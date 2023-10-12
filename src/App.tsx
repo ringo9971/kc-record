@@ -1,6 +1,6 @@
-import { useRoutes } from "react-router-dom";
+import { useRoutes } from 'react-router-dom';
 
-import routes from "./Routes";
+import routes from './Routes';
 
 function App() {
   const routing = useRoutes(routes);
