@@ -19,3 +19,12 @@ export interface DropRequest {
 export interface DropsResponse {
   results: Drop[];
 }
+
+export interface EventAreas {
+  event: string;
+  areas: string[];
+}
+
+export interface EventsAreasResponse {
+  results: Map<string, string[]>;
+}
