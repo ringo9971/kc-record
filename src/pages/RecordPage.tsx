@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   Button,
   FormControl,
@@ -6,16 +7,22 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 
 import { createDrop } from '../api/createDrop';
+import { createEventsAreas } from '../api/createEventsAreas';
 import { getDrops } from '../api/getDrops';
+import { getEventsAreas } from '../api/getEventsAreas';
 import { DropsResponse, DropRequest } from '../api/types';
 import DropTable from '../components/DropTable';
 
 export const RecordPage = (): JSX.Element => {
   const [drops, setDrops] = useState<DropsResponse | null>(null);
+  const [eventsAreas, setEventsAreas] = useState<Map<string, string[]>>(
+    new Map()
+  );
 
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
@@ -25,11 +32,18 @@ export const RecordPage = (): JSX.Element => {
 
   useEffect(() => {
     fetchDropsData();
+    fetchEventsAreas();
   }, []);
 
   const fetchDropsData = async () => {
     const data = await getDrops();
     setDrops(data);
+  };
+  const fetchEventsAreas = async () => {
+    const data = await getEventsAreas();
+    if (data) {
+      setEventsAreas(data.results);
+    }
   };
 
   const handleCreateDrop = async () => {
@@ -41,76 +55,102 @@ export const RecordPage = (): JSX.Element => {
       comment: comment,
     };
     await createDrop(drop);
-    fetchDropsData();
+    await createEventsAreas(event, area);
+    await fetchDropsData();
   };
 
   return (
     <>
-      <Box display="flex" flexDirection="row">
-        <Box display="flex" flexDirection="column">
-          <TextField
-            placeholder="イベント"
+      <Box display="flex" flexDirection="column">
+        <Typography variant="h5" pt={2}>
+          ドロップ記録
+        </Typography>
+        <Box display="flex" flexDirection="row" pt={3}>
+          <Autocomplete
             value={event}
-            onChange={(e) => setEvent(e.target.value)}
+            inputValue={event}
+            onInputChange={(_, event) => {
+              setEvent(event);
+            }}
+            options={Array.from(eventsAreas.keys())}
+            getOptionLabel={(event: string) => event}
+            onOpen={fetchEventsAreas}
+            freeSolo
+            sx={{ width: 200 }}
+            renderInput={(params) => (
+              <TextField {...params} label="イベント" placeholder="イベント" />
+            )}
           />
-          <TextField
-            placeholder="海域"
+          <Autocomplete
             value={area}
-            onChange={(e) => setArea(e.target.value)}
+            inputValue={area}
+            onInputChange={(_, area) => setArea(area)}
+            options={eventsAreas.get(event) ?? []}
+            getOptionLabel={(area: string) => area}
+            onOpen={fetchEventsAreas}
+            freeSolo
+            sx={{ width: 200 }}
+            renderInput={(params) => (
+              <TextField {...params} label="海域" placeholder="海域" />
+            )}
           />
         </Box>
-        <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="row" pt={1}>
           <TextField
             placeholder="ドロップ"
             value={ship}
+            sx={{ width: 200 }}
             onChange={(e) => setShip(e.target.value)}
           />
           <TextField
             placeholder="コメント"
             value={comment}
+            sx={{ width: 200 }}
             onChange={(e) => setComment(e.target.value)}
           />
         </Box>
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            defaultValue="S"
-            onChange={(e) => setOutcome(e.target.value)}
-          >
-            <FormControlLabel
-              value="S"
-              control={<Radio color="primary" />}
-              label="S"
-              labelPlacement="top"
-            />
-            <FormControlLabel
-              value="A"
-              control={<Radio color="primary" />}
-              label="A"
-              labelPlacement="top"
-            />
-            <FormControlLabel
-              value="B"
-              control={<Radio color="primary" />}
-              label="B"
-              labelPlacement="top"
-            />
-            <FormControlLabel
-              value="撤退"
-              control={<Radio color="primary" />}
-              label="撤退"
-              labelPlacement="top"
-            />
-            <FormControlLabel
-              value="不明"
-              control={<Radio color="primary" />}
-              label="不明"
-              labelPlacement="top"
-            />
-          </RadioGroup>
-        </FormControl>
+        <Box pt={2}>
+          <FormControl component="fieldset">
+            <RadioGroup
+              row
+              defaultValue="S"
+              onChange={(e) => setOutcome(e.target.value)}
+            >
+              <FormControlLabel
+                value="S"
+                control={<Radio color="primary" />}
+                label="S"
+                labelPlacement="top"
+              />
+              <FormControlLabel
+                value="A"
+                control={<Radio color="primary" />}
+                label="A"
+                labelPlacement="top"
+              />
+              <FormControlLabel
+                value="B"
+                control={<Radio color="primary" />}
+                label="B"
+                labelPlacement="top"
+              />
+              <FormControlLabel
+                value="撤退"
+                control={<Radio color="primary" />}
+                label="撤退"
+                labelPlacement="top"
+              />
+              <FormControlLabel
+                value="不明"
+                control={<Radio color="primary" />}
+                label="不明"
+                labelPlacement="top"
+              />
+            </RadioGroup>
+          </FormControl>
+        </Box>
       </Box>
-      <Box>
+      <Box pt={2}>
         <Button variant="contained" onClick={handleCreateDrop}>
           追加
         </Button>
