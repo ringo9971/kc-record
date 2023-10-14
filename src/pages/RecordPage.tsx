@@ -157,7 +157,11 @@ export const RecordPage = (): JSX.Element => {
         </Button>
       </Box>
       <Box pt={2}>
-        <DropTable items={drops?.results} />
+        <DropTable
+          items={drops?.results}
+          eventsAreas={eventsAreas}
+          fetchEventsAreas={fetchEventsAreas}
+        />
       </Box>
     </>
   );

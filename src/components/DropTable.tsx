@@ -1,7 +1,10 @@
+import FilterListIcon from '@mui/icons-material/FilterList';
 import {
+  Autocomplete,
   Box,
   Button,
   Checkbox,
+  Collapse,
   FormControlLabel,
   FormGroup,
   Modal,
@@ -11,8 +14,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
 } from '@mui/material';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import { Drop } from '../api/types';
 
@@ -29,6 +33,8 @@ const style = {
 
 interface DropsItemConfig {
   items?: Drop[];
+  eventsAreas: Map<string, string[]>;
+  fetchEventsAreas: () => void;
 }
 
 interface ShowFilter {
@@ -40,7 +46,7 @@ interface ShowFilter {
   time: boolean;
 }
 
-export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
+export const DropTable = (props: DropsItemConfig): JSX.Element => {
   const [isColumnFilterOpen, setIsColumnFilterOpen] = useState(false);
   const [columnFilter, setColumnFilter] = useState<ShowFilter>({
     event: true,
@@ -67,6 +73,11 @@ export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
     時間: 'time',
   };
 
+  const [isDropFilterOpen, setIsDropFilterOpen] = useState(false);
+  const [items, setItems] = useState<Drop[]>(props.items ?? []);
+  const [event, setEvent] = useState('');
+  const [area, setArea] = useState('');
+
   const handleColumnFilterChange = (filterName: keyof ShowFilter) => {
     setColumnFilter((prevFilter) => ({
       ...prevFilter,
@@ -77,8 +88,25 @@ export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
     return columnMap[column] || 'event';
   };
 
+  useEffect(() => {
+    const newItems =
+      props.items?.filter(
+        (item) =>
+          !event || (item.event === event && (!area || item.area === area))
+      ) ?? [];
+
+    setItems(newItems);
+  }, [event, area, props.items]);
+
   return (
     <Box>
+      <Button
+        variant="contained"
+        onClick={() => setIsDropFilterOpen((preFilterOpen) => !preFilterOpen)}
+        startIcon={<FilterListIcon />}
+      >
+        絞り込み
+      </Button>
       <Button
         variant="contained"
         onClick={() => setIsColumnFilterOpen((preFilterOpen) => !preFilterOpen)}
@@ -110,6 +138,48 @@ export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
           </FormGroup>
         </Box>
       </Modal>
+      <Box>
+        <Collapse in={isDropFilterOpen}>
+          <Box pt={2}>
+            <Box display="flex" flexDirection="row">
+              <Autocomplete
+                options={['', ...Array.from(props.eventsAreas.keys())]}
+                getOptionLabel={(event: string) => event}
+                onOpen={props.fetchEventsAreas}
+                sx={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="イベント"
+                    placeholder="イベント"
+                    size="small"
+                  />
+                )}
+                value={event}
+                onChange={(_, newValue) => {
+                  setEvent(newValue ?? '');
+                  setArea('');
+                }}
+              />
+              <Autocomplete
+                options={['', ...(props.eventsAreas.get(event) ?? [])]}
+                getOptionLabel={(area: string) => area}
+                sx={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="海域"
+                    placeholder="海域"
+                    size="small"
+                  />
+                )}
+                value={area}
+                onChange={(_, newValue) => setArea(newValue ?? '')}
+              />
+            </Box>
+          </Box>
+        </Collapse>
+      </Box>
       <Box pt={2}>
         <TableContainer>
           <Table>
@@ -124,7 +194,7 @@ export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props?.items?.map((drop) => {
+              {items.map((drop) => {
                 const time = new Date(drop.time).toLocaleString('jp-JP', {
                   timeZone: 'Asia/Tokyo',
                   month: '2-digit',
