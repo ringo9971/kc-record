@@ -343,16 +343,28 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                             area: area,
                           }))
                       )}
-                    {columnFilter.outcome &&
-                      renderTextFiledCell(
-                        dropEdit.outcome,
-                        drop.outcome,
-                        (e: React.ChangeEvent<HTMLInputElement>) =>
-                          setDropEdit((preDropEdit) => ({
-                            ...preDropEdit,
-                            outcome: e.target.value,
-                          }))
-                      )}
+                    {columnFilter.outcome && (
+                      <TableCell>
+                        {editId && editId === drop.id ? (
+                          <Autocomplete
+                            value={dropEdit.outcome}
+                            onChange={(_, outcome) =>
+                              setDropEdit((preDropEdit) => ({
+                                ...preDropEdit,
+                                outcome: outcome ?? outcomes[0],
+                              }))
+                            }
+                            options={outcomes}
+                            getOptionLabel={(value: string) => value}
+                            sx={{ width: 100 }}
+                            onOpen={props.fetchEventsAreas}
+                            renderInput={(params) => <TextField {...params} />}
+                          />
+                        ) : (
+                          <>{drop.outcome}</>
+                        )}
+                      </TableCell>
+                    )}
                     {columnFilter.ship &&
                       renderTextFiledCell(
                         dropEdit.ship,
