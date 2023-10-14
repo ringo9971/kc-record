@@ -7,7 +7,6 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography,
 } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 
@@ -60,10 +59,7 @@ export const RecordPage = (): JSX.Element => {
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Typography variant="h5" pt={2}>
-          ドロップ記録
-        </Typography>
-        <Box display="flex" flexDirection="row" pt={3}>
+        <Box display="flex" flexDirection="row">
           <Autocomplete
             value={event}
             inputValue={event}
