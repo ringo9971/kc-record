@@ -159,7 +159,10 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
       </Button>
       <Button
         variant="contained"
-        onClick={() => setIsEdit((preIsEdit) => !preIsEdit)}
+        onClick={() => {
+          setEditId(null);
+          setIsEdit((preIsEdit) => !preIsEdit);
+        }}
       >
         編集
       </Button>
