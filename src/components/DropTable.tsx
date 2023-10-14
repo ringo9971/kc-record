@@ -268,47 +268,78 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                   hour: '2-digit',
                   minute: '2-digit',
                 });
+
+
+                const renderTextFiledCell = (
+                  editValue: string,
+                  value: string,
+                  onChangeFn: (e: React.ChangeEvent<HTMLInputElement>) => void
+                ) => (
+                  <TableCell>
+                    {editId && editId === drop.id ? (
+                      <TextField
+                        value={editValue}
+                        onChange={onChangeFn}
+                        sx={{ width: 100 }}
+                      />
+                    ) : (
+                      <>{value}</>
+                    )}
+                  </TableCell>
+                );
+
                 return (
                   <TableRow key={drop.id}>
                     {columnFilter.event &&
-                      (editId && editId === drop.id ? (
-                        <TableCell>
-                          <TextField
-                            value={dropEdit.event}
-                            onChange={(e) =>
-                              setDropEdit((preDropEdit) => ({
-                                ...preDropEdit,
-                                event: e.target.value,
-                              }))
-                            }
-                          />
-                        </TableCell>
-                      ) : (
-                        <TableCell>{drop.event}</TableCell>
-                      ))}
+                      renderTextFiledCell(
+                        dropEdit.event,
+                        drop.event,
+                        (e: React.ChangeEvent<HTMLInputElement>) =>
+                          setDropEdit((preDropEdit) => ({
+                            ...preDropEdit,
+                            event: e.target.value,
+                          }))
+                      )}
                     {columnFilter.area &&
-                      (editId && editId === drop.id ? (
-                        <TableCell>
-                          <TextField
-                            value={dropEdit.area}
-                            onChange={(e) =>
-                              setDropEdit((preDropEdit) => ({
-                                ...preDropEdit,
-                                area: e.target.value,
-                              }))
-                            }
-                          />
-                        </TableCell>
-                      ) : (
-                        <TableCell>{drop.area}</TableCell>
-                      ))}
-                    {columnFilter.outcome && (
-                      <TableCell>{drop.outcome}</TableCell>
-                    )}
-                    {columnFilter.ship && <TableCell>{drop.ship}</TableCell>}
-                    {columnFilter.comment && (
-                      <TableCell>{drop.comment}</TableCell>
-                    )}
+                      renderTextFiledCell(
+                        dropEdit.area,
+                        drop.area,
+                        (e: React.ChangeEvent<HTMLInputElement>) =>
+                          setDropEdit((preDropEdit) => ({
+                            ...preDropEdit,
+                            area: e.target.value,
+                          }))
+                      )}
+                    {columnFilter.outcome &&
+                      renderTextFiledCell(
+                        dropEdit.outcome,
+                        drop.outcome,
+                        (e: React.ChangeEvent<HTMLInputElement>) =>
+                          setDropEdit((preDropEdit) => ({
+                            ...preDropEdit,
+                            outcome: e.target.value,
+                          }))
+                      )}
+                    {columnFilter.ship &&
+                      renderTextFiledCell(
+                        dropEdit.ship,
+                        drop.ship,
+                        (e: React.ChangeEvent<HTMLInputElement>) =>
+                          setDropEdit((preDropEdit) => ({
+                            ...preDropEdit,
+                            ship: e.target.value,
+                          }))
+                      )}
+                    {columnFilter.comment &&
+                      renderTextFiledCell(
+                        dropEdit.comment,
+                        drop.comment,
+                        (e: React.ChangeEvent<HTMLInputElement>) =>
+                          setDropEdit((preDropEdit) => ({
+                            ...preDropEdit,
+                            comment: e.target.value,
+                          }))
+                      )}
                     {columnFilter.time && <TableCell>{time}</TableCell>}
                     {isEdit && (
                       <TableCell>
