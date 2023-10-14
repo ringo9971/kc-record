@@ -8,6 +8,8 @@ export const updateDrop = async (
   preDrop: Drop,
   newDrop: Drop
 ) => {
+  if (!newDrop.event || !newDrop.area) return;
+
   const drops = await getDrops();
   if (!drops) return;
 

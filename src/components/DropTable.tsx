@@ -95,6 +95,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   });
 
   const handleUpdateDrop = (dropId: string, preDrop: Drop, newDrop: Drop) => {
+    if (!newDrop.event || !newDrop.area) return;
     updateDrop(dropId, preDrop, newDrop);
     setItems((preItems) =>
       preItems.map((item) => {

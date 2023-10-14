@@ -5,6 +5,8 @@ import { getDrops } from './getDrops';
 import { DropRequest } from './types';
 
 export const createDrop = async (drop: DropRequest) => {
+  if(!drop.event || !drop.area) return;
+
   const newDrop = {
     id: uuidv4(),
     time: new Date(),
