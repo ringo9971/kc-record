@@ -390,6 +390,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                       <TableCell>
                         {editId && editId === drop.id ? (
                           <Button
+                            variant="contained"
                             onClick={() =>
                               handleUpdateDrop(drop.id, drop, dropEdit)
                             }
