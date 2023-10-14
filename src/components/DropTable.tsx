@@ -19,6 +19,7 @@ import {
 import { memo, useEffect, useState } from 'react';
 
 import { Drop } from '../api/types';
+import { updateDrop } from '../api/updateDrop';
 
 const style = {
   position: 'absolute',
@@ -81,6 +82,30 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   const outcomes = ['S', 'A', 'B', '撤退', '不明'];
   const [outcomesFilter, setOutcomesFilter] = useState<string[]>([]);
 
+  const [isEdit, setIsEdit] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [dropEdit, setDropEdit] = useState<Drop>({
+    id: '',
+    time: '',
+    event: '',
+    area: '',
+    outcome: '',
+    ship: '',
+    comment: '',
+  });
+
+  const handleUpdateDrop = (dropId: string, preDrop: Drop, newDrop: Drop) => {
+    updateDrop(dropId, preDrop, newDrop);
+    setItems((preItems) =>
+      preItems.map((item) => {
+        if (item.id === dropId) return newDrop;
+        return item;
+      })
+    );
+    setEditId(null);
+    props.fetchEventsAreas();
+  };
+
   const handleColumnFilterChange = (filterName: keyof ShowFilter) => {
     setColumnFilter((prevFilter) => ({
       ...prevFilter,
@@ -131,6 +156,12 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
         onClick={() => setIsColumnFilterOpen((preFilterOpen) => !preFilterOpen)}
       >
         フィルタ
+      </Button>
+      <Button
+        variant="contained"
+        onClick={() => setIsEdit((preIsEdit) => !preIsEdit)}
+      >
+        編集
       </Button>
       <Modal
         open={isColumnFilterOpen}
@@ -225,6 +256,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                 {columnFilter.ship && <TableCell>ドロップ</TableCell>}
                 {columnFilter.comment && <TableCell>コメント</TableCell>}
                 {columnFilter.time && <TableCell>時間</TableCell>}
+                {isEdit && <TableCell>編集</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -238,8 +270,38 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                 });
                 return (
                   <TableRow key={drop.id}>
-                    {columnFilter.event && <TableCell>{drop.event}</TableCell>}
-                    {columnFilter.area && <TableCell>{drop.area}</TableCell>}
+                    {columnFilter.event &&
+                      (editId && editId === drop.id ? (
+                        <TableCell>
+                          <TextField
+                            value={dropEdit.event}
+                            onChange={(e) =>
+                              setDropEdit((preDropEdit) => ({
+                                ...preDropEdit,
+                                event: e.target.value,
+                              }))
+                            }
+                          />
+                        </TableCell>
+                      ) : (
+                        <TableCell>{drop.event}</TableCell>
+                      ))}
+                    {columnFilter.area &&
+                      (editId && editId === drop.id ? (
+                        <TableCell>
+                          <TextField
+                            value={dropEdit.area}
+                            onChange={(e) =>
+                              setDropEdit((preDropEdit) => ({
+                                ...preDropEdit,
+                                area: e.target.value,
+                              }))
+                            }
+                          />
+                        </TableCell>
+                      ) : (
+                        <TableCell>{drop.area}</TableCell>
+                      ))}
                     {columnFilter.outcome && (
                       <TableCell>{drop.outcome}</TableCell>
                     )}
@@ -248,6 +310,28 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                       <TableCell>{drop.comment}</TableCell>
                     )}
                     {columnFilter.time && <TableCell>{time}</TableCell>}
+                    {isEdit && (
+                      <TableCell>
+                        {editId && editId === drop.id ? (
+                          <Button
+                            onClick={() =>
+                              handleUpdateDrop(drop.id, drop, dropEdit)
+                            }
+                          >
+                            変更
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() => {
+                              setDropEdit(drop);
+                              setEditId(drop.id);
+                            }}
+                          >
+                            編集
+                          </Button>
+                        )}
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })}

@@ -1,5 +1,5 @@
 export interface Drop {
-  id: number;
+  id: string;
   time: string;
   event: string;
   area: string;

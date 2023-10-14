@@ -12,7 +12,6 @@ import {
 import { memo, useEffect, useState } from 'react';
 
 import { createDrop } from '../api/createDrop';
-import { createEventsAreas } from '../api/createEventsAreas';
 import { getDrops } from '../api/getDrops';
 import { getEventsAreas } from '../api/getEventsAreas';
 import { DropsResponse, DropRequest } from '../api/types';
@@ -55,7 +54,6 @@ export const RecordPage = (): JSX.Element => {
       comment: comment,
     };
     await createDrop(drop);
-    await createEventsAreas(event, area);
     await fetchDropsData();
   };
 

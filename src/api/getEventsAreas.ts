@@ -7,8 +7,8 @@ export const getEventsAreas = async (): Promise<EventsAreasResponse | null> => {
     const eventsAreas: Record<string, string[]> = JSON.parse(storedEventsAreas);
 
     const eventsAreasResponse = new Map<string, string[]>();
-    for (const [a, b] of Object.entries(eventsAreas)) {
-      eventsAreasResponse.set(a, b);
+    for (const [event, areas] of Object.entries(eventsAreas)) {
+      eventsAreasResponse.set(event, areas);
     }
 
     return { results: eventsAreasResponse };
