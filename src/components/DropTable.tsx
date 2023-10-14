@@ -41,9 +41,8 @@ interface ShowFilter {
 }
 
 export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
-  const [click, setClick] = useState(false);
-
-  const [showFilter, setShowFilter] = useState<ShowFilter>({
+  const [isColumnFilterOpen, setIsColumnFilterOpen] = useState(false);
+  const [columnFilter, setColumnFilter] = useState<ShowFilter>({
     event: true,
     area: true,
     outcome: true,
@@ -51,8 +50,15 @@ export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
     comment: false,
     time: false,
   });
-  const showList = ['イベント', '海域', '勝利', 'ドロップ', 'コメント', '時間'];
-  const keyMap: { [key: string]: keyof ShowFilter } = {
+  const columnList = [
+    'イベント',
+    '海域',
+    '勝利',
+    'ドロップ',
+    'コメント',
+    '時間',
+  ];
+  const columnMap: { [column: string]: keyof ShowFilter } = {
     イベント: 'event',
     海域: 'area',
     勝利: 'outcome',
@@ -61,39 +67,43 @@ export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
     時間: 'time',
   };
 
-  const handleCheckboxChange = (filterName: keyof ShowFilter) => {
-    setShowFilter((prevFilter) => ({
+  const handleColumnFilterChange = (filterName: keyof ShowFilter) => {
+    setColumnFilter((prevFilter) => ({
       ...prevFilter,
       [filterName]: !prevFilter[filterName],
     }));
   };
-  const stringToFilterKey = (show: string) => {
-    return keyMap[show] || 'event';
+  const columnToFilterKey = (column: string) => {
+    return columnMap[column] || 'event';
   };
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box>
       <Button
         variant="contained"
-        onClick={() => setClick((preClick) => !preClick)}
+        onClick={() => setIsColumnFilterOpen((preFilterOpen) => !preFilterOpen)}
       >
         フィルタ
       </Button>
-      <Modal open={click} onClose={() => setClick(false)} closeAfterTransition>
+      <Modal
+        open={isColumnFilterOpen}
+        onClose={() => setIsColumnFilterOpen(false)}
+        closeAfterTransition
+      >
         <Box sx={style}>
           <FormGroup>
-            {showList.map((show) => (
+            {columnList.map((column) => (
               <FormControlLabel
-                key={show}
+                key={column}
                 control={
                   <Checkbox
-                    checked={showFilter[stringToFilterKey(show)]}
+                    checked={columnFilter[columnToFilterKey(column)]}
                     onClick={() =>
-                      handleCheckboxChange(stringToFilterKey(show))
+                      handleColumnFilterChange(columnToFilterKey(column))
                     }
                   />
                 }
-                label={show}
+                label={column}
                 labelPlacement="top"
               />
             ))}
@@ -105,12 +115,12 @@ export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
           <Table>
             <TableHead>
               <TableRow>
-                {showFilter.event && <TableCell>イベント</TableCell>}
-                {showFilter.area && <TableCell>海域</TableCell>}
-                {showFilter.outcome && <TableCell>勝利</TableCell>}
-                {showFilter.ship && <TableCell>ドロップ</TableCell>}
-                {showFilter.comment && <TableCell>コメント</TableCell>}
-                {showFilter.time && <TableCell>時間</TableCell>}
+                {columnFilter.event && <TableCell>イベント</TableCell>}
+                {columnFilter.area && <TableCell>海域</TableCell>}
+                {columnFilter.outcome && <TableCell>勝利</TableCell>}
+                {columnFilter.ship && <TableCell>ドロップ</TableCell>}
+                {columnFilter.comment && <TableCell>コメント</TableCell>}
+                {columnFilter.time && <TableCell>時間</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -124,16 +134,16 @@ export const DropTable = (props: DropsItemConfig | undefined): JSX.Element => {
                 });
                 return (
                   <TableRow key={drop.id}>
-                    {showFilter.event && <TableCell>{drop.event}</TableCell>}
-                    {showFilter.area && <TableCell>{drop.area}</TableCell>}
-                    {showFilter.outcome && (
+                    {columnFilter.event && <TableCell>{drop.event}</TableCell>}
+                    {columnFilter.area && <TableCell>{drop.area}</TableCell>}
+                    {columnFilter.outcome && (
                       <TableCell>{drop.outcome}</TableCell>
                     )}
-                    {showFilter.ship && <TableCell>{drop.ship}</TableCell>}
-                    {showFilter.comment && (
+                    {columnFilter.ship && <TableCell>{drop.ship}</TableCell>}
+                    {columnFilter.comment && (
                       <TableCell>{drop.comment}</TableCell>
                     )}
-                    {showFilter.time && <TableCell>{time}</TableCell>}
+                    {columnFilter.time && <TableCell>{time}</TableCell>}
                   </TableRow>
                 );
               })}

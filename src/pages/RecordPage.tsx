@@ -51,7 +51,7 @@ export const RecordPage = (): JSX.Element => {
       event: event,
       area: area,
       outcome: outcome,
-      ship: ship,
+      ship: outcome === '撤退' ? '' : ship,
       comment: comment,
     };
     await createDrop(drop);
@@ -97,6 +97,7 @@ export const RecordPage = (): JSX.Element => {
         </Box>
         <Box display="flex" flexDirection="row" pt={1}>
           <TextField
+            disabled={outcome === '撤退'}
             placeholder="ドロップ"
             value={ship}
             sx={{ width: 200 }}

@@ -11,9 +11,9 @@ export interface Drop {
 export interface DropRequest {
   event: string;
   area: string;
-  outcome?: string;
+  outcome: string;
   ship: string;
-  comment?: string;
+  comment: string;
 }
 
 export interface DropsResponse {
