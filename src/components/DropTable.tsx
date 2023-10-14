@@ -16,7 +16,7 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { SyntheticEvent, memo, useEffect, useState } from 'react';
 
 import { Drop } from '../api/types';
 import { updateDrop } from '../api/updateDrop';
@@ -269,6 +269,33 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                   minute: '2-digit',
                 });
 
+                const renderAutocompleteCell = (
+                  editValue: string,
+                  value: string,
+                  options: string[],
+                  onChangeFn: (
+                    _event: SyntheticEvent<Element, Event>,
+                    value: string
+                  ) => void
+                ) => (
+                  <TableCell>
+                    {editId && editId === drop.id ? (
+                      <Autocomplete
+                        value={editValue}
+                        inputValue={editValue}
+                        onInputChange={onChangeFn}
+                        options={options}
+                        getOptionLabel={(value: string) => value}
+                        sx={{ width: 100 }}
+                        onOpen={props.fetchEventsAreas}
+                        freeSolo
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    ) : (
+                      <>{value}</>
+                    )}
+                  </TableCell>
+                );
 
                 const renderTextFiledCell = (
                   editValue: string,
@@ -291,23 +318,25 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                 return (
                   <TableRow key={drop.id}>
                     {columnFilter.event &&
-                      renderTextFiledCell(
+                      renderAutocompleteCell(
                         dropEdit.event,
                         drop.event,
-                        (e: React.ChangeEvent<HTMLInputElement>) =>
+                        Array.from(props.eventsAreas.keys()),
+                        (_, event) =>
                           setDropEdit((preDropEdit) => ({
                             ...preDropEdit,
-                            event: e.target.value,
+                            event: event,
                           }))
                       )}
                     {columnFilter.area &&
-                      renderTextFiledCell(
+                      renderAutocompleteCell(
                         dropEdit.area,
                         drop.area,
-                        (e: React.ChangeEvent<HTMLInputElement>) =>
+                        props.eventsAreas.get(dropEdit.event) ?? [],
+                        (_, area) =>
                           setDropEdit((preDropEdit) => ({
                             ...preDropEdit,
-                            area: e.target.value,
+                            area: area,
                           }))
                       )}
                     {columnFilter.outcome &&
