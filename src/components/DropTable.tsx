@@ -78,6 +78,9 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
 
+  const outcomes = ['S', 'A', 'B', '撤退', '不明'];
+  const [outcomesFilter, setOutcomesFilter] = useState<string[]>([]);
+
   const handleColumnFilterChange = (filterName: keyof ShowFilter) => {
     setColumnFilter((prevFilter) => ({
       ...prevFilter,
@@ -88,15 +91,31 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
     return columnMap[column] || 'event';
   };
 
+  const handleOutcomesFilter = (outcome: string) => {
+    const isSelected = outcomesFilter.includes(outcome);
+
+    if (!isSelected) {
+      setOutcomesFilter([...outcomesFilter, outcome]);
+    } else {
+      setOutcomesFilter(
+        outcomesFilter.filter((selectedItem) => selectedItem !== outcome)
+      );
+    }
+  };
+
   useEffect(() => {
-    const newItems =
-      props.items?.filter(
-        (item) =>
+    const newItems = (props.items ?? [])
+      .filter(
+        (item: Drop) =>
+          outcomesFilter.length === 0 || outcomesFilter.includes(item.outcome)
+      )
+      .filter(
+        (item: Drop) =>
           !event || (item.event === event && (!area || item.area === area))
-      ) ?? [];
+      );
 
     setItems(newItems);
-  }, [event, area, props.items]);
+  }, [event, area, props.items, outcomesFilter]);
 
   return (
     <Box>
@@ -177,6 +196,21 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                 onChange={(_, newValue) => setArea(newValue ?? '')}
               />
             </Box>
+            <FormGroup sx={{ direction: 'flex', flexDirection: 'row', pt: 2 }}>
+              {outcomes.map((outcome) => (
+                <FormControlLabel
+                  key={outcome}
+                  control={
+                    <Checkbox
+                      checked={outcomesFilter.includes(outcome)}
+                      onChange={() => handleOutcomesFilter(outcome)}
+                    />
+                  }
+                  label={outcome}
+                  labelPlacement="top"
+                />
+              ))}
+            </FormGroup>
           </Box>
         </Collapse>
       </Box>

@@ -3,9 +3,9 @@ export interface Drop {
   time: string;
   event: string;
   area: string;
-  outcome?: string;
+  outcome: string;
   ship: string;
-  comment?: string;
+  comment: string;
 }
 
 export interface DropRequest {
