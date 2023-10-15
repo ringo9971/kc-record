@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import { FirebaseError } from 'firebase/app';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { memo, useState } from 'react';
 
 import useFirebase from '../../hooks/useFirebase';
@@ -20,7 +21,7 @@ const AuthLogin = () => {
 
   const signInEmail = async () => {
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       if (error instanceof FirebaseError) {
         let errorMessage = '';
