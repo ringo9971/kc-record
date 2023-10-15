@@ -1,17 +1,29 @@
-import { EventsAreasResponse } from './types';
+import { User } from 'firebase/auth';
+import { doc, Firestore, getDoc } from 'firebase/firestore';
 
-export const getEventsAreas = async (): Promise<EventsAreasResponse | null> => {
-  const storedEventsAreas = localStorage.getItem('eventsAreas');
+import { EventAreas, EventsAreasResponse } from './types';
 
-  if (storedEventsAreas) {
-    const eventsAreas: Record<string, string[]> = JSON.parse(storedEventsAreas);
+export const getEventsAreas = async (
+  user: User | null,
+  firestore: Firestore
+): Promise<EventsAreasResponse> => {
+  if (!user) return { results: new Map() };
 
-    const eventsAreasResponse = new Map<string, string[]>();
-    for (const [event, areas] of Object.entries(eventsAreas)) {
-      eventsAreasResponse.set(event, areas);
-    }
+  const docSnap = await getDoc(doc(firestore, 'drops', user.uid));
 
-    return { results: eventsAreasResponse };
+  if (!docSnap.exists()) {
+    return { results: new Map() };
   }
-  return null;
+
+  const data = docSnap.data();
+  if (!data.eventsAreas) return { results: new Map() };
+
+  const eventsAreas: EventAreas[] = data.eventsAreas;
+  const results: Map<string, string[]> = new Map();
+
+  eventsAreas.forEach((eventAreas) => {
+    results.set(eventAreas.event, eventAreas.areas);
+  });
+
+  return { results: results };
 };

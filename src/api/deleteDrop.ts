@@ -1,7 +1,8 @@
 import { User } from 'firebase/auth';
 import { doc, setDoc, Firestore } from 'firebase/firestore';
 
-import { getAreaFirestoreDrops } from './firebaseGetDrops';
+import { deleteEventsAreas } from './deleteEventsAreas';
+import { getAreaFirestoreDrops } from './getDrops';
 
 export const deleteDrop = async (
   user: User | null,
@@ -18,4 +19,7 @@ export const deleteDrop = async (
   await setDoc(doc(firestore, 'drops', user.uid, event, area), {
     results: updatedDrops,
   });
+
+  if (updatedDrops.length === 0)
+    await deleteEventsAreas(user, firestore, event, area);
 };

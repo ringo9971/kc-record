@@ -20,6 +20,8 @@ import { SyntheticEvent, memo, useEffect, useState } from 'react';
 
 import { Drop } from '../api/types';
 import { updateDrop } from '../api/updateDrop';
+import useFirebase from '../hooks/useFirebase';
+import { useUser } from '../hooks/useUser';
 
 const style = {
   position: 'absolute',
@@ -48,6 +50,9 @@ interface ShowFilter {
 }
 
 export const DropTable = (props: DropsItemConfig): JSX.Element => {
+  const { user } = useUser();
+  const { firestore } = useFirebase();
+
   const [isColumnFilterOpen, setIsColumnFilterOpen] = useState(false);
   const [columnFilter, setColumnFilter] = useState<ShowFilter>({
     event: true,
@@ -96,7 +101,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
 
   const handleUpdateDrop = (dropId: string, preDrop: Drop, newDrop: Drop) => {
     if (!newDrop.event || !newDrop.area) return;
-    updateDrop(dropId, preDrop, newDrop);
+    updateDrop(user, firestore, dropId, preDrop, newDrop);
     setItems((preItems) =>
       preItems.map((item) => {
         if (item.id === dropId) return newDrop;

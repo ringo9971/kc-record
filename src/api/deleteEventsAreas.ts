@@ -1,31 +1,37 @@
-import { getDrops } from './getDrops';
+import { User } from 'firebase/auth';
+import { doc, setDoc, Firestore } from 'firebase/firestore';
+
 import { getEventsAreas } from './getEventsAreas';
-import { Drop } from './types';
+import { EventAreas } from './types';
 
-export const deleteEventsAreas = async (event: string, area: string) => {
-  if (!event || !area) return;
+export const deleteEventsAreas = async (
+  user: User | null,
+  firestore: Firestore,
+  event: string,
+  area: string
+) => {
+  if (!user) return null;
 
-  const drops = await getDrops();
-  const hasEventArea = drops?.results.filter(
-    (drop: Drop) => drop.event === event && drop.area === area
-  );
-  if (!hasEventArea || hasEventArea.length !== 1) return;
+  const eventsAreasResponse = await getEventsAreas(user, firestore);
 
-  const eventsAreas = await getEventsAreas();
-  const newEventsAreas = eventsAreas?.results;
-  if (!newEventsAreas) return;
+  const eventsAreas = eventsAreasResponse.results;
+  const eventAreas = eventsAreas.get(event);
 
-  const eventAreas = newEventsAreas.get(event);
-  if (!eventAreas) return;
-
-  const newEventAreas = eventAreas.filter((eventArea) => eventArea !== area);
-  if (newEventAreas.length === 0) {
-    newEventsAreas.delete(event);
+  const updatedEventAreas =
+    eventAreas?.filter((eventArea) => eventArea !== area) ?? [];
+  if (updatedEventAreas.length === 0) {
+    eventsAreas.delete(event);
   } else {
-    newEventsAreas.set(event, newEventAreas);
+    eventsAreas.set(event, updatedEventAreas);
   }
-  localStorage.setItem(
-    'eventsAreas',
-    JSON.stringify(Object.fromEntries(newEventsAreas))
-  );
+
+  const eventAreasArray: EventAreas[] = [];
+
+  eventsAreas.forEach((areas, event) => {
+    eventAreasArray.push({ event, areas });
+  });
+
+  await setDoc(doc(firestore, 'drops', user.uid), {
+    eventsAreas: eventAreasArray,
+  });
 };
