@@ -1,10 +1,9 @@
-
 import { User } from 'firebase/auth';
 import { doc, setDoc, Firestore } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 
-import { getAreaDrops } from './firebaseGetDrops';
-import { Drop, DropRequest, FirestoreDrop } from './types';
+import { getAreaFirestoreDrops } from './firebaseGetDrops';
+import { DropRequest } from './types';
 
 export const createDrop = async (
   user: User | null,
@@ -13,17 +12,12 @@ export const createDrop = async (
 ) => {
   if (!user) return null;
 
-  const drops = await getAreaDrops(user, firestore, drop.event, drop.area);
-
-  const firestoreDrops: FirestoreDrop[] = drops.map((drop: Drop) => {
-    return {
-      id: drop.id,
-      time: drop.time,
-      outcome: drop.outcome,
-      ship: drop.ship,
-      comment: drop.comment,
-    };
-  });
+  const firestoreDrops = await getAreaFirestoreDrops(
+    user,
+    firestore,
+    drop.event,
+    drop.area
+  );
 
   firestoreDrops.push({
     id: uuidv4(),
