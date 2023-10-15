@@ -1,6 +1,14 @@
+export interface FirestoreDrop {
+  id: string;
+  time: Date;
+  outcome: string;
+  ship: string;
+  comment: string;
+}
+
 export interface Drop {
   id: string;
-  time: string;
+  time: Date;
   event: string;
   area: string;
   outcome: string;

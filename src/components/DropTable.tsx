@@ -86,7 +86,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   const [editId, setEditId] = useState<string | null>(null);
   const [dropEdit, setDropEdit] = useState<Drop>({
     id: '',
-    time: '',
+    time: new Date(),
     event: '',
     area: '',
     outcome: '',
