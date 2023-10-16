@@ -5,11 +5,12 @@ import { Profile } from './types';
 
 export const getProfile = async (
   user: User | null,
-  firestore: Firestore
+  firestore: Firestore,
+  friendId: string
 ): Promise<Profile | null> => {
   if (!user) return null;
 
-  const docSnap = await getDoc(doc(firestore, 'profile', user.uid));
+  const docSnap = await getDoc(doc(firestore, 'profile', friendId));
   if (!docSnap.exists()) return null;
 
   const data = docSnap.data();

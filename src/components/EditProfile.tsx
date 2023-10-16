@@ -19,7 +19,7 @@ const EditProfile = () => {
 
   const fetchProfile = async () => {
     if (!user) return;
-    const profile = await getProfile(user, firestore);
+    const profile = await getProfile(user, firestore, user.uid);
     setName(profile?.name ?? '');
     setMessage(profile?.message ?? '');
   };
