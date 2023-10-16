@@ -57,6 +57,8 @@ export const RecordPage = (): JSX.Element => {
     };
     await createDrop(user, firestore, drop);
     await fetchDropsData();
+    setShip('');
+    setComment('');
   };
 
   return (
