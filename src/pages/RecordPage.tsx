@@ -70,7 +70,6 @@ export const RecordPage = (): JSX.Element => {
       <Box display="flex" flexDirection="column">
         <Box display="flex" flexDirection="row">
           <Autocomplete
-            value={event}
             inputValue={event}
             onInputChange={(_, event) => {
               setEvent(event);
@@ -85,7 +84,6 @@ export const RecordPage = (): JSX.Element => {
             )}
           />
           <Autocomplete
-            value={area}
             inputValue={area}
             onInputChange={(_, area) => setArea(area)}
             options={eventsAreas.get(event) ?? []}
