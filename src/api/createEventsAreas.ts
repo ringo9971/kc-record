@@ -10,7 +10,7 @@ export const createEventsAreas = async (
   event: string,
   area: string
 ) => {
-  if (!user) return null;
+  if (!user || !event || !area) return null;
 
   const eventsAreasResponse = await getEventsAreas(user, firestore);
 
