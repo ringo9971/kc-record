@@ -11,6 +11,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { memo, useState } from 'react';
 
 import useFirebase from '../../hooks/useFirebase';
+import { useNavigate } from 'react-router-dom';
 
 const AuthLogin = () => {
   const { auth } = useFirebase();
@@ -19,9 +20,12 @@ const AuthLogin = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const navigate = useNavigate();
+
   const signInEmail = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      navigate('/');
     } catch (error) {
       if (error instanceof FirebaseError) {
         let errorMessage = '';
