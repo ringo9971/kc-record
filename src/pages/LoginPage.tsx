@@ -10,23 +10,19 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
+  if (loading) {
+    return <></>;
+  }
+
   return (
     <>
-      {loading ? (
-        <></>
+      {user ? (
+        <Box>
+          <Typography>ログイン済みです</Typography>
+          <Button onClick={() => navigate('/')}>ドロップ記録はこちら</Button>
+        </Box>
       ) : (
-        <>
-          {user ? (
-            <Box>
-              <Typography>ログイン済みです</Typography>
-              <Button onClick={() => navigate('/')}>
-                ドロップ記録はこちら
-              </Button>
-            </Box>
-          ) : (
-            <AuthLogin />
-          )}
-        </>
+        <AuthLogin />
       )}
     </>
   );

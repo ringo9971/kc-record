@@ -61,117 +61,111 @@ export const RecordPage = (): JSX.Element => {
     setComment('');
   };
 
+  if (loading) {
+    return <></>;
+  }
+
   return (
     <>
-      {loading ? (
-        <></>
-      ) : (
-        <>
-          <Box display="flex" flexDirection="column">
-            <Box display="flex" flexDirection="row">
-              <Autocomplete
-                value={event}
-                inputValue={event}
-                onInputChange={(_, event) => {
-                  setEvent(event);
-                }}
-                options={Array.from(eventsAreas.keys())}
-                getOptionLabel={(event: string) => event}
-                onOpen={fetchEventsAreas}
-                freeSolo
-                sx={{ width: 200 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="イベント"
-                    placeholder="イベント"
-                  />
-                )}
+      <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="row">
+          <Autocomplete
+            value={event}
+            inputValue={event}
+            onInputChange={(_, event) => {
+              setEvent(event);
+            }}
+            options={Array.from(eventsAreas.keys())}
+            getOptionLabel={(event: string) => event}
+            onOpen={fetchEventsAreas}
+            freeSolo
+            sx={{ width: 200 }}
+            renderInput={(params) => (
+              <TextField {...params} label="イベント" placeholder="イベント" />
+            )}
+          />
+          <Autocomplete
+            value={area}
+            inputValue={area}
+            onInputChange={(_, area) => setArea(area)}
+            options={eventsAreas.get(event) ?? []}
+            getOptionLabel={(area: string) => area}
+            onOpen={fetchEventsAreas}
+            freeSolo
+            sx={{ width: 200 }}
+            renderInput={(params) => (
+              <TextField {...params} label="海域" placeholder="海域" />
+            )}
+          />
+        </Box>
+        <Box display="flex" flexDirection="row" pt={1}>
+          <TextField
+            disabled={outcome === '撤退'}
+            placeholder="ドロップ"
+            value={ship}
+            sx={{ width: 200 }}
+            onChange={(e) => setShip(e.target.value)}
+          />
+          <TextField
+            placeholder="コメント"
+            value={comment}
+            sx={{ width: 200 }}
+            onChange={(e) => setComment(e.target.value)}
+          />
+        </Box>
+        <Box pt={2}>
+          <FormControl component="fieldset">
+            <RadioGroup
+              row
+              defaultValue="S"
+              onChange={(e) => setOutcome(e.target.value)}
+            >
+              <FormControlLabel
+                value="S"
+                control={<Radio color="primary" />}
+                label="S"
+                labelPlacement="top"
               />
-              <Autocomplete
-                value={area}
-                inputValue={area}
-                onInputChange={(_, area) => setArea(area)}
-                options={eventsAreas.get(event) ?? []}
-                getOptionLabel={(area: string) => area}
-                onOpen={fetchEventsAreas}
-                freeSolo
-                sx={{ width: 200 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="海域" placeholder="海域" />
-                )}
+              <FormControlLabel
+                value="A"
+                control={<Radio color="primary" />}
+                label="A"
+                labelPlacement="top"
               />
-            </Box>
-            <Box display="flex" flexDirection="row" pt={1}>
-              <TextField
-                disabled={outcome === '撤退'}
-                placeholder="ドロップ"
-                value={ship}
-                sx={{ width: 200 }}
-                onChange={(e) => setShip(e.target.value)}
+              <FormControlLabel
+                value="B"
+                control={<Radio color="primary" />}
+                label="B"
+                labelPlacement="top"
               />
-              <TextField
-                placeholder="コメント"
-                value={comment}
-                sx={{ width: 200 }}
-                onChange={(e) => setComment(e.target.value)}
+              <FormControlLabel
+                value="撤退"
+                control={<Radio color="primary" />}
+                label="撤退"
+                labelPlacement="top"
               />
-            </Box>
-            <Box pt={2}>
-              <FormControl component="fieldset">
-                <RadioGroup
-                  row
-                  defaultValue="S"
-                  onChange={(e) => setOutcome(e.target.value)}
-                >
-                  <FormControlLabel
-                    value="S"
-                    control={<Radio color="primary" />}
-                    label="S"
-                    labelPlacement="top"
-                  />
-                  <FormControlLabel
-                    value="A"
-                    control={<Radio color="primary" />}
-                    label="A"
-                    labelPlacement="top"
-                  />
-                  <FormControlLabel
-                    value="B"
-                    control={<Radio color="primary" />}
-                    label="B"
-                    labelPlacement="top"
-                  />
-                  <FormControlLabel
-                    value="撤退"
-                    control={<Radio color="primary" />}
-                    label="撤退"
-                    labelPlacement="top"
-                  />
-                  <FormControlLabel
-                    value="不明"
-                    control={<Radio color="primary" />}
-                    label="不明"
-                    labelPlacement="top"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Box>
-          </Box>
-          <Box pt={2}>
-            <Button variant="contained" onClick={handleCreateDrop}>
-              追加
-            </Button>
-          </Box>
-          <Box pt={2}>
-            <DropTable
-              items={drops}
-              eventsAreas={eventsAreas}
-              fetchEventsAreas={fetchEventsAreas}
-            />
-          </Box>
-        </>
-      )}
+              <FormControlLabel
+                value="不明"
+                control={<Radio color="primary" />}
+                label="不明"
+                labelPlacement="top"
+              />
+            </RadioGroup>
+          </FormControl>
+        </Box>
+      </Box>
+      <Box pt={2}>
+        <Button variant="contained" onClick={handleCreateDrop}>
+          追加
+        </Button>
+      </Box>
+      <Box pt={2}>
+        <DropTable
+          items={drops}
+          eventsAreas={eventsAreas}
+          fetchEventsAreas={fetchEventsAreas}
+        />
+      </Box>
     </>
   );
 };
