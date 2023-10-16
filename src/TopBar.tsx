@@ -65,7 +65,7 @@ const TopBar = (): JSX.Element => {
                   プロフィール
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={() => navigate('/friends')}>
                   <ListItemIcon>
                     <PersonAdd />
                   </ListItemIcon>
