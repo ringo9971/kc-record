@@ -34,7 +34,11 @@ const TopBar = (): JSX.Element => {
     <Box mb={3}>
       <AppBar position="static">
         <Toolbar>
-          <Box flexGrow="1">ドロップ記録</Box>
+          <Box flexGrow="1">
+            <Button component={Link} to="/" color="inherit">
+              ドロップ記録
+            </Button>
+          </Box>
           {user ? (
             <Box>
               <Box>
