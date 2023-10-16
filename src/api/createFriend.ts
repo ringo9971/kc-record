@@ -10,7 +10,7 @@ export const createFriend = async (
   firestore: Firestore,
   friendId: string
 ): Promise<Profile | null> => {
-  if (!user) return null;
+  if (!user || user.uid === friendId) return null;
 
   const profile = await getProfile(user, firestore, friendId);
   if (!profile) return null;
