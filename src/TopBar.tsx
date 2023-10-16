@@ -16,9 +16,11 @@ import { Link } from 'react-router-dom';
 
 import { useUser } from './hooks/useUser';
 import { Logout, PersonAdd, Person } from '@mui/icons-material';
+import { useLogout } from './hooks/useLogout';
 
 const TopBar = (): JSX.Element => {
   const { user } = useUser();
+  const { logout } = useLogout();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
@@ -68,7 +70,7 @@ const TopBar = (): JSX.Element => {
                   フレンド追加
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={logout}>
                   <ListItemIcon>
                     <Logout />
                   </ListItemIcon>
