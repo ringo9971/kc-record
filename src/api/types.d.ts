@@ -1,3 +1,8 @@
+export interface Profile {
+  name: string;
+  message?: string;
+}
+
 export interface FirestoreDrop {
   id: string;
   time: Date;

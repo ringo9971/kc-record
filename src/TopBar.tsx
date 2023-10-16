@@ -1,3 +1,4 @@
+import { Logout, PersonAdd, Person } from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
@@ -12,11 +13,10 @@ import {
   Tooltip,
 } from '@mui/material';
 import { memo, useState, MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { useUser } from './hooks/useUser';
-import { Logout, PersonAdd, Person } from '@mui/icons-material';
 import { useLogout } from './hooks/useLogout';
+import { useUser } from './hooks/useUser';
 
 const TopBar = (): JSX.Element => {
   const { user } = useUser();
@@ -24,6 +24,8 @@ const TopBar = (): JSX.Element => {
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
+
+  const navigate = useNavigate();
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -56,7 +58,7 @@ const TopBar = (): JSX.Element => {
                 onClose={handleClose}
                 onClick={handleClose}
               >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={() => navigate('/profile')}>
                   <ListItemIcon>
                     <Person />
                   </ListItemIcon>

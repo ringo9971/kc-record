@@ -9,9 +9,9 @@ import {
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { memo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import useFirebase from '../../hooks/useFirebase';
-import { useNavigate } from 'react-router-dom';
 
 const AuthLogin = () => {
   const { auth } = useFirebase();
