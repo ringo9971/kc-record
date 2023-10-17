@@ -22,6 +22,7 @@ import { Drop } from '../api/types';
 import { updateDrop } from '../api/updateDrop';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
+import { useDropsContext } from '../lib/DropsContext';
 
 const style = {
   position: 'absolute',
@@ -35,7 +36,7 @@ const style = {
 };
 
 interface DropsItemConfig {
-  items?: Drop[];
+  drops: Drop[];
   eventsAreas: Map<string, string[]>;
   fetchEventsAreas: () => void;
 }
@@ -79,8 +80,9 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
     時間: 'time',
   };
 
+  const { setDrops } = useDropsContext();
   const [isDropFilterOpen, setIsDropFilterOpen] = useState(false);
-  const [items, setItems] = useState<Drop[]>(props.items ?? []);
+  const [filteredDrops, setFilteredDrops] = useState<Drop[]>(props.drops);
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
 
@@ -102,10 +104,16 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   const handleUpdateDrop = (dropId: string, preDrop: Drop, newDrop: Drop) => {
     if (!newDrop.event || !newDrop.area) return;
     updateDrop(user, firestore, dropId, preDrop, newDrop);
-    setItems((preItems) =>
-      preItems.map((item) => {
-        if (item.id === dropId) return newDrop;
-        return item;
+    setDrops(() =>
+      props.drops.map((drop: Drop) => {
+        if (drop.id === dropId) return newDrop;
+        return drop;
+      })
+    );
+    setFilteredDrops(() =>
+      props.drops.map((drop: Drop) => {
+        if (drop.id === dropId) return newDrop;
+        return drop;
       })
     );
     setEditId(null);
@@ -135,18 +143,18 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   };
 
   useEffect(() => {
-    const newItems = (props.items ?? [])
+    const newDrops = (props.drops ?? [])
       .filter(
-        (item: Drop) =>
-          outcomesFilter.length === 0 || outcomesFilter.includes(item.outcome)
+        (drop: Drop) =>
+          outcomesFilter.length === 0 || outcomesFilter.includes(drop.outcome)
       )
       .filter(
-        (item: Drop) =>
-          !event || (item.event === event && (!area || item.area === area))
+        (drop: Drop) =>
+          !event || (drop.event === event && (!area || drop.area === area))
       );
 
-    setItems(newItems);
-  }, [event, area, props.items, outcomesFilter]);
+    setFilteredDrops(newDrops);
+  }, [event, area, props.drops, outcomesFilter]);
 
   return (
     <Box>
@@ -269,7 +277,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((drop) => {
+              {filteredDrops.map((drop: Drop) => {
                 const time = new Date(drop.time).toLocaleString('jp-JP', {
                   timeZone: 'Asia/Tokyo',
                   month: '2-digit',

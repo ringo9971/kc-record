@@ -13,16 +13,17 @@ import { memo, useEffect, useState } from 'react';
 import { createDrop } from '../api/createDrop';
 import { getDrops } from '../api/getDrops';
 import { getEventsAreas } from '../api/getEventsAreas';
-import { Drop, DropRequest } from '../api/types';
+import { DropRequest } from '../api/types';
 import DropTable from '../components/DropTable';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
+import { useDropsContext } from '../lib/DropsContext';
 
 export const RecordPage = (): JSX.Element => {
   const { user, loading } = useUser();
   const { firestore } = useFirebase();
 
-  const [drops, setDrops] = useState<Drop[]>([]);
+  const { drops, setDrops } = useDropsContext();
   const [eventsAreas, setEventsAreas] = useState<Map<string, string[]>>(
     new Map()
   );
@@ -34,9 +35,10 @@ export const RecordPage = (): JSX.Element => {
   const [comment, setComment] = useState('');
 
   useEffect(() => {
+    if (drops.length > 0 || loading) return;
     fetchDropsData();
     fetchEventsAreas();
-  }, [user]);
+  }, [user, drops.length, loading]);
 
   const fetchDropsData = async () => {
     const data = await getDrops(user, firestore);
@@ -55,8 +57,9 @@ export const RecordPage = (): JSX.Element => {
       ship: outcome === '撤退' ? '' : ship,
       comment: comment,
     };
-    await createDrop(user, firestore, drop);
-    await fetchDropsData();
+    const newDrop = await createDrop(user, firestore, drop);
+    if (!newDrop) return;
+    setDrops((preDrops) => [newDrop, ...preDrops]);
     setShip('');
     setComment('');
   };
@@ -159,7 +162,7 @@ export const RecordPage = (): JSX.Element => {
       </Box>
       <Box pt={2}>
         <DropTable
-          items={drops}
+          drops={drops}
           eventsAreas={eventsAreas}
           fetchEventsAreas={fetchEventsAreas}
         />

@@ -1,5 +1,6 @@
 import { useRoutes } from 'react-router-dom';
 
+import { DropsProvider } from './lib/DropsContext';
 import routes from './Routes';
 import TopBar from './TopBar';
 
@@ -8,8 +9,12 @@ function App() {
 
   return (
     <>
-      <TopBar />
-      {routing}
+      <DropsProvider>
+        <>
+          <TopBar />
+          {routing}
+        </>
+      </DropsProvider>
     </>
   );
 }
