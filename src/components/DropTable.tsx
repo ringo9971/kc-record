@@ -80,7 +80,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
     時間: 'time',
   };
 
-  const { setDrops } = useDropsContext();
+  const { dropsProviderUpdateDrop } = useDropsContext();
   const [isDropFilterOpen, setIsDropFilterOpen] = useState(false);
   const [filteredDrops, setFilteredDrops] = useState<Drop[]>(props.drops);
   const [event, setEvent] = useState('');
@@ -104,12 +104,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   const handleUpdateDrop = (dropId: string, preDrop: Drop, newDrop: Drop) => {
     if (!newDrop.event || !newDrop.area) return;
     updateDrop(user, firestore, dropId, preDrop, newDrop);
-    setDrops(() =>
-      props.drops.map((drop: Drop) => {
-        if (drop.id === dropId) return newDrop;
-        return drop;
-      })
-    );
+    dropsProviderUpdateDrop(dropId, preDrop, newDrop);
     setFilteredDrops(() =>
       props.drops.map((drop: Drop) => {
         if (drop.id === dropId) return newDrop;
