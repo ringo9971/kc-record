@@ -41,9 +41,18 @@ export const updateDrop = async (
     return;
   }
 
+  const drops = await getAreaFirestoreDrops(
+    user,
+    firestore,
+    preDrop.event,
+    preDrop.area
+  );
+  if (drops.length === 1) {
+    await deleteEventsAreas(user, firestore, preDrop.event, preDrop.area);
+  }
+
   await deleteDrop(user, firestore, dropId, preDrop.event, preDrop.area);
   await _createDrop(user, firestore, updateDrop);
-  await deleteEventsAreas(user, firestore, preDrop.event, preDrop.area);
   await createEventsAreas(user, firestore, updateDrop.event, updateDrop.area);
 };
 
