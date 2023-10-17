@@ -38,7 +38,6 @@ const style = {
 interface DropsItemConfig {
   drops: Drop[];
   eventsAreas: Map<string, string[]>;
-  fetchEventsAreas: () => void;
 }
 
 interface ShowFilter {
@@ -112,7 +111,6 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
       })
     );
     setEditId(null);
-    props.fetchEventsAreas();
   };
 
   const handleColumnFilterChange = (filterName: keyof ShowFilter) => {
@@ -207,7 +205,6 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
               <Autocomplete
                 options={['', ...Array.from(props.eventsAreas.keys())]}
                 getOptionLabel={(event: string) => event}
-                onOpen={props.fetchEventsAreas}
                 sx={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
@@ -299,7 +296,6 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                         options={options}
                         getOptionLabel={(value: string) => value}
                         sx={{ width: 100 }}
-                        onOpen={props.fetchEventsAreas}
                         freeSolo
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -365,7 +361,6 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                             options={outcomes}
                             getOptionLabel={(value: string) => value}
                             sx={{ width: 100 }}
-                            onOpen={props.fetchEventsAreas}
                             renderInput={(params) => <TextField {...params} />}
                           />
                         ) : (

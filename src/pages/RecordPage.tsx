@@ -18,15 +18,14 @@ import DropTable from '../components/DropTable';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
 import { useDropsContext } from '../lib/DropsContext';
+import { useEventsAreasContext } from '../lib/EventsAreasContext';
 
 export const RecordPage = (): JSX.Element => {
   const { user, loading } = useUser();
   const { firestore } = useFirebase();
 
-  const { drops, setDrops } = useDropsContext();
-  const [eventsAreas, setEventsAreas] = useState<Map<string, string[]>>(
-    new Map()
-  );
+  const { drops, setDrops, dropsProviderCreateDrop } = useDropsContext();
+  const { eventsAreas, setEventsAreas } = useEventsAreasContext();
 
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
@@ -59,7 +58,7 @@ export const RecordPage = (): JSX.Element => {
     };
     const newDrop = await createDrop(user, firestore, drop);
     if (!newDrop) return;
-    setDrops((preDrops) => [newDrop, ...preDrops]);
+    dropsProviderCreateDrop(newDrop);
     setShip('');
     setComment('');
   };
@@ -79,7 +78,6 @@ export const RecordPage = (): JSX.Element => {
             }}
             options={Array.from(eventsAreas.keys())}
             getOptionLabel={(event: string) => event}
-            onOpen={fetchEventsAreas}
             freeSolo
             sx={{ width: 200 }}
             renderInput={(params) => (
@@ -91,7 +89,6 @@ export const RecordPage = (): JSX.Element => {
             onInputChange={(_, area) => setArea(area)}
             options={eventsAreas.get(event) ?? []}
             getOptionLabel={(area: string) => area}
-            onOpen={fetchEventsAreas}
             freeSolo
             sx={{ width: 200 }}
             renderInput={(params) => (
@@ -161,11 +158,7 @@ export const RecordPage = (): JSX.Element => {
         </Button>
       </Box>
       <Box pt={2}>
-        <DropTable
-          drops={drops}
-          eventsAreas={eventsAreas}
-          fetchEventsAreas={fetchEventsAreas}
-        />
+        <DropTable drops={drops} eventsAreas={eventsAreas} />
       </Box>
     </>
   );
