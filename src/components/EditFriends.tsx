@@ -11,10 +11,6 @@ import {
 } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 
-import { createFriend } from '../api/createFriend';
-import { getFriends } from '../api/getFriends';
-import { getProfiles } from '../api/getProfile';
-import { Profile } from '../api/types';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
 import { useFriendsContext } from '../lib/FriendsContext';
@@ -22,31 +18,22 @@ import { useFriendsContext } from '../lib/FriendsContext';
 const EditFriends = () => {
   const { user } = useUser();
   const { firestore } = useFirebase();
-
-  const { setFriendsId } = useFriendsContext();
-  const { friendsProfile, setFriendsProfile } = useFriendsContext();
+  const { friendsData, addFriend, fetchFriends } = useFriendsContext();
 
   const [friendId, setFriendId] = useState('');
 
   const handleClick = async () => {
-    const profile = await createFriend(user, firestore, friendId);
-    if (!profile) return;
-    setFriendsProfile((preFriendsProfile: Profile[]) => {
-      const newFriendsProfile = [...preFriendsProfile, profile];
-      return newFriendsProfile;
-    });
+    if (!user) return;
+    addFriend(user, firestore, friendId);
   };
 
-  const fetchFriends = async () => {
-    if (!user || friendsProfile.length > 0) return;
-    const ids = await getFriends(user, firestore);
-    const profiles = await getProfiles(user, firestore, ids);
-    setFriendsId(ids);
-    setFriendsProfile(profiles);
+  const _fetchFriends = async () => {
+    if (!user || friendsData.length > 0) return;
+    fetchFriends(user, firestore);
   };
   useEffect(() => {
-    fetchFriends();
-  }, [user, friendsProfile.length]);
+    _fetchFriends();
+  }, [user, friendsData.length]);
 
   if (!user) {
     return <></>;
@@ -74,7 +61,7 @@ const EditFriends = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {friendsProfile.map((profile) => (
+                {friendsData.map(({ profile }) => (
                   <TableRow key={profile.name}>
                     <TableCell>{profile.name}</TableCell>
                     <TableCell>{profile.message}</TableCell>
