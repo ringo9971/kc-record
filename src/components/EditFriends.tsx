@@ -17,32 +17,36 @@ import { getProfiles } from '../api/getProfile';
 import { Profile } from '../api/types';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
+import { useFriendsContext } from '../lib/FriendsContext';
 
 const EditFriends = () => {
   const { user } = useUser();
   const { firestore } = useFirebase();
 
-  const [friendsProfile, setFriendsProfile] = useState<Profile[]>([]);
+  const { setFriendsId } = useFriendsContext();
+  const { friendsProfile, setFriendsProfile } = useFriendsContext();
+
   const [friendId, setFriendId] = useState('');
 
   const handleClick = async () => {
     const profile = await createFriend(user, firestore, friendId);
     if (!profile) return;
-    setFriendsProfile((preFriendsProfile) => {
+    setFriendsProfile((preFriendsProfile: Profile[]) => {
       const newFriendsProfile = [...preFriendsProfile, profile];
       return newFriendsProfile;
     });
   };
 
   const fetchFriends = async () => {
-    if (!user) return;
-    const friendIds = await getFriends(user, firestore);
-    const profiles = await getProfiles(user, firestore, friendIds);
+    if (!user || friendsProfile.length > 0) return;
+    const ids = await getFriends(user, firestore);
+    const profiles = await getProfiles(user, firestore, ids);
+    setFriendsId(ids);
     setFriendsProfile(profiles);
   };
   useEffect(() => {
     fetchFriends();
-  }, [user]);
+  }, [user, friendsProfile.length]);
 
   if (!user) {
     return <></>;
