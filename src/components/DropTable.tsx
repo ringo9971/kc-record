@@ -141,25 +141,31 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
     }
   };
 
+  const filterDrops = (
+    drops: Drop[] = [],
+    outcomesFilter: string[],
+    event: string,
+    area: string
+  ) => {
+    return drops
+      .filter(
+        (drop: Drop) =>
+          outcomesFilter.length === 0 || outcomesFilter.includes(drop.outcome)
+      )
+      .filter(
+        (drop: Drop) =>
+          !event || (drop.event === event && (!area || drop.area === area))
+      );
+  };
+
   useEffect(() => {
-    const newDrops = (props.drops ?? [])
-      .filter(
-        (drop: Drop) =>
-          outcomesFilter.length === 0 || outcomesFilter.includes(drop.outcome)
-      )
-      .filter(
-        (drop: Drop) =>
-          !event || (drop.event === event && (!area || drop.area === area))
-      );
-    const newFriendDrops = (friendsData?.[0]?.drops ?? [])
-      .filter(
-        (drop: Drop) =>
-          outcomesFilter.length === 0 || outcomesFilter.includes(drop.outcome)
-      )
-      .filter(
-        (drop: Drop) =>
-          !event || (drop.event === event && (!area || drop.area === area))
-      );
+    const newDrops = filterDrops(props.drops, outcomesFilter, event, area);
+    const newFriendDrops = filterDrops(
+      friendsData?.[0]?.drops,
+      outcomesFilter,
+      event,
+      area
+    );
 
     setFilteredDrops(newDrops);
     setFilteredFriendData(newFriendDrops);
