@@ -37,7 +37,7 @@ export const getDrops = async (
 ): Promise<Drop[]> => {
   if (!user) return [];
 
-  const eventsAreas = await getEventsAreas(user, firestore);
+  const eventsAreas = await getEventsAreas(user, firestore, userId);
   const results: Drop[] = [];
 
   for (const [event, areas] of eventsAreas.results.entries()) {
@@ -84,7 +84,7 @@ export const getFirestoreDrops = async (
 ): Promise<FirestoreDrop[]> => {
   if (!user) return [];
 
-  const eventsAreas = await getEventsAreas(user, firestore);
+  const eventsAreas = await getEventsAreas(user, firestore, userId);
   const results: FirestoreDrop[] = [];
 
   for (const [event, areas] of eventsAreas.results.entries()) {

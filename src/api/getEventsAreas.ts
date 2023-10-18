@@ -5,11 +5,12 @@ import { EventAreas, EventsAreasResponse } from './types';
 
 export const getEventsAreas = async (
   user: User | null,
-  firestore: Firestore
+  firestore: Firestore,
+  userId?: string
 ): Promise<EventsAreasResponse> => {
   if (!user) return { results: new Map() };
 
-  const docSnap = await getDoc(doc(firestore, 'drops', user.uid));
+  const docSnap = await getDoc(doc(firestore, 'drops', userId ?? user.uid));
 
   if (!docSnap.exists()) {
     return { results: new Map() };
