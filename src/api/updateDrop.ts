@@ -3,7 +3,6 @@ import { doc, setDoc, Firestore } from 'firebase/firestore';
 
 import { createEventsAreas } from './createEventsAreas';
 import { deleteDrop } from './deleteDrop';
-import { deleteEventsAreas } from './deleteEventsAreas';
 import { getAreaFirestoreDrops } from './getDrops';
 import { Drop, FirestoreDrop } from './types';
 
@@ -39,16 +38,6 @@ export const updateDrop = async (
       }
     );
     return;
-  }
-
-  const drops = await getAreaFirestoreDrops(
-    user,
-    firestore,
-    preDrop.event,
-    preDrop.area
-  );
-  if (drops.length === 1) {
-    await deleteEventsAreas(user, firestore, preDrop.event, preDrop.area);
   }
 
   await deleteDrop(user, firestore, dropId, preDrop.event, preDrop.area);
