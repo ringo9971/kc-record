@@ -23,7 +23,7 @@ interface FriendData {
 interface FriendsContextProps {
   friendsData: FriendData[];
   setFriendsData: Dispatch<SetStateAction<FriendData[]>>;
-  fetchFriends: (user: User, firestore: Firestore) => void;
+  fetchFriends: (user: User | null, firestore: Firestore) => void;
   addFriend: (user: User, firestore: Firestore, friendId: string) => void;
 }
 
@@ -32,7 +32,9 @@ const FriendsContext = createContext<FriendsContextProps | null>(null);
 export const FriendsProvider = ({ children }: { children: JSX.Element }) => {
   const [friendsData, setFriendsData] = useState<FriendData[]>([]);
 
-  const fetchFriends = async (user: User, firestore: Firestore) => {
+  const fetchFriends = async (user: User | null, firestore: Firestore) => {
+    if (!user) return;
+
     const friendIds = await getFriends(user, firestore);
 
     const newFriendsData: FriendData[] = [];

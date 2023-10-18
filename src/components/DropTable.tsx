@@ -23,6 +23,7 @@ import { updateDrop } from '../api/updateDrop';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
 import { useDropsContext } from '../lib/DropsContext';
+import { useFriendsContext } from '../lib/FriendsContext';
 
 const style = {
   position: 'absolute',
@@ -52,6 +53,8 @@ interface ShowFilter {
 export const DropTable = (props: DropsItemConfig): JSX.Element => {
   const { user } = useUser();
   const { firestore } = useFirebase();
+
+  const { friendsData } = useFriendsContext();
 
   const [isColumnFilterOpen, setIsColumnFilterOpen] = useState(false);
   const [columnFilter, setColumnFilter] = useState<ShowFilter>({
@@ -262,14 +265,32 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                 {columnFilter.event && <TableCell>イベント</TableCell>}
                 {columnFilter.area && <TableCell>海域</TableCell>}
                 {columnFilter.outcome && <TableCell>勝利</TableCell>}
-                {columnFilter.ship && <TableCell>ドロップ</TableCell>}
+                {columnFilter.ship && (
+                  <TableCell colSpan={friendsData.length + 1}>
+                    ドロップ
+                  </TableCell>
+                )}
                 {columnFilter.comment && <TableCell>コメント</TableCell>}
                 {columnFilter.time && <TableCell>時間</TableCell>}
                 {isEdit && <TableCell>編集</TableCell>}
               </TableRow>
+              {friendsData.length > 0 && (
+                <TableRow>
+                  {columnFilter.event && <TableCell></TableCell>}
+                  {columnFilter.area && <TableCell></TableCell>}
+                  {columnFilter.outcome && <TableCell></TableCell>}
+                  {columnFilter.ship && <TableCell>自分</TableCell>}
+                  {columnFilter.ship && (
+                    <TableCell>{friendsData?.[0]?.profile.name}</TableCell>
+                  )}
+                  {columnFilter.comment && <TableCell></TableCell>}
+                  {columnFilter.time && <TableCell></TableCell>}
+                  {isEdit && <TableCell></TableCell>}
+                </TableRow>
+              )}
             </TableHead>
             <TableBody>
-              {filteredDrops.map((drop: Drop) => {
+              {filteredDrops.map((drop: Drop, index) => {
                 const time = new Date(drop.time).toLocaleString('jp-JP', {
                   timeZone: 'Asia/Tokyo',
                   month: '2-digit',
@@ -378,6 +399,11 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                             ship: e.target.value,
                           }))
                       )}
+                    {columnFilter.ship && friendsData.length > 0 && (
+                      <TableCell>
+                        {friendsData?.[0]?.drops[index]?.ship}
+                      </TableCell>
+                    )}
                     {columnFilter.comment &&
                       renderTextFiledCell(
                         dropEdit.comment,

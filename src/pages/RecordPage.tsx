@@ -19,6 +19,7 @@ import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
 import { useDropsContext } from '../lib/DropsContext';
 import { useEventsAreasContext } from '../lib/EventsAreasContext';
+import { useFriendsContext } from '../lib/FriendsContext';
 
 export const RecordPage = (): JSX.Element => {
   const { user, loading } = useUser();
@@ -26,6 +27,8 @@ export const RecordPage = (): JSX.Element => {
 
   const { drops, setDrops, dropsProviderCreateDrop } = useDropsContext();
   const { eventsAreas, setEventsAreas } = useEventsAreasContext();
+
+  const { fetchFriends } = useFriendsContext();
 
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
@@ -37,6 +40,7 @@ export const RecordPage = (): JSX.Element => {
     if (drops.length > 0 || loading) return;
     fetchDropsData();
     fetchEventsAreas();
+    fetchFriends(user, firestore);
   }, [user, drops.length, loading]);
 
   const fetchDropsData = async () => {
