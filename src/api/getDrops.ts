@@ -32,7 +32,8 @@ const mapFirestoreDropsToDrops = (
 
 export const getDrops = async (
   user: User | null,
-  firestore: Firestore
+  firestore: Firestore,
+  userId?: string
 ): Promise<Drop[]> => {
   if (!user) return [];
 
@@ -41,7 +42,13 @@ export const getDrops = async (
 
   for (const [event, areas] of eventsAreas.results.entries()) {
     for (const area of areas) {
-      const areaResults = await getAreaDrops(user, firestore, event, area);
+      const areaResults = await getAreaDrops(
+        user,
+        firestore,
+        event,
+        area,
+        userId
+      );
       results.push(...areaResults);
     }
   }
@@ -53,7 +60,8 @@ export const getAreaDrops = async (
   user: User | null,
   firestore: Firestore,
   event: string,
-  area: string
+  area: string,
+  userId?: string
 ): Promise<Drop[]> => {
   if (!user) return [];
 
@@ -61,7 +69,8 @@ export const getAreaDrops = async (
     user,
     firestore,
     event,
-    area
+    area,
+    userId
   );
   const drops = mapFirestoreDropsToDrops(firestoreDrops, event, area);
 
@@ -70,7 +79,8 @@ export const getAreaDrops = async (
 
 export const getFirestoreDrops = async (
   user: User | null,
-  firestore: Firestore
+  firestore: Firestore,
+  userId?: string
 ): Promise<FirestoreDrop[]> => {
   if (!user) return [];
 
@@ -79,7 +89,13 @@ export const getFirestoreDrops = async (
 
   for (const [event, areas] of eventsAreas.results.entries()) {
     for (const area of areas) {
-      const areaResults = await getAreaDrops(user, firestore, event, area);
+      const areaResults = await getAreaDrops(
+        user,
+        firestore,
+        event,
+        area,
+        userId
+      );
       results.push(...areaResults);
     }
   }
@@ -91,11 +107,14 @@ export const getAreaFirestoreDrops = async (
   user: User | null,
   firestore: Firestore,
   event: string,
-  area: string
+  area: string,
+  userId?: string
 ): Promise<FirestoreDrop[]> => {
   if (!user) return [];
 
-  const docSnap = await getDoc(doc(firestore, 'drops', user.uid, event, area));
+  const docSnap = await getDoc(
+    doc(firestore, 'drops', userId ?? user.uid, event, area)
+  );
   const results: FirestoreDrop[] = (docSnap.data()?.results ?? []).map(
     (result: FirestoreDropData) => ({
       ...result,
