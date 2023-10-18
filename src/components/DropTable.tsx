@@ -55,6 +55,9 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   const { firestore } = useFirebase();
 
   const { friendsData } = useFriendsContext();
+  const [filteredFriendData, setFilteredFriendData] = useState<Drop[]>(
+    friendsData?.[0]?.drops ?? []
+  );
 
   const [isColumnFilterOpen, setIsColumnFilterOpen] = useState(false);
   const [columnFilter, setColumnFilter] = useState<ShowFilter>({
@@ -148,8 +151,18 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
         (drop: Drop) =>
           !event || (drop.event === event && (!area || drop.area === area))
       );
+    const newFriendDrops = (friendsData?.[0]?.drops ?? [])
+      .filter(
+        (drop: Drop) =>
+          outcomesFilter.length === 0 || outcomesFilter.includes(drop.outcome)
+      )
+      .filter(
+        (drop: Drop) =>
+          !event || (drop.event === event && (!area || drop.area === area))
+      );
 
     setFilteredDrops(newDrops);
+    setFilteredFriendData(newFriendDrops);
   }, [event, area, props.drops, outcomesFilter]);
 
   return (
@@ -401,7 +414,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                       )}
                     {columnFilter.ship && friendsData.length > 0 && (
                       <TableCell>
-                        {friendsData?.[0]?.drops[index]?.ship}
+                        {filteredFriendData?.[index]?.ship ?? ''}
                       </TableCell>
                     )}
                     {columnFilter.comment &&
