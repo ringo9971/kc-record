@@ -90,6 +90,9 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   const [filteredDrops, setFilteredDrops] = useState<Drop[]>(props.drops);
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
+  const [maxDropsLength, setMaxDropsLength] = useState(
+    Math.max(filteredDrops.length, filteredFriendData.length)
+  );
 
   const outcomes = ['S', 'A', 'B', '撤退', '不明'];
   const [outcomesFilter, setOutcomesFilter] = useState<string[]>([]);
@@ -169,6 +172,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
 
     setFilteredDrops(newDrops);
     setFilteredFriendData(newFriendDrops);
+    setMaxDropsLength(Math.max(newDrops.length, newFriendDrops.length));
   }, [event, area, props.drops, outcomesFilter]);
 
   return (
@@ -309,14 +313,17 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
               )}
             </TableHead>
             <TableBody>
-              {filteredDrops.map((drop: Drop, index) => {
-                const time = new Date(drop.time).toLocaleString('jp-JP', {
-                  timeZone: 'Asia/Tokyo',
-                  month: '2-digit',
-                  day: '2-digit',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                });
+              {Array.from({ length: maxDropsLength }, (_, index) => {
+                const drop = filteredDrops[index];
+                const time = drop
+                  ? new Date(drop.time).toLocaleString('jp-JP', {
+                      timeZone: 'Asia/Tokyo',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+                  : undefined;
 
                 const renderAutocompleteCell = (
                   editValue: string,
@@ -328,7 +335,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                   ) => void
                 ) => (
                   <TableCell>
-                    {editId && editId === drop.id ? (
+                    {editId && editId === drop?.id ? (
                       <Autocomplete
                         value={editValue}
                         inputValue={editValue}
@@ -351,7 +358,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                   onChangeFn: (e: React.ChangeEvent<HTMLInputElement>) => void
                 ) => (
                   <TableCell>
-                    {editId && editId === drop.id ? (
+                    {editId && editId === drop?.id ? (
                       <TextField
                         value={editValue}
                         onChange={onChangeFn}
@@ -364,11 +371,11 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                 );
 
                 return (
-                  <TableRow key={drop.id}>
+                  <TableRow key={drop?.id ?? filteredFriendData[index]?.id}>
                     {columnFilter.event &&
                       renderAutocompleteCell(
                         dropEdit.event,
-                        drop.event,
+                        drop?.event,
                         Array.from(props.eventsAreas.keys()),
                         (_, event) =>
                           setDropEdit((preDropEdit) => ({
@@ -379,7 +386,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                     {columnFilter.area &&
                       renderAutocompleteCell(
                         dropEdit.area,
-                        drop.area,
+                        drop?.area,
                         props.eventsAreas.get(dropEdit.event) ?? [],
                         (_, area) =>
                           setDropEdit((preDropEdit) => ({
@@ -389,7 +396,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                       )}
                     {columnFilter.outcome && (
                       <TableCell>
-                        {editId && editId === drop.id ? (
+                        {editId && editId === drop?.id ? (
                           <Autocomplete
                             value={dropEdit.outcome}
                             onChange={(_, outcome) =>
@@ -404,14 +411,14 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                             renderInput={(params) => <TextField {...params} />}
                           />
                         ) : (
-                          <>{drop.outcome}</>
+                          <>{drop?.outcome}</>
                         )}
                       </TableCell>
                     )}
                     {columnFilter.ship &&
                       renderTextFiledCell(
                         dropEdit.ship,
-                        drop.ship,
+                        drop?.ship,
                         (e: React.ChangeEvent<HTMLInputElement>) =>
                           setDropEdit((preDropEdit) => ({
                             ...preDropEdit,
@@ -426,7 +433,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                     {columnFilter.comment &&
                       renderTextFiledCell(
                         dropEdit.comment,
-                        drop.comment,
+                        drop?.comment,
                         (e: React.ChangeEvent<HTMLInputElement>) =>
                           setDropEdit((preDropEdit) => ({
                             ...preDropEdit,
@@ -434,7 +441,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                           }))
                       )}
                     {columnFilter.time && <TableCell>{time}</TableCell>}
-                    {isEdit && (
+                    {isEdit && drop && (
                       <TableCell>
                         {editId && editId === drop.id ? (
                           <Button
