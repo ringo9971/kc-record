@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { SyntheticEvent, memo, useEffect, useState } from 'react';
 
+import { ShipInfo } from './ShipInfo';
 import { Drop } from '../api/types';
 import { updateDrop } from '../api/updateDrop';
 import useFirebase from '../hooks/useFirebase';
@@ -415,19 +416,29 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                         )}
                       </TableCell>
                     )}
-                    {columnFilter.ship &&
-                      renderTextFiledCell(
-                        dropEdit.ship,
-                        drop?.ship,
-                        (e: React.ChangeEvent<HTMLInputElement>) =>
-                          setDropEdit((preDropEdit) => ({
-                            ...preDropEdit,
-                            ship: e.target.value,
-                          }))
-                      )}
+                    {columnFilter.ship && (
+                      <TableCell>
+                        {editId && editId === drop?.id ? (
+                          <TextField
+                            value={dropEdit.ship}
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) =>
+                              setDropEdit((preDropEdit) => ({
+                                ...preDropEdit,
+                                ship: e.target.value,
+                              }))
+                            }
+                            sx={{ width: 100 }}
+                          />
+                        ) : (
+                          <ShipInfo ship={drop?.ship} />
+                        )}
+                      </TableCell>
+                    )}
                     {columnFilter.ship && friendsData.length > 0 && (
                       <TableCell>
-                        {filteredFriendData?.[index]?.ship ?? ''}
+                        <ShipInfo ship={filteredFriendData?.[index]?.ship} />
                       </TableCell>
                     )}
                     {columnFilter.comment &&
