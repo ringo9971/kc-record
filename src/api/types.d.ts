@@ -1,3 +1,12 @@
+export interface RareDrop {
+  ship: string;
+  rare: string;
+}
+
+export interface RareDropsResponse {
+  results: Map<string, string>;
+}
+
 export interface Profile {
   name: string;
   message?: string;
