@@ -230,7 +230,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
           <Box pt={2}>
             <Box display="flex" flexDirection="row">
               <Autocomplete
-                options={['', ...Array.from(props.eventsAreas.keys())]}
+                options={['', ...Array.from(props.eventsAreas.keys()).sort()]}
                 getOptionLabel={(event: string) => event}
                 sx={{ width: 200 }}
                 renderInput={(params) => (
@@ -248,7 +248,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                 }}
               />
               <Autocomplete
-                options={['', ...(props.eventsAreas.get(event) ?? [])]}
+                options={['', ...(props.eventsAreas.get(event)?.sort() ?? [])]}
                 getOptionLabel={(area: string) => area}
                 sx={{ width: 200 }}
                 renderInput={(params) => (
@@ -377,7 +377,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                       renderAutocompleteCell(
                         dropEdit.event,
                         drop?.event,
-                        Array.from(props.eventsAreas.keys()),
+                        Array.from(props.eventsAreas.keys()).sort(),
                         (_, event) =>
                           setDropEdit((preDropEdit) => ({
                             ...preDropEdit,
@@ -388,7 +388,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                       renderAutocompleteCell(
                         dropEdit.area,
                         drop?.area,
-                        props.eventsAreas.get(dropEdit.event) ?? [],
+                        props.eventsAreas.get(dropEdit.event)?.sort() ?? [],
                         (_, area) =>
                           setDropEdit((preDropEdit) => ({
                             ...preDropEdit,

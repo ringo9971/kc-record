@@ -83,7 +83,7 @@ export const RecordPage = (): JSX.Element => {
             onInputChange={(_, event) => {
               setEvent(event);
             }}
-            options={Array.from(eventsAreas.keys())}
+            options={Array.from(eventsAreas.keys()).sort()}
             getOptionLabel={(event: string) => event}
             freeSolo
             sx={{ width: 200 }}
@@ -94,7 +94,7 @@ export const RecordPage = (): JSX.Element => {
           <Autocomplete
             inputValue={area}
             onInputChange={(_, area) => setArea(area)}
-            options={eventsAreas.get(event) ?? []}
+            options={eventsAreas.get(event)?.sort() ?? []}
             getOptionLabel={(area: string) => area}
             freeSolo
             sx={{ width: 200 }}
