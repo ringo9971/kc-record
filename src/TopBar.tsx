@@ -1,4 +1,4 @@
-import { Logout, PersonAdd, Person } from '@mui/icons-material';
+import { Logout, PersonAdd, Person, Settings } from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
@@ -70,6 +70,12 @@ const TopBar = (): JSX.Element => {
                     <PersonAdd />
                   </ListItemIcon>
                   フレンド追加
+                </MenuItem>
+                <MenuItem onClick={() => navigate('/settings')}>
+                  <ListItemIcon>
+                    <Settings />
+                  </ListItemIcon>
+                  設定
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={logout}>

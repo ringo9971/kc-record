@@ -3,6 +3,7 @@ import { useRoutes } from 'react-router-dom';
 import { DropsProvider } from './lib/DropsContext';
 import { EventsAreasProvider } from './lib/EventsAreasContext';
 import { FriendsProvider } from './lib/FriendsContext';
+import { RareProvider } from './lib/RareContext';
 import routes from './Routes';
 import TopBar from './TopBar';
 
@@ -14,10 +15,12 @@ function App() {
       <EventsAreasProvider>
         <DropsProvider>
           <FriendsProvider>
-            <>
-              <TopBar />
-              {routing}
-            </>
+            <RareProvider>
+              <>
+                <TopBar />
+                {routing}
+              </>
+            </RareProvider>
           </FriendsProvider>
         </DropsProvider>
       </EventsAreasProvider>

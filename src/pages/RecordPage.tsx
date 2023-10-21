@@ -20,6 +20,7 @@ import { useUser } from '../hooks/useUser';
 import { useDropsContext } from '../lib/DropsContext';
 import { useEventsAreasContext } from '../lib/EventsAreasContext';
 import { useFriendsContext } from '../lib/FriendsContext';
+import { useRareContext } from '../lib/RareContext';
 
 export const RecordPage = (): JSX.Element => {
   const { user, loading } = useUser();
@@ -29,6 +30,7 @@ export const RecordPage = (): JSX.Element => {
   const { eventsAreas, setEventsAreas } = useEventsAreasContext();
 
   const { fetchFriends } = useFriendsContext();
+  const { fetchRareDrops } = useRareContext();
 
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
@@ -41,6 +43,7 @@ export const RecordPage = (): JSX.Element => {
     fetchDropsData();
     fetchEventsAreas();
     fetchFriends(user, firestore);
+    fetchRareDrops(user, firestore);
   }, [user, drops.length, loading]);
 
   const fetchDropsData = async () => {
