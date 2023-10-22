@@ -39,12 +39,12 @@ export const RecordPage = (): JSX.Element => {
   const [comment, setComment] = useState('');
 
   useEffect(() => {
-    if (drops.length > 0 || loading) return;
+    if (drops.length > 0 || loading || !user) return;
     fetchDropsData();
     fetchEventsAreas();
     fetchFriends(user, firestore);
     fetchRareDrops(user, firestore);
-  }, [user, drops.length, loading]);
+  }, [user, drops.length, loading, user]);
 
   const fetchDropsData = async () => {
     const data = await getDrops(user, firestore);
