@@ -3,6 +3,7 @@ import { Box, Button, Popover, TextField } from '@mui/material';
 import { memo, useState } from 'react';
 import { CirclePicker, ColorResult } from 'react-color';
 
+import ColorsDropsBox from './ColorsDropsBox';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
 import { useRareContext } from '../lib/RareContext';
@@ -10,7 +11,7 @@ import { useRareContext } from '../lib/RareContext';
 export const EditRareDrops = () => {
   const { user } = useUser();
   const { firestore } = useFirebase();
-  const { rareDrops, addRareDrop } = useRareContext();
+  const { colorsDrops, addRareDrop } = useRareContext();
 
   const [ship, setShip] = useState('');
   const [rare, setRare] = useState('#000000');
@@ -31,7 +32,6 @@ export const EditRareDrops = () => {
     <Box>
       <Box>
         <Circle
-          // fontSize="400px"
           style={{ color: rare, width: '50px', height: '50px' }}
           onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
             handleClick(event)
@@ -67,11 +67,12 @@ export const EditRareDrops = () => {
         </Popover>
       </Box>
       <Box pt={2}>
-        {Array.from(rareDrops.entries()).map(([ship, rare]) => (
-          <Box key={ship}>
-            <Circle fontSize="large" style={{ color: rare }} />
-            {ship}
-          </Box>
+        {Array.from(colorsDrops.keys()).map((color) => (
+          <ColorsDropsBox
+            key={color}
+            color={color}
+            ships={colorsDrops.get(color) ?? []}
+          />
         ))}
       </Box>
     </Box>

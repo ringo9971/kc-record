@@ -21,6 +21,7 @@ interface RareContextProps {
     ship: string,
     rare: string
   ) => void;
+  colorsDrops: Map<string, string[]>;
 }
 
 const RareContext = createContext<RareContextProps | null>(null);
@@ -29,12 +30,28 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
   const [rareDrops, setRareDrops] = useState<Map<string, string>>(
     new Map<string, string>()
   );
+  const [colorsDrops, setColorsDrops] = useState<Map<string, string[]>>(
+    new Map<string, string[]>()
+  );
+
+  const groupShipsByColor = (drops: Map<string, string>) => {
+    const colorsDrops = new Map<string, string[]>();
+    drops.forEach((color, ship) => {
+      if (colorsDrops.has(color)) {
+        colorsDrops.get(color)?.push(ship);
+      } else {
+        colorsDrops.set(color, [ship]);
+      }
+    });
+    return colorsDrops;
+  };
 
   const fetchRareDrops = async (user: User | null, firestore: Firestore) => {
     if (!user) return;
 
     const drops = await getRareDrops(user, firestore);
     setRareDrops(drops.results);
+    setColorsDrops(() => groupShipsByColor(drops.results));
   };
 
   const addRareDrop = async (
@@ -46,6 +63,7 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
     if (!user) return;
     const drops = await createRareDrop(user, firestore, ship, rare);
     setRareDrops(drops.results);
+    setColorsDrops(() => groupShipsByColor(drops.results));
   };
 
   return (
@@ -55,6 +73,7 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
         setRareDrops,
         fetchRareDrops,
         addRareDrop,
+        colorsDrops,
       }}
     >
       {children}

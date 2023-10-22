@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+
 import { useRareContext } from '../lib/RareContext';
 
 interface ShipInfoProps {
