@@ -1,7 +1,7 @@
 import { Circle } from '@mui/icons-material';
 import { Box, Button, Popover, TextField } from '@mui/material';
 import { memo, useState } from 'react';
-import { CirclePicker, ColorResult } from 'react-color';
+import { SketchPicker, ColorResult } from 'react-color';
 
 import ColorsDropsBox from './ColorsDropsBox';
 import useFirebase from '../hooks/useFirebase';
@@ -56,12 +56,9 @@ export const EditRareDrops = () => {
           }}
         >
           <Box p={2}>
-            <CirclePicker
+            <SketchPicker
               color={rare}
-              onChange={(color: ColorResult) => {
-                handleClose();
-                setRare(color.hex);
-              }}
+              onChange={(color: ColorResult) => setRare(color.hex)}
             />
           </Box>
         </Popover>
