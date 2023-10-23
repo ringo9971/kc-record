@@ -3,8 +3,8 @@ export interface RareDrop {
   rare: string;
 }
 
-export interface RareDropsResponse {
-  results: Map<string, string>;
+export interface RareSettingsResponse {
+  drops: Map<string, string>;
 }
 
 export interface Profile {

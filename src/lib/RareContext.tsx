@@ -8,8 +8,8 @@ import {
   useState,
 } from 'react';
 
-import { createRareDrop } from '../api/createRareDrop';
-import { getRareDrops } from '../api/getRareDrops';
+import { createRareDrop } from '../api/createRareSetting';
+import { getRareSettings } from '../api/getRareSettings';
 
 interface RareContextProps {
   rareDrops: Map<string, string>;
@@ -49,9 +49,9 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
   const fetchRareDrops = async (user: User | null, firestore: Firestore) => {
     if (!user) return;
 
-    const drops = await getRareDrops(user, firestore);
-    setRareDrops(drops.results);
-    setColorsDrops(() => groupShipsByColor(drops.results));
+    const setting = await getRareSettings(user, firestore);
+    setRareDrops(setting.drops);
+    setColorsDrops(() => groupShipsByColor(setting.drops));
   };
 
   const addRareDrop = async (
@@ -61,9 +61,9 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
     rare: string
   ) => {
     if (!user) return;
-    const drops = await createRareDrop(user, firestore, ship, rare);
-    setRareDrops(drops.results);
-    setColorsDrops(() => groupShipsByColor(drops.results));
+    const setting = await createRareDrop(user, firestore, ship, rare);
+    setRareDrops(setting.drops);
+    setColorsDrops(() => groupShipsByColor(setting.drops));
   };
 
   return (

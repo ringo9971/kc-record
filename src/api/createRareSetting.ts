@@ -1,21 +1,21 @@
 import { User } from 'firebase/auth';
 import { Firestore, doc, setDoc } from 'firebase/firestore';
 
-import { getRareDrops } from './getRareDrops';
-import { RareDropsResponse, RareDrop } from './types';
+import { getRareSettings } from './getRareSettings';
+import { RareSettingsResponse, RareDrop } from './types';
 
 export const createRareDrop = async (
   user: User | null,
   firestore: Firestore,
   ship: string,
   rare: string
-): Promise<RareDropsResponse> => {
-  if (!user) return { results: new Map() };
+): Promise<RareSettingsResponse> => {
+  if (!user) return { drops: new Map() };
 
-  const data = await getRareDrops(user, firestore);
-  const drops = data.results;
+  const data = await getRareSettings(user, firestore);
+  const drops = data.drops;
   if (drops.has(ship)) {
-    return { results: drops };
+    return { drops: drops };
   }
 
   const rareDrops = drops.set(ship, rare);
@@ -33,5 +33,5 @@ export const createRareDrop = async (
     { merge: true }
   );
 
-  return { results: drops };
+  return { drops };
 };

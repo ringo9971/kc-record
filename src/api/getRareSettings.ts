@@ -1,13 +1,13 @@
 import { User } from 'firebase/auth';
 import { Firestore, doc, getDoc } from 'firebase/firestore';
 
-import { RareDrop, RareDropsResponse } from './types';
+import { RareDrop, RareSettingsResponse } from './types';
 
-export const getRareDrops = async (
+export const getRareSettings = async (
   user: User | null,
   firestore: Firestore
-): Promise<RareDropsResponse> => {
-  if (!user) return { results: new Map() };
+): Promise<RareSettingsResponse> => {
+  if (!user) return { drops: new Map() };
 
   const docSnap = await getDoc(doc(firestore, 'rare', user.uid));
 
@@ -19,5 +19,5 @@ export const getRareDrops = async (
     results.set(drop.ship, drop.rare);
   });
 
-  return { results: results };
+  return { drops: results };
 };
