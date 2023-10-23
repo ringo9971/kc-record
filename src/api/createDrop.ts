@@ -29,9 +29,13 @@ export const createDrop = async (
   };
   firestoreDrops.push(firestoreDrop);
 
-  await setDoc(doc(firestore, 'drops', user.uid, drop.event, drop.area), {
-    results: firestoreDrops,
-  });
+  await setDoc(
+    doc(firestore, 'drops', user.uid, drop.event, drop.area),
+    {
+      results: firestoreDrops,
+    },
+    { merge: true }
+  );
   await createEventsAreas(user, firestore, drop.event, drop.area);
 
   return { ...firestoreDrop, event: drop.event, area: drop.area };

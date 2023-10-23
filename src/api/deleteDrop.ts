@@ -16,9 +16,13 @@ export const deleteDrop = async (
   const drops = await getAreaFirestoreDrops(user, firestore, event, area);
   const updatedDrops = drops.filter((drop) => drop.id !== dropId);
 
-  await setDoc(doc(firestore, 'drops', user.uid, event, area), {
-    results: updatedDrops,
-  });
+  await setDoc(
+    doc(firestore, 'drops', user.uid, event, area),
+    {
+      results: updatedDrops,
+    },
+    { merge: true }
+  );
 
   if (updatedDrops.length === 0)
     await deleteEventsAreas(user, firestore, event, area);

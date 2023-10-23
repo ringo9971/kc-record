@@ -31,7 +31,11 @@ export const deleteEventsAreas = async (
     eventAreasArray.push({ event, areas });
   });
 
-  await setDoc(doc(firestore, 'drops', user.uid), {
-    eventsAreas: eventAreasArray,
-  });
+  await setDoc(
+    doc(firestore, 'drops', user.uid),
+    {
+      eventsAreas: eventAreasArray,
+    },
+    { merge: true }
+  );
 };

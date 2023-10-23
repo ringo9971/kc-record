@@ -19,7 +19,11 @@ export const createFriend = async (
   if (friends.includes(friendId)) return null;
 
   friends.push(friendId);
-  setDoc(doc(firestore, 'friends', user.uid), { friends: friends });
+  setDoc(
+    doc(firestore, 'friends', user.uid),
+    { friends: friends },
+    { merge: true }
+  );
 
   return profile;
 };

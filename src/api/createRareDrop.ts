@@ -25,9 +25,13 @@ export const createRareDrop = async (
   rareDrops.forEach((rare, ship) => {
     rareDropsArray.push({ ship, rare });
   });
-  await setDoc(doc(firestore, 'rare', user.uid), {
-    drops: rareDropsArray,
-  });
+  await setDoc(
+    doc(firestore, 'rare', user.uid),
+    {
+      drops: rareDropsArray,
+    },
+    { merge: true }
+  );
 
   return { results: drops };
 };

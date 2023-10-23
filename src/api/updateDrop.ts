@@ -35,7 +35,8 @@ export const updateDrop = async (
       doc(firestore, 'drops', user.uid, updateDrop.event, updateDrop.area),
       {
         results: firestoreDrops,
-      }
+      },
+      { merge: true }
     );
     return;
   }
@@ -67,7 +68,11 @@ const _createDrop = async (
     comment: drop.comment,
   });
 
-  await setDoc(doc(firestore, 'drops', user.uid, drop.event, drop.area), {
-    results: firestoreDrops,
-  });
+  await setDoc(
+    doc(firestore, 'drops', user.uid, drop.event, drop.area),
+    {
+      results: firestoreDrops,
+    },
+    { merge: true }
+  );
 };

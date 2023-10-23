@@ -9,8 +9,12 @@ export const createProfile = async (
 ) => {
   if (!user || !name) return null;
 
-  await setDoc(doc(firestore, 'profile', user.uid), {
-    name: name,
-    message: message,
-  });
+  await setDoc(
+    doc(firestore, 'profile', user.uid),
+    {
+      name: name,
+      message: message,
+    },
+    { merge: true }
+  );
 };
