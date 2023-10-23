@@ -14,25 +14,27 @@ import { useUser } from '../hooks/useUser';
 import { useRareContext } from '../lib/RareContext';
 
 interface ColorsDropsBoxProps {
-  color: string;
+  id: string;
   ships: string[];
 }
 
-export const ColorsDropsBox = ({ color, ships }: ColorsDropsBoxProps) => {
+export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
   const { user } = useUser();
   const { firestore } = useFirebase();
-  const { addRareDrop } = useRareContext();
+  const { addRareDrop, getColor } = useRareContext();
 
   const [ship, setShip] = useState('');
 
+  const color = getColor(id);
+
   const handleClick = () => {
-    addRareDrop(user, firestore, ship, color);
+    addRareDrop(user, firestore, ship, id);
     setShip('');
   };
 
   return (
     <Box>
-      <Circle fontSize="large" style={{ color: color }} />
+      <Circle fontSize="large" style={{ color: color.color }} />
       <TextField
         placeholder="ドロップ"
         value={ship}

@@ -11,13 +11,17 @@ import { useRareContext } from '../lib/RareContext';
 export const EditRareDrops = () => {
   const { user } = useUser();
   const { firestore } = useFirebase();
-  const { colorsDrops, addRareDrop } = useRareContext();
+  const { colorsDrops, addRareColor, rareColors } = useRareContext();
 
-  const [ship, setShip] = useState('');
-  const [rare, setRare] = useState('#000000');
+  const [comment, setComment] = useState('');
+  const [color, setColor] = useState('#000000');
 
   const handleAdd = () => {
-    addRareDrop(user, firestore, ship, rare);
+    addRareColor(user, firestore, {
+      color: color,
+      bgColor: '#FFFFFF',
+      comment: comment,
+    });
   };
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl);
@@ -32,16 +36,16 @@ export const EditRareDrops = () => {
     <Box>
       <Box>
         <Circle
-          style={{ color: rare, width: '50px', height: '50px' }}
+          style={{ color: color, width: '50px', height: '50px' }}
           onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
             handleClick(event)
           }
         />
         <TextField
-          placeholder="ドロップ"
-          value={ship}
+          placeholder="コメント"
+          value={comment}
           sx={{ width: 200 }}
-          onChange={(e) => setShip(e.target.value)}
+          onChange={(e) => setComment(e.target.value)}
         />
         <Button variant="contained" onClick={handleAdd}>
           追加
@@ -57,19 +61,15 @@ export const EditRareDrops = () => {
         >
           <Box p={2}>
             <SketchPicker
-              color={rare}
-              onChange={(color: ColorResult) => setRare(color.hex)}
+              color={color}
+              onChange={(color: ColorResult) => setColor(color.hex)}
             />
           </Box>
         </Popover>
       </Box>
       <Box pt={2}>
-        {Array.from(colorsDrops.keys()).map((color) => (
-          <ColorsDropsBox
-            key={color}
-            color={color}
-            ships={colorsDrops.get(color) ?? []}
-          />
+        {Array.from(rareColors.keys()).map((id) => (
+          <ColorsDropsBox key={id} id={id} ships={colorsDrops.get(id) ?? []} />
         ))}
       </Box>
     </Box>

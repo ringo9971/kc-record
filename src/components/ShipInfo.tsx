@@ -7,9 +7,9 @@ interface ShipInfoProps {
 }
 
 export const ShipInfo = ({ ship }: ShipInfoProps) => {
-  const { rareDrops } = useRareContext();
+  const { getColorByShip } = useRareContext();
 
-  const color = ship ? rareDrops.get(ship) ?? 'balck' : 'black';
+  const color = getColorByShip(ship);
 
   return <Box sx={{ color }}>{ship}</Box>;
 };

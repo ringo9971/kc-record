@@ -1,3 +1,22 @@
+export interface RareColorRequest {
+  color: string;
+  bgColor: string;
+  comment: string;
+}
+
+export interface FirestoreRareColor {
+  id: string;
+  color: string;
+  bgColor: string;
+  comment: string;
+}
+
+export interface RareColor {
+  color: string;
+  bgColor: string;
+  comment: string;
+}
+
 export interface RareDrop {
   ship: string;
   rare: string;
@@ -5,6 +24,7 @@ export interface RareDrop {
 
 export interface RareSettingsResponse {
   drops: Map<string, string>;
+  colors: Map<string, RareColor>;
 }
 
 export interface Profile {
