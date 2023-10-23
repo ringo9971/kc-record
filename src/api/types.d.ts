@@ -19,7 +19,7 @@ export interface RareColor {
 
 export interface RareDrop {
   ship: string;
-  rare: string;
+  id: string;
 }
 
 export interface RareSettingsResponse {

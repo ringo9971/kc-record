@@ -20,7 +20,7 @@ interface RareContextProps {
     user: User | null,
     firestore: Firestore,
     ship: string,
-    rare: string
+    id: string
   ) => void;
   colorsDrops: Map<string, string[]>;
   rareColors: Map<string, RareColor>;
@@ -81,10 +81,10 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
     user: User | null,
     firestore: Firestore,
     ship: string,
-    rare: string
+    id: string
   ) => {
     if (!user || !ship) return;
-    const setting = await createRareDrop(user, firestore, ship, rare);
+    const setting = await createRareDrop(user, firestore, ship, id);
     setRareDrops(setting.drops);
     setColorsDrops(() => groupShipsByColor(setting.drops));
   };

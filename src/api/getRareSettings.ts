@@ -21,7 +21,7 @@ export const getRareSettings = async (
 
   const drops: Map<string, string> = new Map();
   firestoreDrops.forEach((drop) => {
-    drops.set(drop.ship, drop.rare);
+    drops.set(drop.ship, drop.id);
   });
 
   const colors: Map<string, RareColor> = new Map();

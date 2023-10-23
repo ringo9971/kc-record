@@ -50,7 +50,7 @@ export const createRareDrop = async (
   user: User | null,
   firestore: Firestore,
   ship: string,
-  rare: string
+  id: string
 ): Promise<RareSettingsResponse> => {
   if (!user) return { drops: new Map(), colors: new Map() };
 
@@ -60,12 +60,12 @@ export const createRareDrop = async (
     return { drops, colors: data.colors };
   }
 
-  const rareDrops = drops.set(ship, rare);
+  const rareDrops = drops.set(ship, id);
 
   const rareDropsArray: RareDrop[] = [];
 
-  rareDrops.forEach((rare, ship) => {
-    rareDropsArray.push({ ship, rare });
+  rareDrops.forEach((id, ship) => {
+    rareDropsArray.push({ ship, id });
   });
   await setDoc(
     doc(firestore, 'rare', user.uid),
