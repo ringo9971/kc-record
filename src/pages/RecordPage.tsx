@@ -56,6 +56,7 @@ export const RecordPage = (): JSX.Element => {
   };
 
   const handleCreateDrop = async () => {
+    if (!ship) return;
     const drop: DropRequest = {
       event: event,
       area: area,
