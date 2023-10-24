@@ -11,5 +11,9 @@ export const ShipInfo = ({ ship }: ShipInfoProps) => {
 
   const color = getColorByShip(ship);
 
-  return <Box sx={{ color }}>{ship}</Box>;
+  return (
+    <Box sx={{ color: color.color, backgroundColor: color.bgColor }}>
+      {ship}
+    </Box>
+  );
 };

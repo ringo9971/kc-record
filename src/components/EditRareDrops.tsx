@@ -1,5 +1,5 @@
-import { Circle } from '@mui/icons-material';
-import { Box, Button, Popover, TextField } from '@mui/material';
+import { Circle, Rectangle } from '@mui/icons-material';
+import { Box, Button, Popover, TextField, Typography } from '@mui/material';
 import { memo, useState } from 'react';
 import { SketchPicker, ColorResult } from 'react-color';
 
@@ -15,45 +15,81 @@ export const EditRareDrops = () => {
 
   const [comment, setComment] = useState('');
   const [color, setColor] = useState('#000000');
+  const [bgColor, setBgColor] = useState('#FFFFFF');
 
   const handleAdd = () => {
     addRareColor(user, firestore, {
       color: color,
-      bgColor: '#FFFFFF',
+      bgColor: bgColor,
       comment: comment,
     });
   };
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
-    setAnchorEl(event.currentTarget as unknown as HTMLButtonElement);
+  const [colorAnchorEl, setColorAnchorEl] = useState<HTMLButtonElement | null>(
+    null
+  );
+  const colorOpen = Boolean(colorAnchorEl);
+  const handleColorClick = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>
+  ) => {
+    setColorAnchorEl(event.currentTarget as unknown as HTMLButtonElement);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleColorClose = () => {
+    setColorAnchorEl(null);
+  };
+  const [bgColorAnchorEl, setBgColorAnchorEl] =
+    useState<HTMLButtonElement | null>(null);
+  const bgColorOpen = Boolean(bgColorAnchorEl);
+  const handleBgColorClick = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>
+  ) => {
+    setBgColorAnchorEl(event.currentTarget as unknown as HTMLButtonElement);
+  };
+  const handleBgColorClose = () => {
+    setBgColorAnchorEl(null);
   };
 
   return (
     <Box>
-      <Box>
+      <Typography>背景色と文字色の設定</Typography>
+      <Box pt={2}>
         <Circle
-          style={{ color: color, width: '50px', height: '50px' }}
+          style={{
+            color: color,
+            border: '1px solid black',
+            width: '50px',
+            height: '50px',
+          }}
           onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
-            handleClick(event)
+            handleColorClick(event)
+          }
+        />
+        <Rectangle
+          style={{
+            color: bgColor,
+            border: '1px solid black',
+            width: '50px',
+            height: '50px',
+          }}
+          onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
+            handleBgColorClick(event)
           }
         />
         <TextField
           placeholder="コメント"
           value={comment}
-          sx={{ width: 200 }}
+          sx={{ width: 200, backgroundColor: bgColor }}
+          InputProps={{
+            style: { color },
+          }}
           onChange={(e) => setComment(e.target.value)}
         />
         <Button variant="contained" onClick={handleAdd}>
           追加
         </Button>
         <Popover
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
+          anchorEl={colorAnchorEl}
+          open={colorOpen}
+          onClose={handleColorClose}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
@@ -63,6 +99,23 @@ export const EditRareDrops = () => {
             <SketchPicker
               color={color}
               onChange={(color: ColorResult) => setColor(color.hex)}
+            />
+          </Box>
+        </Popover>
+
+        <Popover
+          anchorEl={bgColorAnchorEl}
+          open={bgColorOpen}
+          onClose={handleBgColorClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <Box p={2}>
+            <SketchPicker
+              color={bgColor}
+              onChange={(bgColor: ColorResult) => setBgColor(bgColor.hex)}
             />
           </Box>
         </Popover>

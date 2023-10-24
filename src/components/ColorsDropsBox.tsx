@@ -1,4 +1,4 @@
-import { Circle } from '@mui/icons-material';
+import { Circle, Rectangle } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -6,9 +6,11 @@ import {
   ListItem,
   ListItemText,
   TextField,
+  Typography,
 } from '@mui/material';
 import { memo, useState } from 'react';
 
+import { ShipInfo } from './ShipInfo';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
 import { useRareContext } from '../lib/RareContext';
@@ -34,7 +36,13 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
 
   return (
     <Box>
-      <Circle fontSize="large" style={{ color: color.color }} />
+      <Box display="flex" flexDirection="row">
+        <Circle fontSize="large" style={{ color: color.color }} />
+        <Rectangle fontSize="large" style={{ color: color.bgColor }} />
+        <Typography sx={{ color: color.color, backgroundColor: color.bgColor }}>
+          {color.comment}
+        </Typography>
+      </Box>
       <TextField
         placeholder="ドロップ"
         value={ship}
@@ -48,7 +56,9 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
       <List>
         {ships.map((ship) => (
           <ListItem key={ship}>
-            <ListItemText>{ship}</ListItemText>
+            <ListItemText>
+              <ShipInfo ship={ship} />
+            </ListItemText>
           </ListItem>
         ))}
       </List>
