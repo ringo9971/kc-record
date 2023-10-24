@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { SyntheticEvent, memo, useEffect, useState } from 'react';
 
+import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
 import { Drop } from '../api/types';
 import { updateDrop } from '../api/updateDrop';
@@ -419,17 +420,14 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                     {columnFilter.ship && (
                       <TableCell>
                         {editId && editId === drop?.id ? (
-                          <TextField
-                            value={dropEdit.ship}
-                            onChange={(
-                              e: React.ChangeEvent<HTMLInputElement>
-                            ) =>
+                          <ShipAutocomplete
+                            ship={dropEdit.ship}
+                            onShipChange={(ship: string) =>
                               setDropEdit((preDropEdit) => ({
                                 ...preDropEdit,
-                                ship: e.target.value,
+                                ship: ship,
                               }))
                             }
-                            sx={{ width: 100 }}
                           />
                         ) : (
                           <ShipInfo ship={drop?.ship} />

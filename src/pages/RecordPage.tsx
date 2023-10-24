@@ -15,6 +15,7 @@ import { getDrops } from '../api/getDrops';
 import { getEventsAreas } from '../api/getEventsAreas';
 import { DropRequest } from '../api/types';
 import DropTable from '../components/DropTable';
+import ShipAutocomplete from '../components/ShipAutocomplete';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
 import { useDropsContext } from '../lib/DropsContext';
@@ -105,12 +106,10 @@ export const RecordPage = (): JSX.Element => {
           />
         </Box>
         <Box display="flex" flexDirection="row" pt={1}>
-          <TextField
+          <ShipAutocomplete
+            ship={ship}
+            onShipChange={setShip}
             disabled={outcome === '撤退'}
-            placeholder="ドロップ"
-            value={ship}
-            sx={{ width: 200 }}
-            onChange={(e) => setShip(e.target.value)}
           />
           <TextField
             placeholder="コメント"

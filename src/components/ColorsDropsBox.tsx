@@ -5,11 +5,11 @@ import {
   List,
   ListItem,
   ListItemText,
-  TextField,
   Typography,
 } from '@mui/material';
 import { memo, useState } from 'react';
 
+import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
@@ -43,12 +43,7 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
           {color.comment}
         </Typography>
       </Box>
-      <TextField
-        placeholder="ドロップ"
-        value={ship}
-        sx={{ width: 200 }}
-        onChange={(e) => setShip(e.target.value)}
-      />
+      <ShipAutocomplete ship={ship} onShipChange={setShip} />
       <Button variant="contained" onClick={handleClick}>
         追加
       </Button>
