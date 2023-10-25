@@ -11,7 +11,7 @@ export const createDrop = async (
   firestore: Firestore,
   drop: DropRequest
 ): Promise<Drop | null> => {
-  if (!user || !drop.event || !drop.area || !drop.ship) return null;
+  if (!user || !drop.event || !drop.area) return null;
 
   const firestoreDrops = await getAreaFirestoreDrops(
     user,
