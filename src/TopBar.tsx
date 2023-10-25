@@ -19,7 +19,7 @@ import { useLogout } from './hooks/useLogout';
 import { useUser } from './hooks/useUser';
 
 const TopBar = (): JSX.Element => {
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const { logout } = useLogout();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -87,9 +87,11 @@ const TopBar = (): JSX.Element => {
               </Menu>
             </Box>
           ) : (
-            <Button component={Link} to="/login" color="inherit">
-              ログインはこちらから
-            </Button>
+            !loading && (
+              <Button component={Link} to="/login" color="inherit">
+                ログインはこちらから
+              </Button>
+            )
           )}
         </Toolbar>
       </AppBar>
