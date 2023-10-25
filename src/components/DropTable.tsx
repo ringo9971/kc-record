@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { SyntheticEvent, memo, useEffect, useState } from 'react';
 
+import DropFilter from './DropFilter';
 import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
 import { Drop } from '../api/types';
@@ -226,62 +227,23 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
           </FormGroup>
         </Box>
       </Modal>
-      <Box>
-        <Collapse in={isDropFilterOpen}>
-          <Box pt={2}>
-            <Box display="flex" flexDirection="row">
-              <Autocomplete
-                options={['', ...Array.from(props.eventsAreas.keys()).sort()]}
-                getOptionLabel={(event: string) => event}
-                sx={{ width: 200 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="イベント"
-                    placeholder="イベント"
-                    size="small"
-                  />
-                )}
-                value={event}
-                onChange={(_, newValue) => {
-                  setEvent(newValue ?? '');
-                  setArea('');
-                }}
-              />
-              <Autocomplete
-                options={['', ...(props.eventsAreas.get(event)?.sort() ?? [])]}
-                getOptionLabel={(area: string) => area}
-                sx={{ width: 200 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="海域"
-                    placeholder="海域"
-                    size="small"
-                  />
-                )}
-                value={area}
-                onChange={(_, newValue) => setArea(newValue ?? '')}
-              />
-            </Box>
-            <FormGroup sx={{ direction: 'flex', flexDirection: 'row', pt: 2 }}>
-              {outcomes.map((outcome) => (
-                <FormControlLabel
-                  key={outcome}
-                  control={
-                    <Checkbox
-                      checked={outcomesFilter.includes(outcome)}
-                      onChange={() => handleOutcomesFilter(outcome)}
-                    />
-                  }
-                  label={outcome}
-                  labelPlacement="top"
-                />
-              ))}
-            </FormGroup>
-          </Box>
-        </Collapse>
-      </Box>
+      <Collapse in={isDropFilterOpen}>
+        <Box pt={2}>
+          <DropFilter
+            event={event}
+            area={area}
+            eventsAreas={props.eventsAreas}
+            outcomes={outcomes}
+            outcomesFilter={outcomesFilter}
+            handleEventChange={(_, newValue) => {
+              setEvent(newValue ?? '');
+              setArea('');
+            }}
+            handleAreaChange={(_, newValue) => setArea(newValue ?? '')}
+            handleOutcomesFilter={handleOutcomesFilter}
+          />
+        </Box>
+      </Collapse>
       <Box pt={2}>
         <TableContainer>
           <Table>
