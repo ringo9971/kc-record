@@ -1,5 +1,4 @@
 import {
-  Autocomplete,
   Box,
   Button,
   FormControl,
@@ -15,6 +14,7 @@ import { getDrops } from '../api/getDrops';
 import { getEventsAreas } from '../api/getEventsAreas';
 import { DropRequest } from '../api/types';
 import DropTable from '../components/DropTable';
+import FreeAutocomplete from '../components/FreeAutocomplete';
 import ShipAutocomplete from '../components/ShipAutocomplete';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
@@ -80,29 +80,17 @@ export const RecordPage = (): JSX.Element => {
     <>
       <Box display="flex" flexDirection="column">
         <Box display="flex" flexDirection="row">
-          <Autocomplete
+          <FreeAutocomplete
             inputValue={event}
-            onInputChange={(_, event) => {
-              setEvent(event);
-            }}
             options={Array.from(eventsAreas.keys()).sort()}
-            getOptionLabel={(event: string) => event}
-            freeSolo
-            sx={{ width: 200 }}
-            renderInput={(params) => (
-              <TextField {...params} label="イベント" placeholder="イベント" />
-            )}
+            onInputChange={(_, event) => setEvent(event)}
+            label="イベント"
           />
-          <Autocomplete
+          <FreeAutocomplete
             inputValue={area}
-            onInputChange={(_, area) => setArea(area)}
             options={eventsAreas.get(event)?.sort() ?? []}
-            getOptionLabel={(area: string) => area}
-            freeSolo
-            sx={{ width: 200 }}
-            renderInput={(params) => (
-              <TextField {...params} label="海域" placeholder="海域" />
-            )}
+            onInputChange={(_, area) => setArea(area)}
+            label="海域"
           />
         </Box>
         <Box display="flex" flexDirection="row" pt={1}>
