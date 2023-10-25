@@ -4,6 +4,7 @@ import { memo, useEffect } from 'react';
 import { ShipMaster, useMasterContext } from '../lib/MasterContext';
 import {
   hiraganaToKatakana,
+  hiraganaToRomaji,
   isPartialMatch,
   katakanaToHiragana,
 } from '../utils/helpers';
@@ -26,10 +27,15 @@ export const ShipAutocomplete = ({
     { inputValue }: FilterOptionsState<ShipMaster>
   ) => {
     const matches = options.filter((option) => {
-      const value = `${option.name} ${katakanaToHiragana(
-        option.yomi
-      )} ${hiraganaToKatakana(option.yomi)}`;
-      return isPartialMatch(value, inputValue);
+      const hiragana = katakanaToHiragana(option.yomi);
+      const katakana = hiraganaToKatakana(option.yomi);
+      const romaji = hiraganaToRomaji(hiragana);
+      return (
+        isPartialMatch(option.name, inputValue) ||
+        isPartialMatch(hiragana, inputValue) ||
+        isPartialMatch(katakana, inputValue) ||
+        isPartialMatch(romaji, inputValue)
+      );
     });
     return matches;
   };
