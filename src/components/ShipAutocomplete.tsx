@@ -1,7 +1,12 @@
-import { Autocomplete, TextField, createFilterOptions } from '@mui/material';
+import { Autocomplete, FilterOptionsState, TextField } from '@mui/material';
 import { memo, useEffect } from 'react';
 
 import { ShipMaster, useMasterContext } from '../lib/MasterContext';
+import {
+  hiraganaToKatakana,
+  isPartialMatch,
+  katakanaToHiragana,
+} from '../utils/helpers';
 
 interface ShipAutocompleteProps {
   ship: string;
@@ -16,46 +21,39 @@ export const ShipAutocomplete = ({
 }: ShipAutocompleteProps) => {
   const { shipsMaster } = useMasterContext();
 
-  const hiraganaToKatakana = (text: string) => {
-    return text.replace(/[\u3041-\u3096]/g, (match) =>
-      String.fromCharCode(match.charCodeAt(0) + 0x60)
-    );
-  };
-  const katakanaToHiragana = (text: string) => {
-    return text.replace(/[\u30a1-\u30f6]/g, (match) =>
-      String.fromCharCode(match.charCodeAt(0) - 0x60)
-    );
-  };
-
-  const filterOptions = createFilterOptions({
-    matchFrom: 'any',
-    stringify: (option: { name: string; yomi: string }) =>
-      `${option.name} ${katakanaToHiragana(option.yomi)} ${hiraganaToKatakana(
+  const filterOptions = (
+    options: ShipMaster[],
+    { inputValue }: FilterOptionsState<ShipMaster>
+  ) => {
+    const matches = options.filter((option) => {
+      const value = `${option.name} ${katakanaToHiragana(
         option.yomi
-      )}`,
-  });
+      )} ${hiraganaToKatakana(option.yomi)}`;
+      return isPartialMatch(value, inputValue);
+    });
+    return matches;
+  };
 
   useEffect(() => {
     onShipChange(ship);
   }, [ship, onShipChange]);
 
   return (
-    <>
-      <Autocomplete
-        inputValue={ship}
-        onInputChange={(_, selectedShip: string) => {
-          onShipChange(selectedShip);
-        }}
-        options={shipsMaster}
-        getOptionLabel={(option: ShipMaster) => option.name}
-        filterOptions={filterOptions}
-        sx={{ width: 200 }}
-        disabled={disabled}
-        renderInput={(params) => (
-          <TextField {...params} label="ドロップ" placeholder="ドロップ" />
-        )}
-      />
-    </>
+    <Autocomplete
+      inputValue={ship}
+      onInputChange={(_, selectedShip: string) => {
+        onShipChange(selectedShip);
+      }}
+      autoSelect
+      options={shipsMaster}
+      getOptionLabel={(option: ShipMaster) => option.name}
+      filterOptions={filterOptions}
+      sx={{ width: 200 }}
+      disabled={disabled}
+      renderInput={(params) => (
+        <TextField {...params} label="ドロップ" placeholder="ドロップ" />
+      )}
+    />
   );
 };
 
