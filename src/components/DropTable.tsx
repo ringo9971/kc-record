@@ -41,6 +41,7 @@ const style = {
 
 interface DropsItemConfig {
   drops: Drop[];
+  outcomes: string[];
   eventsAreas: Map<string, string[]>;
 }
 
@@ -53,7 +54,11 @@ interface ShowFilter {
   time: boolean;
 }
 
-export const DropTable = (props: DropsItemConfig): JSX.Element => {
+export const DropTable = ({
+  drops,
+  outcomes,
+  eventsAreas,
+}: DropsItemConfig): JSX.Element => {
   const { user } = useUser();
   const { firestore } = useFirebase();
 
@@ -90,14 +95,13 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
 
   const { dropsProviderUpdateDrop } = useDropsContext();
   const [isDropFilterOpen, setIsDropFilterOpen] = useState(false);
-  const [filteredDrops, setFilteredDrops] = useState<Drop[]>(props.drops);
+  const [filteredDrops, setFilteredDrops] = useState<Drop[]>(drops);
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
   const [maxDropsLength, setMaxDropsLength] = useState(
     Math.max(filteredDrops.length, filteredFriendData.length)
   );
 
-  const outcomes = ['S', 'A', 'B', '撤退', '不明'];
   const [outcomesFilter, setOutcomesFilter] = useState<string[]>([]);
 
   const [isEdit, setIsEdit] = useState(false);
@@ -117,7 +121,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
     updateDrop(user, firestore, dropId, preDrop, newDrop);
     dropsProviderUpdateDrop(dropId, preDrop, newDrop);
     setFilteredDrops(() =>
-      props.drops.map((drop: Drop) => {
+      drops.map((drop: Drop) => {
         if (drop.id === dropId) return newDrop;
         return drop;
       })
@@ -165,7 +169,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
   };
 
   useEffect(() => {
-    const newDrops = filterDrops(props.drops, outcomesFilter, event, area);
+    const newDrops = filterDrops(drops, outcomesFilter, event, area);
     const newFriendDrops = filterDrops(
       friendsData?.[0]?.drops,
       outcomesFilter,
@@ -176,7 +180,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
     setFilteredDrops(newDrops);
     setFilteredFriendData(newFriendDrops);
     setMaxDropsLength(Math.max(newDrops.length, newFriendDrops.length));
-  }, [event, area, props.drops, outcomesFilter]);
+  }, [event, area, drops, outcomesFilter]);
 
   return (
     <Box>
@@ -232,7 +236,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
           <DropFilter
             event={event}
             area={area}
-            eventsAreas={props.eventsAreas}
+            eventsAreas={eventsAreas}
             outcomes={outcomes}
             outcomesFilter={outcomesFilter}
             handleEventChange={(_, newValue) => {
@@ -340,7 +344,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                       renderAutocompleteCell(
                         dropEdit.event,
                         drop?.event,
-                        Array.from(props.eventsAreas.keys()).sort(),
+                        Array.from(eventsAreas.keys()).sort(),
                         (_, event) =>
                           setDropEdit((preDropEdit) => ({
                             ...preDropEdit,
@@ -351,7 +355,7 @@ export const DropTable = (props: DropsItemConfig): JSX.Element => {
                       renderAutocompleteCell(
                         dropEdit.area,
                         drop?.area,
-                        props.eventsAreas.get(dropEdit.event)?.sort() ?? [],
+                        eventsAreas.get(dropEdit.event)?.sort() ?? [],
                         (_, area) =>
                           setDropEdit((preDropEdit) => ({
                             ...preDropEdit,

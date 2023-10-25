@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-} from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 
 import { createDrop } from '../api/createDrop';
@@ -15,6 +7,7 @@ import { getEventsAreas } from '../api/getEventsAreas';
 import { DropRequest } from '../api/types';
 import DropTable from '../components/DropTable';
 import FreeAutocomplete from '../components/FreeAutocomplete';
+import RadioButtonGroup from '../components/RadioButtonGroup';
 import ShipAutocomplete from '../components/ShipAutocomplete';
 import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
@@ -38,6 +31,8 @@ export const RecordPage = (): JSX.Element => {
   const [outcome, setOutcome] = useState('S');
   const [ship, setShip] = useState('');
   const [comment, setComment] = useState('');
+
+  const outcomes = ['S', 'A', 'B', '撤退', '不明'];
 
   useEffect(() => {
     if (drops.length > 0 || loading || !user) return;
@@ -107,44 +102,10 @@ export const RecordPage = (): JSX.Element => {
           />
         </Box>
         <Box pt={2}>
-          <FormControl component="fieldset">
-            <RadioGroup
-              row
-              defaultValue="S"
-              onChange={(e) => setOutcome(e.target.value)}
-            >
-              <FormControlLabel
-                value="S"
-                control={<Radio color="primary" />}
-                label="S"
-                labelPlacement="top"
-              />
-              <FormControlLabel
-                value="A"
-                control={<Radio color="primary" />}
-                label="A"
-                labelPlacement="top"
-              />
-              <FormControlLabel
-                value="B"
-                control={<Radio color="primary" />}
-                label="B"
-                labelPlacement="top"
-              />
-              <FormControlLabel
-                value="撤退"
-                control={<Radio color="primary" />}
-                label="撤退"
-                labelPlacement="top"
-              />
-              <FormControlLabel
-                value="不明"
-                control={<Radio color="primary" />}
-                label="不明"
-                labelPlacement="top"
-              />
-            </RadioGroup>
-          </FormControl>
+          <RadioButtonGroup
+            options={outcomes}
+            onChange={(e) => setOutcome(e.target.value)}
+          />
         </Box>
       </Box>
       <Box pt={2}>
@@ -153,7 +114,11 @@ export const RecordPage = (): JSX.Element => {
         </Button>
       </Box>
       <Box pt={2}>
-        <DropTable drops={drops} eventsAreas={eventsAreas} />
+        <DropTable
+          drops={drops}
+          outcomes={outcomes}
+          eventsAreas={eventsAreas}
+        />
       </Box>
     </>
   );
