@@ -1,8 +1,6 @@
 import { Box, Button, TextField } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 
-import { createDrop } from '../api/createDrop';
-import { getDrops } from '../api/getDrops';
 import { getEventsAreas } from '../api/getEventsAreas';
 import { DropRequest } from '../api/types';
 import DropTable from '../components/DropTable';
@@ -20,7 +18,7 @@ export const RecordPage = (): JSX.Element => {
   const { user, loading } = useUser();
   const { firestore } = useFirebase();
 
-  const { drops, setDrops, dropsProviderCreateDrop } = useDropsContext();
+  const { drops, getDrops, createDrop } = useDropsContext();
   const { eventsAreas, setEventsAreas } = useEventsAreasContext();
 
   const { fetchFriends } = useFriendsContext();
@@ -36,16 +34,12 @@ export const RecordPage = (): JSX.Element => {
 
   useEffect(() => {
     if (drops.length > 0 || loading || !user) return;
-    fetchDropsData();
+    getDrops();
     fetchEventsAreas();
     fetchFriends(user, firestore);
     fetchRareDrops(user, firestore);
   }, [user, drops.length, loading, user]);
 
-  const fetchDropsData = async () => {
-    const data = await getDrops(user, firestore);
-    setDrops(data);
-  };
   const fetchEventsAreas = async () => {
     const data = await getEventsAreas(user, firestore);
     setEventsAreas(data.results);
@@ -59,9 +53,8 @@ export const RecordPage = (): JSX.Element => {
       ship: outcome === '撤退' ? '' : ship,
       comment: comment,
     };
-    const newDrop = await createDrop(user, firestore, drop);
+    const newDrop = await createDrop(drop);
     if (!newDrop) return;
-    dropsProviderCreateDrop(newDrop);
     setShip('');
     setComment('');
   };

@@ -6,35 +6,39 @@ import {
   useState,
 } from 'react';
 
+import { useApiClient } from './ApiClientContext';
 import { useEventsAreasContext } from './EventsAreasContext';
-import { Drop } from '../api/types';
+import { Drop, DropRequest } from '../api/types';
 
 interface DropsContextProps {
   drops: Drop[];
   setDrops: Dispatch<SetStateAction<Drop[]>>;
-  dropsProviderCreateDrop: (drop: Drop) => void;
-  dropsProviderUpdateDrop: (
-    dropId: string,
-    preDrop: Drop,
-    newDrop: Drop
-  ) => void;
+  createDrop: (drop: DropRequest) => Promise<Drop | null>;
+  getDrops: () => void;
+  updateDrop: (dropId: string, preDrop: Drop, newDrop: Drop) => void;
 }
 
 const DropsContext = createContext<DropsContextProps | null>(null);
 
 export const DropsProvider = ({ children }: { children: JSX.Element }) => {
+  const { apiClient } = useApiClient();
+
   const [drops, setDrops] = useState<Drop[]>([]);
   const { createEventsAreas, deleteEventsAreas } = useEventsAreasContext();
 
-  const dropsProviderCreateDrop = (drop: Drop) => {
-    setDrops((preDrops) => [drop, ...preDrops]);
+  const createDrop = async (drop: DropRequest): Promise<Drop | null> => {
+    const newDrop = await apiClient.createDrop(drop);
+    if (!newDrop) return null;
+    setDrops((preDrops) => [newDrop, ...preDrops]);
     createEventsAreas(drop.event, drop.area);
+    return newDrop;
   };
-  const dropsProviderUpdateDrop = (
-    dropId: string,
-    preDrop: Drop,
-    newDrop: Drop
-  ) => {
+  const getDrops = async () => {
+    const drops = await apiClient.getDrops();
+    setDrops(drops);
+  };
+  const updateDrop = async (dropId: string, preDrop: Drop, newDrop: Drop) => {
+    await apiClient.updateDrop(dropId, preDrop, newDrop);
     const matchingDrops = drops.filter(
       (drop) => drop.event === preDrop.event && drop.area === preDrop.area
     );
@@ -55,8 +59,9 @@ export const DropsProvider = ({ children }: { children: JSX.Element }) => {
       value={{
         drops,
         setDrops,
-        dropsProviderCreateDrop,
-        dropsProviderUpdateDrop,
+        createDrop,
+        getDrops,
+        updateDrop,
       }}
     >
       {children}

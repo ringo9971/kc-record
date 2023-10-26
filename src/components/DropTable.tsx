@@ -22,9 +22,6 @@ import DropFilter from './DropFilter';
 import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
 import { Drop } from '../api/types';
-import { updateDrop } from '../api/updateDrop';
-import useFirebase from '../hooks/useFirebase';
-import { useUser } from '../hooks/useUser';
 import { useDropsContext } from '../lib/DropsContext';
 import { useFriendsContext } from '../lib/FriendsContext';
 
@@ -59,9 +56,6 @@ export const DropTable = ({
   outcomes,
   eventsAreas,
 }: DropsItemConfig): JSX.Element => {
-  const { user } = useUser();
-  const { firestore } = useFirebase();
-
   const { friendsData } = useFriendsContext();
   const [filteredFriendData, setFilteredFriendData] = useState<Drop[]>(
     friendsData?.[0]?.drops ?? []
@@ -93,7 +87,7 @@ export const DropTable = ({
     時間: 'time',
   };
 
-  const { dropsProviderUpdateDrop } = useDropsContext();
+  const { updateDrop } = useDropsContext();
   const [isDropFilterOpen, setIsDropFilterOpen] = useState(false);
   const [filteredDrops, setFilteredDrops] = useState<Drop[]>(drops);
   const [event, setEvent] = useState('');
@@ -118,8 +112,7 @@ export const DropTable = ({
 
   const handleUpdateDrop = (dropId: string, preDrop: Drop, newDrop: Drop) => {
     if (!newDrop.event || !newDrop.area) return;
-    updateDrop(user, firestore, dropId, preDrop, newDrop);
-    dropsProviderUpdateDrop(dropId, preDrop, newDrop);
+    updateDrop(dropId, preDrop, newDrop);
     setFilteredDrops(() =>
       drops.map((drop: Drop) => {
         if (drop.id === dropId) return newDrop;
