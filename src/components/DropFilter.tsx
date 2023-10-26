@@ -4,6 +4,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
+  Grid,
   TextField,
 } from '@mui/material';
 import { SyntheticEvent, memo } from 'react';
@@ -70,19 +71,23 @@ export const DropFilter = ({
         />
       </Box>
       <FormGroup sx={{ direction: 'flex', flexDirection: 'row', pt: 2 }}>
-        {outcomes.map((outcome) => (
-          <FormControlLabel
-            key={outcome}
-            control={
-              <Checkbox
-                checked={outcomesFilter.includes(outcome)}
-                onChange={() => handleOutcomesFilter(outcome)}
+        <Grid container style={{ width: '95%' }}>
+          {outcomes.map((outcome) => (
+            <Grid item xs={2} key={outcome}>
+              <FormControlLabel
+                key={outcome}
+                control={
+                  <Checkbox
+                    checked={outcomesFilter.includes(outcome)}
+                    onChange={() => handleOutcomesFilter(outcome)}
+                  />
+                }
+                label={outcome}
+                labelPlacement="top"
               />
-            }
-            label={outcome}
-            labelPlacement="top"
-          />
-        ))}
+            </Grid>
+          ))}
+        </Grid>
       </FormGroup>
     </Box>
   );

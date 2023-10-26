@@ -32,7 +32,7 @@ export const RecordPage = (): JSX.Element => {
   const [ship, setShip] = useState('');
   const [comment, setComment] = useState('');
 
-  const outcomes = ['S', 'A', 'B', '撤退', '不明'];
+  const outcomes = ['S', 'A', 'B', '敗北', '撤退', '不明'];
 
   useEffect(() => {
     if (drops.length > 0 || loading || !user) return;
