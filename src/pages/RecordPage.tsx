@@ -1,7 +1,6 @@
 import { Box, Button, TextField } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 
-import { getEventsAreas } from '../api/getEventsAreas';
 import { DropRequest } from '../api/types';
 import DropTable from '../components/DropTable';
 import FreeAutocomplete from '../components/FreeAutocomplete';
@@ -19,7 +18,7 @@ export const RecordPage = (): JSX.Element => {
   const { firestore } = useFirebase();
 
   const { drops, getDrops, createDrop } = useDropsContext();
-  const { eventsAreas, setEventsAreas } = useEventsAreasContext();
+  const { eventsAreas, getEventsAreas } = useEventsAreasContext();
 
   const { fetchFriends } = useFriendsContext();
   const { fetchRareDrops } = useRareContext();
@@ -35,15 +34,10 @@ export const RecordPage = (): JSX.Element => {
   useEffect(() => {
     if (drops.length > 0 || loading || !user) return;
     getDrops();
-    fetchEventsAreas();
+    getEventsAreas();
     fetchFriends(user, firestore);
     fetchRareDrops(user, firestore);
   }, [user, drops.length, loading, user]);
-
-  const fetchEventsAreas = async () => {
-    const data = await getEventsAreas(user, firestore);
-    setEventsAreas(data.results);
-  };
 
   const handleCreateDrop = async () => {
     const drop: DropRequest = {

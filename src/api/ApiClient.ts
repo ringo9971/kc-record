@@ -2,8 +2,11 @@ import { User } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore';
 
 import { createDrop } from './createDrop';
+import { createEventsAreas } from './createEventsAreas';
 import { deleteDrop } from './deleteDrop';
+import { deleteEventsAreas } from './deleteEventsAreas';
 import { getDrops } from './getDrops';
+import { getEventsAreas } from './getEventsAreas';
 import { Drop, DropRequest } from './types';
 import { updateDrop } from './updateDrop';
 
@@ -21,5 +24,15 @@ export class ApiClient {
   }
   async deleteDrop(dropId: string, event: string, area: string) {
     return deleteDrop(this.user, this.firestore, dropId, event, area);
+  }
+
+  async createEventsAreas(event: string, area: string) {
+    return createEventsAreas(this.user, this.firestore, event, area);
+  }
+  async getEventsAreas() {
+    return getEventsAreas(this.user, this.firestore);
+  }
+  async deleteEventsAreas(event: string, area: string) {
+    return deleteEventsAreas(this.user, this.firestore, event, area);
   }
 }

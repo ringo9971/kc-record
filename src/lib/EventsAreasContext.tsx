@@ -6,10 +6,13 @@ import {
   useState,
 } from 'react';
 
+import { useApiClient } from './ApiClientContext';
+
 interface EventsAreasContextProps {
   eventsAreas: Map<string, string[]>;
   setEventsAreas: Dispatch<SetStateAction<Map<string, string[]>>>;
   createEventsAreas: (event: string, area: string) => void;
+  getEventsAreas: () => void;
   deleteEventsAreas: (event: string, area: string) => void;
 }
 
@@ -20,11 +23,14 @@ export const EventsAreasProvider = ({
 }: {
   children: JSX.Element;
 }) => {
+  const { apiClient } = useApiClient();
+
   const [eventsAreas, setEventsAreas] = useState<Map<string, string[]>>(
     new Map()
   );
 
-  const createEventsAreas = (event: string, area: string) => {
+  const createEventsAreas = async (event: string, area: string) => {
+    await apiClient.createEventsAreas(event, area);
     const eventAreas = eventsAreas.get(event);
     if (eventAreas) {
       if (eventAreas.includes(area)) return;
@@ -39,8 +45,12 @@ export const EventsAreasProvider = ({
       });
     }
   };
-
-  const deleteEventsAreas = (event: string, area: string) => {
+  const getEventsAreas = async () => {
+    const eventsAreas = await apiClient.getEventsAreas();
+    setEventsAreas(eventsAreas.results);
+  };
+  const deleteEventsAreas =  async(event: string, area: string) => {
+    await apiClient.deleteEventsAreas(event, area);
     const eventAreas = eventsAreas.get(event);
     const updatedEventAreas =
       eventAreas?.filter((eventArea) => eventArea !== area) ?? [];
@@ -63,6 +73,7 @@ export const EventsAreasProvider = ({
         eventsAreas,
         setEventsAreas,
         createEventsAreas,
+        getEventsAreas,
         deleteEventsAreas,
       }}
     >
