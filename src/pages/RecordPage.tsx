@@ -51,10 +51,6 @@ export const RecordPage = (): JSX.Element => {
     setComment('');
   };
 
-  if (loading) {
-    return <></>;
-  }
-
   return (
     <>
       <Box display="flex" flexDirection="column">

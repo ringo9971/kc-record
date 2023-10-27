@@ -6,13 +6,9 @@ import AuthLogin from '../components/auth/AuthLogin';
 import { useUser } from '../hooks/useUser';
 
 const LoginPage = () => {
-  const { user, loading } = useUser();
+  const { user } = useUser();
 
   const navigate = useNavigate();
-
-  if (loading) {
-    return <></>;
-  }
 
   return (
     <>

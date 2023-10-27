@@ -13,7 +13,7 @@ import TopBar from './TopBar';
 
 function App() {
   const routing = useRoutes(routes);
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const { firestore } = useFirebase();
 
   return (
@@ -26,7 +26,7 @@ function App() {
                 <MasterProvider>
                   <>
                     <TopBar />
-                    {routing}
+                    {!loading && <>{routing}</>}
                   </>
                 </MasterProvider>
               </RareProvider>
