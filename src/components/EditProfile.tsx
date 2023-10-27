@@ -1,25 +1,23 @@
 import { Box, Button, TextField } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 
-import { createProfile } from '../api/createProfile';
-import { getProfile } from '../api/getProfile';
-import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
+import { useApiClient } from '../lib/ApiClientContext';
 
 const EditProfile = () => {
+  const { apiClient } = useApiClient();
+
   const { user } = useUser();
-  const { firestore } = useFirebase();
 
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
 
   const handleClick = () => {
-    createProfile(user, firestore, name, message);
+    apiClient.createProfile(name, message);
   };
 
   const fetchProfile = async () => {
-    if (!user) return;
-    const profile = await getProfile(user, firestore, user.uid);
+    const profile = await apiClient.getProfile();
     setName(profile?.name ?? '');
     setMessage(profile?.message ?? '');
   };

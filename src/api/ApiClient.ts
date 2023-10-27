@@ -4,6 +4,7 @@ import { Firestore } from 'firebase/firestore';
 import { createDrop } from './createDrop';
 import { createEventsAreas } from './createEventsAreas';
 import { createFriend } from './createFriend';
+import { createProfile } from './createProfile';
 import { deleteDrop } from './deleteDrop';
 import { deleteEventsAreas } from './deleteEventsAreas';
 import { getDrops } from './getDrops';
@@ -46,7 +47,10 @@ export class ApiClient {
     return getFriends(this.user, this.firestore);
   }
 
-  async getProfile(userId: string): Promise<Profile | null> {
+  async createProfile(name: string, message: string) {
+    return createProfile(this.user, this.firestore, name, message);
+  }
+  async getProfile(userId?: string): Promise<Profile | null> {
     return getProfile(this.user, this.firestore, userId);
   }
 }

@@ -23,11 +23,11 @@ export const getProfiles = async (
 export const getProfile = async (
   user: User | null,
   firestore: Firestore,
-  friendId: string
+  friendId?: string
 ): Promise<Profile | null> => {
   if (!user) return null;
 
-  const docSnap = await getDoc(doc(firestore, 'profile', friendId));
+  const docSnap = await getDoc(doc(firestore, 'profile', friendId ?? user.uid));
   if (!docSnap.exists()) return null;
 
   const data = docSnap.data();
