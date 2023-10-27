@@ -6,7 +6,6 @@ import DropTable from '../components/DropTable';
 import FreeAutocomplete from '../components/FreeAutocomplete';
 import RadioButtonGroup from '../components/RadioButtonGroup';
 import ShipAutocomplete from '../components/ShipAutocomplete';
-import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
 import { useDropsContext } from '../lib/DropsContext';
 import { useEventsAreasContext } from '../lib/EventsAreasContext';
@@ -15,13 +14,12 @@ import { useRareContext } from '../lib/RareContext';
 
 export const RecordPage = (): JSX.Element => {
   const { user, loading } = useUser();
-  const { firestore } = useFirebase();
 
   const { drops, getDrops, createDrop } = useDropsContext();
   const { eventsAreas, getEventsAreas } = useEventsAreasContext();
 
   const { getFriends } = useFriendsContext();
-  const { fetchRareDrops } = useRareContext();
+  const { getRareDrops } = useRareContext();
 
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
@@ -36,7 +34,7 @@ export const RecordPage = (): JSX.Element => {
     getDrops();
     getEventsAreas();
     getFriends();
-    fetchRareDrops(user, firestore);
+    getRareDrops();
   }, [user, drops.length, loading, user]);
 
   const handleCreateDrop = async () => {

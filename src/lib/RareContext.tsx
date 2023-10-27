@@ -1,5 +1,3 @@
-import { User } from 'firebase/auth';
-import { Firestore } from 'firebase/firestore';
 import {
   Dispatch,
   SetStateAction,
@@ -8,27 +6,17 @@ import {
   useState,
 } from 'react';
 
-import { createRareColor, createRareDrop } from '../api/createRareSetting';
-import { getRareSettings } from '../api/getRareSettings';
+import { useApiClient } from './ApiClientContext';
 import { RareColor, RareColorRequest } from '../api/types';
 
 interface RareContextProps {
   rareDrops: Map<string, string>;
   setRareDrops: Dispatch<SetStateAction<Map<string, string>>>;
-  fetchRareDrops: (user: User | null, firestore: Firestore) => void;
-  addRareDrop: (
-    user: User | null,
-    firestore: Firestore,
-    ship: string,
-    id: string
-  ) => void;
+  getRareDrops: () => void;
+  createRareDrop: (ship: string, id: string) => void;
   colorsDrops: Map<string, string[]>;
   rareColors: Map<string, RareColor>;
-  addRareColor: (
-    user: User | null,
-    firestore: Firestore,
-    req: RareColorRequest
-  ) => void;
+  createRareColor: (req: RareColorRequest) => void;
   getColor: (id?: string) => RareColor;
   getColorByShip: (ship?: string) => RareColor;
 }
@@ -36,6 +24,8 @@ interface RareContextProps {
 const RareContext = createContext<RareContextProps | null>(null);
 
 export const RareProvider = ({ children }: { children: JSX.Element }) => {
+  const { apiClient } = useApiClient();
+
   const [rareDrops, setRareDrops] = useState<Map<string, string>>(
     new Map<string, string>()
   );
@@ -58,33 +48,21 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
     return colorsDrops;
   };
 
-  const fetchRareDrops = async (user: User | null, firestore: Firestore) => {
-    if (!user) return;
-
-    const setting = await getRareSettings(user, firestore);
+  const getRareDrops = async () => {
+    const setting = await apiClient.getRareSettings();
     setRareDrops(setting.drops);
     setColorsDrops(() => groupShipsByColor(setting.drops));
     setRareColors(setting.colors);
   };
 
-  const addRareColor = async (
-    user: User | null,
-    firestore: Firestore,
-    req: RareColorRequest
-  ) => {
-    if (!user) return;
-    const setting = await createRareColor(user, firestore, req);
+  const createRareColor = async (req: RareColorRequest) => {
+    const setting = await apiClient.createRareColor(req);
     setRareColors(setting.colors);
   };
 
-  const addRareDrop = async (
-    user: User | null,
-    firestore: Firestore,
-    ship: string,
-    id: string
-  ) => {
-    if (!user || !ship) return;
-    const setting = await createRareDrop(user, firestore, ship, id);
+  const createRareDrop = async (ship: string, id: string) => {
+    if (!ship) return;
+    const setting = await apiClient.createRareDrop(ship, id);
     setRareDrops(setting.drops);
     setColorsDrops(() => groupShipsByColor(setting.drops));
   };
@@ -109,11 +87,11 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
       value={{
         rareDrops,
         setRareDrops,
-        fetchRareDrops,
-        addRareDrop,
+        getRareDrops,
+        createRareDrop,
         colorsDrops,
         rareColors,
-        addRareColor,
+        createRareColor,
         getColor,
         getColorByShip,
       }}

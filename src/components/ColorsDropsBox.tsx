@@ -11,8 +11,6 @@ import { memo, useState } from 'react';
 
 import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
-import useFirebase from '../hooks/useFirebase';
-import { useUser } from '../hooks/useUser';
 import { useRareContext } from '../lib/RareContext';
 
 interface ColorsDropsBoxProps {
@@ -21,16 +19,14 @@ interface ColorsDropsBoxProps {
 }
 
 export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
-  const { user } = useUser();
-  const { firestore } = useFirebase();
-  const { addRareDrop, getColor } = useRareContext();
+  const { createRareDrop, getColor } = useRareContext();
 
   const [ship, setShip] = useState('');
 
   const color = getColor(id);
 
   const handleClick = () => {
-    addRareDrop(user, firestore, ship, id);
+    createRareDrop(ship, id);
     setShip('');
   };
 

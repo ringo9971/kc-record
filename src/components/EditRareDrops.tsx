@@ -4,25 +4,17 @@ import { memo, useState } from 'react';
 import { SketchPicker, ColorResult } from 'react-color';
 
 import ColorsDropsBox from './ColorsDropsBox';
-import useFirebase from '../hooks/useFirebase';
-import { useUser } from '../hooks/useUser';
 import { useRareContext } from '../lib/RareContext';
 
 export const EditRareDrops = () => {
-  const { user } = useUser();
-  const { firestore } = useFirebase();
-  const { colorsDrops, addRareColor, rareColors } = useRareContext();
+  const { colorsDrops, createRareColor, rareColors } = useRareContext();
 
   const [comment, setComment] = useState('');
   const [color, setColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#FFFFFF');
 
   const handleAdd = () => {
-    addRareColor(user, firestore, {
-      color: color,
-      bgColor: bgColor,
-      comment: comment,
-    });
+    createRareColor({ color, bgColor, comment });
   };
   const [colorAnchorEl, setColorAnchorEl] = useState<HTMLButtonElement | null>(
     null

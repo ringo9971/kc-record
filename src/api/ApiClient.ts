@@ -5,13 +5,21 @@ import { createDrop } from './createDrop';
 import { createEventsAreas } from './createEventsAreas';
 import { createFriend } from './createFriend';
 import { createProfile } from './createProfile';
+import { createRareColor, createRareDrop } from './createRareSetting';
 import { deleteDrop } from './deleteDrop';
 import { deleteEventsAreas } from './deleteEventsAreas';
 import { getDrops } from './getDrops';
 import { getEventsAreas } from './getEventsAreas';
 import { getFriends } from './getFriends';
 import { getProfile } from './getProfile';
-import { Drop, DropRequest, Profile } from './types';
+import { getRareSettings } from './getRareSettings';
+import {
+  Drop,
+  DropRequest,
+  Profile,
+  RareColorRequest,
+  RareSettingsResponse,
+} from './types';
 import { updateDrop } from './updateDrop';
 
 export class ApiClient {
@@ -52,5 +60,18 @@ export class ApiClient {
   }
   async getProfile(userId?: string): Promise<Profile | null> {
     return getProfile(this.user, this.firestore, userId);
+  }
+
+  async createRareDrop(
+    ship: string,
+    id: string
+  ): Promise<RareSettingsResponse> {
+    return createRareDrop(this.user, this.firestore, ship, id);
+  }
+  async createRareColor(req: RareColorRequest): Promise<RareSettingsResponse> {
+    return createRareColor(this.user, this.firestore, req);
+  }
+  async getRareSettings(): Promise<RareSettingsResponse> {
+    return getRareSettings(this.user, this.firestore);
   }
 }
