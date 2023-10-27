@@ -20,7 +20,7 @@ export const RecordPage = (): JSX.Element => {
   const { drops, getDrops, createDrop } = useDropsContext();
   const { eventsAreas, getEventsAreas } = useEventsAreasContext();
 
-  const { fetchFriends } = useFriendsContext();
+  const { getFriends } = useFriendsContext();
   const { fetchRareDrops } = useRareContext();
 
   const [event, setEvent] = useState('');
@@ -35,7 +35,7 @@ export const RecordPage = (): JSX.Element => {
     if (drops.length > 0 || loading || !user) return;
     getDrops();
     getEventsAreas();
-    fetchFriends(user, firestore);
+    getFriends();
     fetchRareDrops(user, firestore);
   }, [user, drops.length, loading, user]);
 

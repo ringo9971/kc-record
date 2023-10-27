@@ -3,11 +3,14 @@ import { Firestore } from 'firebase/firestore';
 
 import { createDrop } from './createDrop';
 import { createEventsAreas } from './createEventsAreas';
+import { createFriend } from './createFriend';
 import { deleteDrop } from './deleteDrop';
 import { deleteEventsAreas } from './deleteEventsAreas';
 import { getDrops } from './getDrops';
 import { getEventsAreas } from './getEventsAreas';
-import { Drop, DropRequest } from './types';
+import { getFriends } from './getFriends';
+import { getProfile } from './getProfile';
+import { Drop, DropRequest, Profile } from './types';
 import { updateDrop } from './updateDrop';
 
 export class ApiClient {
@@ -16,8 +19,8 @@ export class ApiClient {
   async createDrop(drop: DropRequest): Promise<Drop | null> {
     return createDrop(this.user, this.firestore, drop);
   }
-  async getDrops(): Promise<Drop[]> {
-    return getDrops(this.user, this.firestore);
+  async getDrops(userId?: string): Promise<Drop[]> {
+    return getDrops(this.user, this.firestore, userId);
   }
   async updateDrop(dropId: string, preDrop: Drop, nextDrop: Drop) {
     return updateDrop(this.user, this.firestore, dropId, preDrop, nextDrop);
@@ -34,5 +37,16 @@ export class ApiClient {
   }
   async deleteEventsAreas(event: string, area: string) {
     return deleteEventsAreas(this.user, this.firestore, event, area);
+  }
+
+  async createFriend(friendId: string): Promise<Profile | null> {
+    return createFriend(this.user, this.firestore, friendId);
+  }
+  async getFriends(): Promise<string[]> {
+    return getFriends(this.user, this.firestore);
+  }
+
+  async getProfile(userId: string): Promise<Profile | null> {
+    return getProfile(this.user, this.firestore, userId);
   }
 }

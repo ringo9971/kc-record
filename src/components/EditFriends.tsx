@@ -9,31 +9,20 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 
-import useFirebase from '../hooks/useFirebase';
 import { useUser } from '../hooks/useUser';
 import { useFriendsContext } from '../lib/FriendsContext';
 
 const EditFriends = () => {
+  const { friendsData, createFriend } = useFriendsContext();
   const { user } = useUser();
-  const { firestore } = useFirebase();
-  const { friendsData, addFriend, fetchFriends } = useFriendsContext();
 
   const [friendId, setFriendId] = useState('');
 
   const handleClick = async () => {
-    if (!user) return;
-    addFriend(user, firestore, friendId);
+    createFriend(friendId);
   };
-
-  const _fetchFriends = async () => {
-    if (!user || friendsData.length > 0) return;
-    fetchFriends(user, firestore);
-  };
-  useEffect(() => {
-    _fetchFriends();
-  }, [user, friendsData.length]);
 
   if (!user) {
     return <></>;

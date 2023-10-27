@@ -1,5 +1,3 @@
-import { User } from 'firebase/auth';
-import { Firestore } from 'firebase/firestore';
 import {
   Dispatch,
   SetStateAction,
@@ -8,10 +6,7 @@ import {
   useState,
 } from 'react';
 
-import { createFriend } from '../api/createFriend';
-import { getDrops } from '../api/getDrops';
-import { getFriends } from '../api/getFriends';
-import { getProfile } from '../api/getProfile';
+import { useApiClient } from './ApiClientContext';
 import { Drop, Profile } from '../api/types';
 
 interface FriendData {
@@ -23,39 +18,35 @@ interface FriendData {
 interface FriendsContextProps {
   friendsData: FriendData[];
   setFriendsData: Dispatch<SetStateAction<FriendData[]>>;
-  fetchFriends: (user: User | null, firestore: Firestore) => void;
-  addFriend: (user: User, firestore: Firestore, friendId: string) => void;
+  getFriends: () => void;
+  createFriend: (friendId: string) => void;
 }
 
 const FriendsContext = createContext<FriendsContextProps | null>(null);
 
 export const FriendsProvider = ({ children }: { children: JSX.Element }) => {
+  const { apiClient } = useApiClient();
+
   const [friendsData, setFriendsData] = useState<FriendData[]>([]);
 
-  const fetchFriends = async (user: User | null, firestore: Firestore) => {
-    if (!user) return;
-
-    const friendIds = await getFriends(user, firestore);
+  const getFriends = async () => {
+    const friendIds = await apiClient.getFriends();
 
     const newFriendsData: FriendData[] = [];
     for (const friendId of friendIds) {
-      const drops = await getDrops(user, firestore, friendId);
-      const profile = await getProfile(user, firestore, friendId);
+      const drops = await apiClient.getDrops(friendId);
+      const profile = await apiClient.getProfile(friendId);
       if (!profile) continue;
       newFriendsData.push({ friendId, profile, drops });
     }
     setFriendsData(newFriendsData);
   };
 
-  const addFriend = async (
-    user: User,
-    firestore: Firestore,
-    friendId: string
-  ) => {
-    const profile = await createFriend(user, firestore, friendId);
+  const createFriend = async (friendId: string) => {
+    const profile = await apiClient.createFriend(friendId);
     if (!profile) return;
 
-    const drops = await getDrops(user, firestore, friendId);
+    const drops = await apiClient.getDrops(friendId);
     setFriendsData((preFriendsData) => [
       { friendId, profile, drops },
       ...preFriendsData,
@@ -67,8 +58,8 @@ export const FriendsProvider = ({ children }: { children: JSX.Element }) => {
       value={{
         friendsData,
         setFriendsData,
-        fetchFriends,
-        addFriend,
+        getFriends,
+        createFriend,
       }}
     >
       {children}
