@@ -48,7 +48,7 @@ export const EditRareDrops = () => {
           <Circle
             style={{
               color: color,
-              border: '1px solid black',
+              border: '1px solid lightgray',
               width: '50px',
               height: '50px',
             }}
@@ -59,7 +59,7 @@ export const EditRareDrops = () => {
           <Rectangle
             style={{
               color: bgColor,
-              border: '1px solid black',
+              border: '1px solid lightgray',
               width: '50px',
               height: '50px',
             }}

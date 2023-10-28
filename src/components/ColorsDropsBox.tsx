@@ -75,14 +75,14 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
       <Box display="flex" flexDirection="row" alignItems="center">
         <Circle
           fontSize="large"
-          style={{ color: updateColor, border: '1px solid black' }}
+          style={{ color: updateColor, border: '1px solid lightgray' }}
           onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
             handleColorClick(event)
           }
         />
         <Rectangle
           fontSize="large"
-          style={{ color: updateBgColor, border: '1px solid black' }}
+          style={{ color: updateBgColor, border: '1px solid lightgray' }}
           onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
             handleBgColorClick(event)
           }
