@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import { useApiClient } from './ApiClientContext';
 import { useEventsAreasContext } from './EventsAreasContext';
@@ -12,10 +6,10 @@ import { Drop, DropRequest } from '../api/types';
 
 interface DropsContextProps {
   drops: Drop[];
-  setDrops: Dispatch<SetStateAction<Drop[]>>;
   createDrop: (drop: DropRequest) => Promise<Drop | null>;
   getDrops: () => void;
   updateDrop: (dropId: string, preDrop: Drop, newDrop: Drop) => void;
+  deleteDrop: (dropId: string) => void;
 }
 
 const DropsContext = createContext<DropsContextProps | null>(null);
@@ -45,23 +39,36 @@ export const DropsProvider = ({ children }: { children: JSX.Element }) => {
     if (matchingDrops.length === 1) {
       deleteEventsAreas(preDrop.event, preDrop.area);
     }
-    setDrops(() =>
-      drops.map((drop: Drop) => {
+    setDrops((preDrops) =>
+      preDrops.map((drop: Drop) => {
         if (drop.id === dropId) return newDrop;
         return drop;
       })
     );
     createEventsAreas(newDrop.event, newDrop.area);
   };
+  const deleteDrop = async (dropId: string) => {
+    const drop = drops.find((drop) => drop.id === dropId);
+    if (!drop) return;
+
+    const eventsAreaDrops = drops.filter(
+      (d) => d.event === drop.event && d.area === drop.area
+    );
+    if (eventsAreaDrops.length === 1) {
+      deleteEventsAreas(drop.event, drop.area);
+    }
+    setDrops((preDrops) => preDrops.filter((drop) => drop.id !== dropId));
+    await apiClient.deleteDrop(dropId, drop.event, drop.area);
+  };
 
   return (
     <DropsContext.Provider
       value={{
         drops,
-        setDrops,
         createDrop,
         getDrops,
         updateDrop,
+        deleteDrop,
       }}
     >
       {children}

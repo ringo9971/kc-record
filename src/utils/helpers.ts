@@ -41,3 +41,14 @@ export const hiraganaToRomaji = (text: string) => {
     },
   });
 };
+
+export const formatTime = (time?: Date) => {
+  if (!time) return undefined;
+  return new Date(time).toLocaleString('jp-JP', {
+    timeZone: 'Asia/Tokyo',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};

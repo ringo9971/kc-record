@@ -18,12 +18,14 @@ import {
 } from '@mui/material';
 import { SyntheticEvent, memo, useEffect, useState } from 'react';
 
+import DeleteDropDialog from './DeleteDropDialog';
 import DropFilter from './DropFilter';
 import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
 import { Drop } from '../api/types';
 import { useDropsContext } from '../lib/DropsContext';
 import { useFriendsContext } from '../lib/FriendsContext';
+import { formatTime } from '../utils/helpers';
 
 const style = {
   position: 'absolute',
@@ -87,7 +89,7 @@ export const DropTable = ({
     時間: 'time',
   };
 
-  const { updateDrop } = useDropsContext();
+  const { updateDrop, deleteDrop } = useDropsContext();
   const [isDropFilterOpen, setIsDropFilterOpen] = useState(false);
   const [filteredDrops, setFilteredDrops] = useState<Drop[]>(drops);
   const [event, setEvent] = useState('');
@@ -110,6 +112,9 @@ export const DropTable = ({
     comment: '',
   });
 
+  const [deleteDropShip, setDeleteDropShip] = useState<Drop | null>(null);
+  const deleteDropOpen = Boolean(deleteDropShip);
+
   const handleUpdateDrop = (dropId: string, preDrop: Drop, newDrop: Drop) => {
     if (!newDrop.event || !newDrop.area) return;
     updateDrop(dropId, preDrop, newDrop);
@@ -120,6 +125,11 @@ export const DropTable = ({
       })
     );
     setEditId(null);
+  };
+  const handleDeleteDrop = () => {
+    if (!deleteDropShip) return;
+    deleteDrop(deleteDropShip.id);
+    setDeleteDropShip(null);
   };
 
   const handleColumnFilterChange = (filterName: keyof ShowFilter) => {
@@ -257,6 +267,7 @@ export const DropTable = ({
                 {columnFilter.comment && <TableCell>コメント</TableCell>}
                 {columnFilter.time && <TableCell>時間</TableCell>}
                 {isEdit && <TableCell>編集</TableCell>}
+                {isEdit && <TableCell>削除</TableCell>}
               </TableRow>
               {friendsData.length > 0 && (
                 <TableRow>
@@ -270,21 +281,14 @@ export const DropTable = ({
                   {columnFilter.comment && <TableCell></TableCell>}
                   {columnFilter.time && <TableCell></TableCell>}
                   {isEdit && <TableCell></TableCell>}
+                  {isEdit && <TableCell></TableCell>}
                 </TableRow>
               )}
             </TableHead>
             <TableBody>
               {Array.from({ length: maxDropsLength }, (_, index) => {
                 const drop = filteredDrops[index];
-                const time = drop
-                  ? new Date(drop.time).toLocaleString('jp-JP', {
-                      timeZone: 'Asia/Tokyo',
-                      month: '2-digit',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })
-                  : undefined;
+                const time = formatTime(drop?.time);
 
                 const renderAutocompleteCell = (
                   editValue: string,
@@ -432,6 +436,13 @@ export const DropTable = ({
                         )}
                       </TableCell>
                     )}
+                    {isEdit && drop && (
+                      <TableCell>
+                        <Button onClick={() => setDeleteDropShip(drop)}>
+                          削除
+                        </Button>
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })}
@@ -439,6 +450,13 @@ export const DropTable = ({
           </Table>
         </TableContainer>
       </Box>
+      <DeleteDropDialog
+        open={deleteDropOpen}
+        drop={deleteDropShip}
+        onClose={() => setDeleteDropShip(null)}
+        onCanselClick={() => setDeleteDropShip(null)}
+        onDeleteClick={handleDeleteDrop}
+      />
     </Box>
   );
 };
