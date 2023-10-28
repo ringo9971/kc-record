@@ -19,15 +19,18 @@ interface ColorsDropsBoxProps {
 }
 
 export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
-  const { createRareDrop, getColor } = useRareContext();
+  const { createRareDrop, deleteRareDrop, getColor } = useRareContext();
 
   const [ship, setShip] = useState('');
 
   const color = getColor(id);
 
-  const handleClick = () => {
+  const handleAdd = () => {
     createRareDrop(ship, id);
     setShip('');
+  };
+  const handleDelete = (ship: string) => {
+    deleteRareDrop(ship);
   };
 
   return (
@@ -41,7 +44,7 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
       </Box>
       <Box display="flex" flexDirection="row">
         <ShipAutocomplete ship={ship} onShipChange={setShip} />
-        <Button variant="contained" onClick={handleClick} sx={{ mx: 1 }}>
+        <Button variant="contained" onClick={handleAdd} sx={{ mx: 1 }}>
           追加
         </Button>
       </Box>
@@ -50,7 +53,10 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
         {ships.map((ship) => (
           <ListItem key={ship}>
             <ListItemText>
-              <ShipInfo ship={ship} />
+              <Box display="flex" flexDirection="row">
+                <ShipInfo ship={ship} />
+                <Button onClick={() => handleDelete(ship)}>削除</Button>
+              </Box>
             </ListItemText>
           </ListItem>
         ))}
