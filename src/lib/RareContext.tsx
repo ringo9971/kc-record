@@ -19,6 +19,7 @@ interface RareContextProps {
   createRareColor: (req: RareColorRequest) => void;
   getColor: (id?: string) => RareColor;
   getColorByShip: (ship?: string) => RareColor;
+  updateRareColor: (id: string, req: RareColorRequest) => void;
   deleteRareDrop: (ship: string) => void;
 }
 
@@ -66,6 +67,10 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
     setColorsDrops(() => groupShipsByColor(setting.drops));
     setRareColors(setting.colors);
   };
+  const updateRareColor = async (id: string, req: RareColorRequest) => {
+    const setting = await apiClient.updateRareColor(id, req);
+    setRareColors(setting.colors);
+  };
   const deleteRareDrop = async (ship: string) => {
     const setting = await apiClient.deleteRareDrop(ship);
     setRareDrops(setting.drops);
@@ -99,6 +104,7 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
         createRareColor,
         getColor,
         getColorByShip,
+        updateRareColor,
         deleteRareDrop,
       }}
     >

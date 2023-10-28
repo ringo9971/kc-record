@@ -22,6 +22,7 @@ import {
   RareSettingsResponse,
 } from './types';
 import { updateDrop } from './updateDrop';
+import { updateRareColor } from './updateRareSetting';
 
 export class ApiClient {
   constructor(private user: User | null, private firestore: Firestore) {}
@@ -74,6 +75,9 @@ export class ApiClient {
   }
   async getRareSettings(): Promise<RareSettingsResponse> {
     return getRareSettings(this.user, this.firestore);
+  }
+  async updateRareColor(id: string, req: RareColorRequest): Promise<RareSettingsResponse> {
+    return updateRareColor(this.user, this.firestore, id, req);
   }
   async deleteRareDrop(ship: string): Promise<RareSettingsResponse> {
     return deleteRareDrop(this.user, this.firestore, ship);
