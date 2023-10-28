@@ -1,25 +1,17 @@
 import { Box, Button, TextField } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 
 import { DropRequest } from '../api/types';
 import DropTable from '../components/DropTable';
 import FreeAutocomplete from '../components/FreeAutocomplete';
 import RadioButtonGroup from '../components/RadioButtonGroup';
 import ShipAutocomplete from '../components/ShipAutocomplete';
-import { useUser } from '../hooks/useUser';
 import { useDropsContext } from '../lib/DropsContext';
 import { useEventsAreasContext } from '../lib/EventsAreasContext';
-import { useFriendsContext } from '../lib/FriendsContext';
-import { useRareContext } from '../lib/RareContext';
 
 export const RecordPage = (): JSX.Element => {
-  const { user, loading } = useUser();
-
-  const { drops, getDrops, createDrop } = useDropsContext();
-  const { eventsAreas, getEventsAreas } = useEventsAreasContext();
-
-  const { getFriends } = useFriendsContext();
-  const { getRareDrops } = useRareContext();
+  const { drops, createDrop } = useDropsContext();
+  const { eventsAreas} = useEventsAreasContext();
 
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
@@ -28,14 +20,6 @@ export const RecordPage = (): JSX.Element => {
   const [comment, setComment] = useState('');
 
   const outcomes = ['S', 'A', 'B', '敗北', '撤退', '不明'];
-
-  useEffect(() => {
-    if (drops.length > 0 || loading || !user) return;
-    getDrops();
-    getEventsAreas();
-    getFriends();
-    getRareDrops();
-  }, [user, drops.length, loading, user]);
 
   const handleCreateDrop = async () => {
     const drop: DropRequest = {

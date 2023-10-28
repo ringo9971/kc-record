@@ -12,16 +12,26 @@ import {
   Toolbar,
   Tooltip,
 } from '@mui/material';
-import { memo, useState, MouseEvent } from 'react';
+import { memo, useState, MouseEvent, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useLogout } from './hooks/useLogout';
 import { useUser } from './hooks/useUser';
+import { useDropsContext } from './lib/DropsContext';
+import { useEventsAreasContext } from './lib/EventsAreasContext';
+import { useFriendsContext } from './lib/FriendsContext';
+import { useRareContext } from './lib/RareContext';
 
 const TopBar = (): JSX.Element => {
   const { user, loading } = useUser();
   const { logout } = useLogout();
 
+  const { getDrops } = useDropsContext();
+  const { getEventsAreas } = useEventsAreasContext();
+  const { getFriends } = useFriendsContext();
+  const { getRareDrops } = useRareContext();
+
+  const [first, setFirst] = useState(true);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
 
@@ -33,6 +43,23 @@ const TopBar = (): JSX.Element => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (!first || loading || !user) return;
+    getDrops();
+    getEventsAreas();
+    getFriends();
+    getRareDrops();
+    setFirst(false);
+  }, [
+    first,
+    loading,
+    user,
+    getDrops,
+    getEventsAreas,
+    getFriends,
+    getRareDrops,
+  ]);
 
   return (
     <Box mb={3}>
