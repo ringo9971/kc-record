@@ -12,7 +12,9 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
+  TablePagination,
   TableRow,
   TextField,
 } from '@mui/material';
@@ -62,6 +64,9 @@ export const DropTable = ({
   const [filteredFriendData, setFilteredFriendData] = useState<Drop[]>(
     friendsData?.[0]?.drops ?? []
   );
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [isColumnFilterOpen, setIsColumnFilterOpen] = useState(false);
   const [columnFilter, setColumnFilter] = useState<ShowFilter>({
@@ -287,6 +292,11 @@ export const DropTable = ({
             </TableHead>
             <TableBody>
               {Array.from({ length: maxDropsLength }, (_, index) => {
+                if (
+                  index < page * rowsPerPage ||
+                  (page + 1) * rowsPerPage <= index
+                )
+                  return;
                 const drop = filteredDrops[index];
                 const time = formatTime(drop?.time);
 
@@ -447,6 +457,19 @@ export const DropTable = ({
                 );
               })}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  count={maxDropsLength}
+                  onPageChange={(_event, newPage) => setPage(newPage)}
+                  page={page}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={(event) =>
+                    setRowsPerPage(+event.target.value)
+                  }
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </Box>
