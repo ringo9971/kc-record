@@ -42,42 +42,44 @@ export const EditRareDrops = () => {
 
   return (
     <Box>
-      <Typography>背景色と文字色の設定</Typography>
+      <Typography>文字色と背景色の設定</Typography>
       <Box pt={2}>
-        <Circle
-          style={{
-            color: color,
-            border: '1px solid black',
-            width: '50px',
-            height: '50px',
-          }}
-          onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
-            handleColorClick(event)
-          }
-        />
-        <Rectangle
-          style={{
-            color: bgColor,
-            border: '1px solid black',
-            width: '50px',
-            height: '50px',
-          }}
-          onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
-            handleBgColorClick(event)
-          }
-        />
-        <TextField
-          placeholder="コメント"
-          value={comment}
-          sx={{ width: 200, backgroundColor: bgColor }}
-          InputProps={{
-            style: { color },
-          }}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <Button variant="contained" onClick={handleAdd}>
-          追加
-        </Button>
+        <Box display="flex" flexDirection="row">
+          <Circle
+            style={{
+              color: color,
+              border: '1px solid black',
+              width: '50px',
+              height: '50px',
+            }}
+            onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
+              handleColorClick(event)
+            }
+          />
+          <Rectangle
+            style={{
+              color: bgColor,
+              border: '1px solid black',
+              width: '50px',
+              height: '50px',
+            }}
+            onClick={(event: React.MouseEvent<SVGSVGElement, MouseEvent>) =>
+              handleBgColorClick(event)
+            }
+          />
+          <TextField
+            placeholder="コメント（例: 海外艦）"
+            value={comment}
+            sx={{ width: 200, backgroundColor: bgColor, mx: 1 }}
+            InputProps={{
+              style: { color },
+            }}
+            onChange={(e) => setComment(e.target.value)}
+          />
+          <Button variant="contained" onClick={handleAdd} sx={{ mx: 1 }}>
+            追加
+          </Button>
+        </Box>
         <Popover
           anchorEl={colorAnchorEl}
           open={colorOpen}

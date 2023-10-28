@@ -39,10 +39,12 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
           {color.comment}
         </Typography>
       </Box>
-      <ShipAutocomplete ship={ship} onShipChange={setShip} />
-      <Button variant="contained" onClick={handleClick}>
-        追加
-      </Button>
+      <Box display="flex" flexDirection="row">
+        <ShipAutocomplete ship={ship} onShipChange={setShip} />
+        <Button variant="contained" onClick={handleClick} sx={{ mx: 1 }}>
+          追加
+        </Button>
+      </Box>
 
       <List>
         {ships.map((ship) => (
