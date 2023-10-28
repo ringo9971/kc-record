@@ -16,14 +16,15 @@ const EditProfile = () => {
     apiClient.createProfile(name, message);
   };
 
-  const fetchProfile = async () => {
-    const profile = await apiClient.getProfile();
-    setName(profile?.name ?? '');
-    setMessage(profile?.message ?? '');
-  };
   useEffect(() => {
+    const fetchProfile = async () => {
+      const profile = await apiClient.getProfile();
+      setName(profile?.name ?? '');
+      setMessage(profile?.message ?? '');
+    };
+
     fetchProfile();
-  }, [user]);
+  }, [user, apiClient]);
 
   if (!user) {
     return <></>;

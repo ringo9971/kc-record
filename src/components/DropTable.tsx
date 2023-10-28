@@ -173,7 +173,7 @@ export const DropTable = ({
     setFilteredDrops(newDrops);
     setFilteredFriendData(newFriendDrops);
     setMaxDropsLength(Math.max(newDrops.length, newFriendDrops.length));
-  }, [event, area, drops, outcomesFilter]);
+  }, [event, area, drops, outcomesFilter, friendsData]);
 
   return (
     <Box>
