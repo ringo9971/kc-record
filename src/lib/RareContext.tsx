@@ -19,6 +19,7 @@ interface RareContextProps {
   createRareColor: (req: RareColorRequest) => void;
   getColor: (id?: string) => RareColor;
   getColorByShip: (ship?: string) => RareColor;
+  deleteRareDrop: (ship: string) => void;
 }
 
 const RareContext = createContext<RareContextProps | null>(null);
@@ -48,13 +49,6 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
     return colorsDrops;
   };
 
-  const getRareDrops = async () => {
-    const setting = await apiClient.getRareSettings();
-    setRareDrops(setting.drops);
-    setColorsDrops(() => groupShipsByColor(setting.drops));
-    setRareColors(setting.colors);
-  };
-
   const createRareColor = async (req: RareColorRequest) => {
     const setting = await apiClient.createRareColor(req);
     setRareColors(setting.colors);
@@ -63,6 +57,17 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
   const createRareDrop = async (ship: string, id: string) => {
     if (!ship) return;
     const setting = await apiClient.createRareDrop(ship, id);
+    setRareDrops(setting.drops);
+    setColorsDrops(() => groupShipsByColor(setting.drops));
+  };
+  const getRareDrops = async () => {
+    const setting = await apiClient.getRareSettings();
+    setRareDrops(setting.drops);
+    setColorsDrops(() => groupShipsByColor(setting.drops));
+    setRareColors(setting.colors);
+  };
+  const deleteRareDrop = async (ship: string) => {
+    const setting = await apiClient.deleteRareDrop(ship);
     setRareDrops(setting.drops);
     setColorsDrops(() => groupShipsByColor(setting.drops));
   };
@@ -94,6 +99,7 @@ export const RareProvider = ({ children }: { children: JSX.Element }) => {
         createRareColor,
         getColor,
         getColorByShip,
+        deleteRareDrop,
       }}
     >
       {children}

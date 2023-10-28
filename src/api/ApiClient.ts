@@ -8,6 +8,7 @@ import { createProfile } from './createProfile';
 import { createRareColor, createRareDrop } from './createRareSetting';
 import { deleteDrop } from './deleteDrop';
 import { deleteEventsAreas } from './deleteEventsAreas';
+import { deleteRareDrop } from './deleteRareSetting';
 import { getDrops } from './getDrops';
 import { getEventsAreas } from './getEventsAreas';
 import { getFriends } from './getFriends';
@@ -73,5 +74,8 @@ export class ApiClient {
   }
   async getRareSettings(): Promise<RareSettingsResponse> {
     return getRareSettings(this.user, this.firestore);
+  }
+  async deleteRareDrop(ship: string): Promise<RareSettingsResponse> {
+    return deleteRareDrop(this.user, this.firestore, ship);
   }
 }
