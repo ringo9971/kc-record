@@ -9,7 +9,7 @@ import {
 import { useApiClient } from './ApiClientContext';
 import { Drop, Profile } from '../api/types';
 
-interface FriendData {
+export interface FriendData {
   friendId: string;
   profile: Profile;
   drops: Drop[];

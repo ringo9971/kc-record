@@ -2,7 +2,7 @@ import { Box, Button, TextField } from '@mui/material';
 import { memo, useState } from 'react';
 
 import { DropRequest } from '../api/types';
-import DropTable from '../components/DropTable';
+import DropsDetail from '../components/DropsDetail';
 import FreeAutocomplete from '../components/FreeAutocomplete';
 import RadioButtonGroup from '../components/RadioButtonGroup';
 import ShipAutocomplete from '../components/ShipAutocomplete';
@@ -11,7 +11,7 @@ import { useEventsAreasContext } from '../lib/EventsAreasContext';
 
 export const RecordPage = (): JSX.Element => {
   const { drops, createDrop } = useDropsContext();
-  const { eventsAreas} = useEventsAreasContext();
+  const { eventsAreas } = useEventsAreasContext();
 
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
@@ -78,7 +78,7 @@ export const RecordPage = (): JSX.Element => {
         </Button>
       </Box>
       <Box pt={2}>
-        <DropTable
+        <DropsDetail
           drops={drops}
           outcomes={outcomes}
           eventsAreas={eventsAreas}
