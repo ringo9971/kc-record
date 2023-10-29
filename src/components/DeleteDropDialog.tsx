@@ -20,6 +20,20 @@ interface DeleteDropDialogProps {
   onDeleteClick: () => void;
 }
 
+const TextGridItem = ({
+  message,
+  right,
+}: {
+  message?: string;
+  right?: boolean;
+}) => {
+  return (
+    <Grid item xs={6} textAlign={right ? 'right' : 'left'}>
+      <DialogContentText>{message}</DialogContentText>
+    </Grid>
+  );
+};
+
 export const DeleteDropDialog = ({
   open,
   drop,
@@ -31,66 +45,20 @@ export const DeleteDropDialog = ({
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth={true}>
       <DialogTitle>確認</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          <Grid container spacing={2}>
-            <Grid item xs={6} textAlign="right">
-              イベント:
-            </Grid>
-            <Grid item xs={6}>
-              <DialogContentText>{drop?.event}</DialogContentText>
-            </Grid>
-          </Grid>
-        </DialogContentText>
-        <DialogContentText>
-          <Grid container spacing={2}>
-            <Grid item xs={6} textAlign="right">
-              海域:
-            </Grid>
-            <Grid item xs={6}>
-              <DialogContentText>{drop?.area}</DialogContentText>
-            </Grid>
-          </Grid>
-        </DialogContentText>
-        <DialogContentText>
-          <Grid container spacing={2}>
-            <Grid item xs={6} textAlign="right">
-              勝利:
-            </Grid>
-            <Grid item xs={6}>
-              <DialogContentText>{drop?.outcome}</DialogContentText>
-            </Grid>
-          </Grid>
-        </DialogContentText>
-        <DialogContentText>
-          <Grid container spacing={2}>
-            <Grid item xs={6} textAlign="right">
-              勝利: ドロップ:
-            </Grid>
-            <Grid item xs={6}>
-              <DialogContentText>{drop?.ship}</DialogContentText>
-            </Grid>
-          </Grid>
-        </DialogContentText>
-        <DialogContentText>
-          <Grid container spacing={2}>
-            <Grid item xs={6} textAlign="right">
-              コメント:
-            </Grid>
-            <Grid item xs={6}>
-              <DialogContentText>{drop?.comment}</DialogContentText>
-            </Grid>
-          </Grid>
-        </DialogContentText>
-        <DialogContentText>
-          <Grid container spacing={2}>
-            <Grid item xs={6} textAlign="right">
-              時間:
-            </Grid>
-            <Grid item xs={6}>
-              <DialogContentText>{formatTime(drop?.time)}</DialogContentText>
-            </Grid>
-          </Grid>
-        </DialogContentText>
+        <Grid container spacing={2}>
+          <TextGridItem message="イベント:" right={true} />
+          <TextGridItem message={drop?.event} />
+          <TextGridItem message="海域:" right={true} />
+          <TextGridItem message={drop?.area} />
+          <TextGridItem message="勝利:" right={true} />
+          <TextGridItem message={drop?.outcome} />
+          <TextGridItem message="勝利: ドロップ:" right={true} />
+          <TextGridItem message={drop?.ship} />
+          <TextGridItem message="コメント:" right={true} />
+          <TextGridItem message={drop?.comment} />
+          <TextGridItem message="時間:" right={true} />
+          <TextGridItem message={formatTime(drop?.time)} />
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={onCanselClick}>キャンセル</Button>
