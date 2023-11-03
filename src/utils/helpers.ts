@@ -52,3 +52,9 @@ export const formatTime = (time?: Date) => {
     minute: '2-digit',
   });
 };
+
+export const displayRate = (rate?: number) => {
+  if (rate == undefined || rate === null) return;
+  if (Number.isNaN(rate)) return '-';
+  return `${Math.round(rate * 100)} %`;
+};

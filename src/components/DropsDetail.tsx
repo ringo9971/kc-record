@@ -12,6 +12,7 @@ import { memo, useEffect, useState } from 'react';
 
 import DeleteDropDialog from './DeleteDropDialog';
 import DropFilter from './DropFilter';
+import DropsAnalysis from './DropsAnalysis';
 import DropsTable from './DropsTable';
 import { Drop } from '../api/types';
 import { useDropsContext } from '../lib/DropsContext';
@@ -214,6 +215,7 @@ export const DropsDetail = ({
         </Box>
       </Collapse>
       <Box pt={2}>
+        <DropsAnalysis drops={filteredDrops} />
         <DropsTable
           drops={filteredDrops}
           friendDrops={filteredFriendData}
