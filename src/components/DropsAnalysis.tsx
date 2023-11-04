@@ -1,4 +1,5 @@
 import {
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -55,6 +56,8 @@ interface Data {
 export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
   const { rareDrops, rareColors } = useRareContext();
 
+  const [width, setWidth] = useState(window.innerWidth);
+
   const [total, setTotal] = useState<number>(drops.length);
   const [reachRate, setReachRate] = useState<number | undefined>(undefined);
   const [sRate, setSRate] = useState<number | undefined>(undefined);
@@ -105,6 +108,17 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
       ],
     });
   }, [drops]);
+
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (drops.length === 0) return;
@@ -162,8 +176,45 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {data && <Bar data={data} options={options} />}
-      {count && <Bar data={count} options={options} />}
+      <Box
+        display="flex"
+        flexDirection={width < 800 ? 'column' : 'row'}
+        sx={{
+          gap: 2,
+          mt: 2,
+        }}
+      >
+        {data && (
+          <Box
+            sx={{
+              width: width < 800 ? '100%' : '50%',
+            }}
+          >
+            <Bar
+              data={data}
+              options={options}
+              style={{
+                marginBottom: 2,
+              }}
+            />
+          </Box>
+        )}
+        {count && (
+          <Box
+            sx={{
+              width: width < 800 ? '100%' : '50%',
+            }}
+          >
+            <Bar
+              data={count}
+              options={options}
+              style={{
+                marginBottom: 2,
+              }}
+            />
+          </Box>
+        )}
+      </Box>
     </>
   );
 };
