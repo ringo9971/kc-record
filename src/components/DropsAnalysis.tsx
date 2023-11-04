@@ -22,7 +22,6 @@ import { Drop, RareColor } from '../api/types';
 import { useRareContext } from '../lib/RareContext';
 import { displayRate } from '../utils/helpers';
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -62,6 +61,7 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
   const [dropRate, setDropRate] = useState<number | undefined>(undefined);
   const [rareRate, setRareRate] = useState<number | undefined>(undefined);
   const [data, setData] = useState<Data | undefined>(undefined);
+  const [count, setCount] = useState<Data | undefined>(undefined);
 
   useEffect(() => {
     const total = drops.length;
@@ -79,6 +79,34 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
   }, [drops, rareDrops]);
 
   useEffect(() => {
+    const count: Record<string, number> = drops.reduce(
+      (result, drop) => {
+        result[drop.ship] = (result[drop.ship] ?? 0) + 1;
+        return result;
+      },
+      {} as Record<string, number>
+    );
+
+    const sortedCount = Object.entries(count)
+      .filter(([drop]) => drop !== '' && drop !== '撤退' && drop !== 'ガシャン')
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10);
+
+    const labels = sortedCount.map(([ship]) => ship);
+    const data = sortedCount.map(([, count]) => count);
+
+    setCount({
+      labels,
+      datasets: [
+        {
+          data,
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+      ],
+    });
+  }, [drops]);
+
+  useEffect(() => {
     if (drops.length === 0) return;
 
     const ids = Array.from(rareColors.keys());
@@ -91,7 +119,7 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
       (result, drop) => {
         const rarity = rareDrops.get(drop.ship);
         if (rarity) {
-          result[rarity] = (result[rarity] || 0) + 1;
+          result[rarity] = (result[rarity] ?? 0) + 1;
         }
         return result;
       },
@@ -135,6 +163,7 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
         </Table>
       </TableContainer>
       {data && <Bar data={data} options={options} />}
+      {count && <Bar data={count} options={options} />}
     </>
   );
 };
