@@ -1,5 +1,6 @@
 import { Box, Button, TextField } from '@mui/material';
 import { memo, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { DropRequest } from '../api/types';
 import DropsDetail from '../components/DropsDetail';
@@ -19,6 +20,8 @@ export const RecordPage = (): JSX.Element => {
   const [ship, setShip] = useState('');
   const [comment, setComment] = useState('');
 
+  const [shipKey, setShipKey] = useState(uuidv4());
+
   const outcomes = ['S', 'A', 'B', '敗北', '撤退', '不明'];
 
   const handleCreateDrop = async () => {
@@ -33,6 +36,7 @@ export const RecordPage = (): JSX.Element => {
     if (!newDrop) return;
     setShip('');
     setComment('');
+    setShipKey(uuidv4());
   };
 
   return (
@@ -52,7 +56,7 @@ export const RecordPage = (): JSX.Element => {
             label="海域"
           />
         </Box>
-        <Box display="flex" flexDirection="row" pt={1}>
+        <Box display="flex" flexDirection="row" pt={1} key={shipKey}>
           <ShipAutocomplete
             ship={ship}
             onShipChange={setShip}
