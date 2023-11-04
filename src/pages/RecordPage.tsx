@@ -1,5 +1,5 @@
 import { Box, Button, TextField } from '@mui/material';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { DropRequest } from '../api/types';
@@ -38,6 +38,11 @@ export const RecordPage = (): JSX.Element => {
     setComment('');
     setShipKey(uuidv4());
   };
+
+  useEffect(() => {
+    setEvent(drops[0]?.event ?? '');
+    setArea(drops[0]?.area ?? '');
+  }, [drops]);
 
   return (
     <>
