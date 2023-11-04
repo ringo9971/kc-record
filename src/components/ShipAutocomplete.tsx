@@ -13,12 +13,14 @@ interface ShipAutocompleteProps {
   ship: string;
   onShipChange: (ship: string) => void;
   disabled?: boolean;
+  options?: ShipMaster[];
 }
 
 export const ShipAutocomplete = ({
   ship,
   onShipChange,
   disabled,
+  options,
 }: ShipAutocompleteProps) => {
   const { shipsMaster } = useMasterContext();
 
@@ -50,8 +52,7 @@ export const ShipAutocomplete = ({
       onInputChange={(_, selectedShip: string) => {
         onShipChange(selectedShip);
       }}
-      autoSelect
-      options={shipsMaster}
+      options={options ?? shipsMaster}
       getOptionLabel={(option: ShipMaster) => option.name}
       filterOptions={filterOptions}
       sx={{ width: 200 }}

@@ -8,11 +8,13 @@ import {
   Popover,
   Typography,
 } from '@mui/material';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { SketchPicker, ColorResult } from 'react-color';
+import { v4 as uuidv4 } from 'uuid';
 
 import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
+import { useMasterContext } from '../lib/MasterContext';
 import { useRareContext } from '../lib/RareContext';
 
 interface ColorsDropsBoxProps {
@@ -21,10 +23,19 @@ interface ColorsDropsBoxProps {
 }
 
 export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
-  const { createRareDrop, deleteRareDrop, getColor, updateRareColor } =
-    useRareContext();
+  const { shipsMaster } = useMasterContext();
+  const {
+    rareDrops,
+    createRareDrop,
+    deleteRareDrop,
+    getColor,
+    updateRareColor,
+  } = useRareContext();
+
+  const [options, setOptions] = useState(shipsMaster);
 
   const [ship, setShip] = useState('');
+  const [shipKey, setShipKey] = useState(uuidv4());
 
   const color = getColor(id);
 
@@ -65,10 +76,16 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
   const handleAdd = () => {
     createRareDrop(ship, id);
     setShip('');
+    setShipKey(uuidv4());
   };
   const handleDelete = (ship: string) => {
     deleteRareDrop(ship);
   };
+
+  useEffect(() => {
+    const options = shipsMaster.filter((master) => !rareDrops.get(master.name));
+    setOptions(options);
+  }, [rareDrops, shipsMaster]);
 
   return (
     <Box>
@@ -138,8 +155,12 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
           />
         </Box>
       </Popover>
-      <Box display="flex" flexDirection="row">
-        <ShipAutocomplete ship={ship} onShipChange={setShip} />
+      <Box display="flex" flexDirection="row" key={shipKey}>
+        <ShipAutocomplete
+          ship={ship}
+          onShipChange={setShip}
+          options={options}
+        />
         <Button variant="contained" onClick={handleAdd} sx={{ mx: 1 }}>
           追加
         </Button>
