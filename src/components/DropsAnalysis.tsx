@@ -225,6 +225,24 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
     });
   }, [drops, shipTypeMaster]);
 
+  const Graph = ({ data, title }: { data: Data; title: string }) => {
+    return (
+      <Box
+        sx={{
+          width: width < 800 ? '100%' : '50%',
+        }}
+      >
+        <Bar
+          data={data}
+          options={getOptions(title)}
+          style={{
+            marginBottom: 2,
+          }}
+        />
+      </Box>
+    );
+  };
+
   return (
     <>
       <TableContainer>
@@ -257,36 +275,8 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
           mt: 2,
         }}
       >
-        {data && (
-          <Box
-            sx={{
-              width: width < 800 ? '100%' : '50%',
-            }}
-          >
-            <Bar
-              data={data}
-              options={getOptions('レアドロップ')}
-              style={{
-                marginBottom: 2,
-              }}
-            />
-          </Box>
-        )}
-        {count && (
-          <Box
-            sx={{
-              width: width < 800 ? '100%' : '50%',
-            }}
-          >
-            <Bar
-              data={count}
-              options={getOptions('ドロップ別')}
-              style={{
-                marginBottom: 2,
-              }}
-            />
-          </Box>
-        )}
+        {data && <Graph data={data} title="レアドロップ" />}
+        {count && <Graph data={count} title="ドロップ別" />}
       </Box>
       <Box
         display="flex"
@@ -296,36 +286,8 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
           mt: 2,
         }}
       >
-        {types && (
-          <Box
-            sx={{
-              width: width < 800 ? '100%' : '50%',
-            }}
-          >
-            <Bar
-              data={types}
-              options={getOptions('種別')}
-              style={{
-                marginBottom: 2,
-              }}
-            />
-          </Box>
-        )}
-        {country && (
-          <Box
-            sx={{
-              width: width < 800 ? '100%' : '50%',
-            }}
-          >
-            <Bar
-              data={country}
-              options={getOptions('国別')}
-              style={{
-                marginBottom: 2,
-              }}
-            />
-          </Box>
-        )}
+        {types && <Graph data={types} title="種別" />}
+        {country && <Graph data={country} title="国別" />}
       </Box>
     </>
   );
