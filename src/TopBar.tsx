@@ -66,7 +66,7 @@ const TopBar = (): JSX.Element => {
   ]);
 
   return (
-    <Box mb={3}>
+    <Box mb={1}>
       <AppBar position="static">
         <Toolbar>
           <Box flexGrow="1">
