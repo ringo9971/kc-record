@@ -8,6 +8,7 @@ import { EventsAreasProvider } from './lib/EventsAreasContext';
 import { FriendsProvider } from './lib/FriendsContext';
 import { MasterProvider } from './lib/MasterContext';
 import { RareProvider } from './lib/RareContext';
+import { ResourcesProvider } from './lib/ResourceContext';
 import routes from './Routes';
 import TopBar from './TopBar';
 
@@ -19,20 +20,22 @@ function App() {
   return (
     <>
       <ApiClientProvider user={user} firestore={firestore}>
-        <EventsAreasProvider>
-          <DropsProvider>
-            <FriendsProvider>
-              <RareProvider>
-                <MasterProvider>
-                  <>
-                    <TopBar />
-                    {!loading && <>{routing}</>}
-                  </>
-                </MasterProvider>
-              </RareProvider>
-            </FriendsProvider>
-          </DropsProvider>
-        </EventsAreasProvider>
+        <ResourcesProvider>
+          <EventsAreasProvider>
+            <DropsProvider>
+              <FriendsProvider>
+                <RareProvider>
+                  <MasterProvider>
+                    <>
+                      <TopBar />
+                      {!loading && <>{routing}</>}
+                    </>
+                  </MasterProvider>
+                </RareProvider>
+              </FriendsProvider>
+            </DropsProvider>
+          </EventsAreasProvider>
+        </ResourcesProvider>
       </ApiClientProvider>
     </>
   );

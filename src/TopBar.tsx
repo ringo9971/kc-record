@@ -21,6 +21,7 @@ import { useDropsContext } from './lib/DropsContext';
 import { useEventsAreasContext } from './lib/EventsAreasContext';
 import { useFriendsContext } from './lib/FriendsContext';
 import { useRareContext } from './lib/RareContext';
+import { useResourcesContext } from './lib/ResourceContext';
 
 const TopBar = (): JSX.Element => {
   const { user, loading } = useUser();
@@ -30,6 +31,7 @@ const TopBar = (): JSX.Element => {
   const { getEventsAreas } = useEventsAreasContext();
   const { getFriends } = useFriendsContext();
   const { getRareDrops } = useRareContext();
+  const { getResources } = useResourcesContext();
 
   const [first, setFirst] = useState(true);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -50,6 +52,7 @@ const TopBar = (): JSX.Element => {
     getEventsAreas();
     getFriends();
     getRareDrops();
+    getResources();
     setFirst(false);
   }, [
     first,
@@ -59,6 +62,7 @@ const TopBar = (): JSX.Element => {
     getEventsAreas,
     getFriends,
     getRareDrops,
+    getResources,
   ]);
 
   return (
