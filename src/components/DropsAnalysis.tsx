@@ -123,7 +123,9 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
 
     const reachCount = drops.filter((drop) => drop.outcome !== '撤退').length;
     const sCount = drops.filter((drop) => drop.outcome === 'S').length;
-    const dropCount = drops.filter((drop) => drop.ship).length;
+    const dropCount = drops.filter(
+      (drop) => drop.ship && drop.ship !== 'ガシャン'
+    ).length;
     const rareCount = drops.filter((drop) => rareDrops.get(drop.ship)).length;
 
     setReachRate(reachCount / total);
@@ -161,13 +163,23 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
       .filter((color) => color !== undefined) as RareColor[];
     const labels = colors.map((color) => color.comment);
 
-    const data = getDropData(drops, rareDrops, ids);
+    const dropCount = drops.filter(
+      (drop) => drop.ship && drop.ship !== 'ガシャン'
+    ).length;
+    const data = getDropData(drops, rareDrops, ids).map(
+      (d) => (d / dropCount) * 100
+    );
     setData(getData(data, labels));
   }, [drops, rareDrops, rareColors]);
 
   useEffect(() => {
     const labels = ['日', '米', '伊', '英', '独', '仏', 'ソ', '他'];
-    const data = getDropData(drops, shipCountryMaster, labels);
+    const dropCount = drops.filter(
+      (drop) => drop.ship && drop.ship !== 'ガシャン'
+    ).length;
+    const data = getDropData(drops, shipCountryMaster, labels).map(
+      (d) => (d / dropCount) * 100
+    );
     setCountry(getData(data, labels));
   }, [drops, shipCountryMaster]);
 
@@ -184,7 +196,12 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
       '潜水',
       'その他',
     ];
-    const data = getDropData(drops, shipTypeMaster, labels);
+    const dropCount = drops.filter(
+      (drop) => drop.ship && drop.ship !== 'ガシャン'
+    ).length;
+    const data = getDropData(drops, shipTypeMaster, labels).map(
+      (d) => (d / dropCount) * 100
+    );
     setTypes(getData(data, labels));
   }, [drops, shipTypeMaster]);
 
@@ -238,7 +255,7 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
           mt: 2,
         }}
       >
-        {data && <Graph data={data} title="レアドロップ" />}
+        {data && <Graph data={data} title="レアドロップ割合" />}
         {count && <Graph data={count} title="ドロップ別" />}
       </Box>
       <Box
@@ -249,8 +266,8 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
           mt: 2,
         }}
       >
-        {types && <Graph data={types} title="種別" />}
-        {country && <Graph data={country} title="国別" />}
+        {types && <Graph data={types} title="種別割合" />}
+        {country && <Graph data={country} title="国別割合" />}
       </Box>
     </>
   );
