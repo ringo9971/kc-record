@@ -48,6 +48,18 @@ const getOptions = (title: string) => {
   };
 };
 
+const getData = (data: number[], labels: string[]) => {
+  return {
+    labels,
+    datasets: [
+      {
+        data,
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
+};
+
 interface DropsAnalysisProps {
   drops: Drop[];
 }
@@ -75,6 +87,35 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
   const [count, setCount] = useState<Data | undefined>(undefined);
   const [country, setCountry] = useState<Data | undefined>(undefined);
   const [types, setTypes] = useState<Data | undefined>(undefined);
+
+  const getDropData = (
+    drops: Drop[],
+    master: Map<string, string>,
+    labels: string[]
+  ) => {
+    const count: Record<string, number> = drops.reduce(
+      (result, drop) => {
+        const key = master.get(drop.ship);
+        if (key) {
+          result[key] = (result[key] ?? 0) + 1;
+        }
+        return result;
+      },
+      {} as Record<string, number>
+    );
+    return labels.map((label) => count[label]);
+  };
+
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const total = drops.length;
@@ -108,27 +149,8 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
     const labels = sortedCount.map(([ship]) => ship);
     const data = sortedCount.map(([, count]) => count);
 
-    setCount({
-      labels,
-      datasets: [
-        {
-          data,
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-      ],
-    });
+    setCount(getData(data, labels));
   }, [drops]);
-
-  const handleResize = () => {
-    setWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     if (drops.length === 0) return;
@@ -139,53 +161,14 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
       .filter((color) => color !== undefined) as RareColor[];
     const labels = colors.map((color) => color.comment);
 
-    const count: Record<string, number> = drops.reduce(
-      (result, drop) => {
-        const rarity = rareDrops.get(drop.ship);
-        if (rarity) {
-          result[rarity] = (result[rarity] ?? 0) + 1;
-        }
-        return result;
-      },
-      {} as Record<string, number>
-    );
-    const data = ids.map((id) => (count[id] / drops.length) * 100);
-
-    setData({
-      labels,
-      datasets: [
-        {
-          data,
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-      ],
-    });
+    const data = getDropData(drops, rareDrops, ids);
+    setData(getData(data, labels));
   }, [drops, rareDrops, rareColors]);
 
   useEffect(() => {
     const labels = ['日', '米', '伊', '英', '独', '仏', 'ソ', '他'];
-
-    const count: Record<string, number> = drops.reduce(
-      (result, drop) => {
-        const rarity = shipCountryMaster.get(drop.ship);
-        if (rarity) {
-          result[rarity] = (result[rarity] ?? 0) + 1;
-        }
-        return result;
-      },
-      {} as Record<string, number>
-    );
-    const data = labels.map((label) => count[label]);
-
-    setCountry({
-      labels,
-      datasets: [
-        {
-          data,
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-      ],
-    });
+    const data = getDropData(drops, shipCountryMaster, labels);
+    setCountry(getData(data, labels));
   }, [drops, shipCountryMaster]);
 
   useEffect(() => {
@@ -201,28 +184,8 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
       '潜水',
       'その他',
     ];
-
-    const count: Record<string, number> = drops.reduce(
-      (result, drop) => {
-        const rarity = shipTypeMaster.get(drop.ship);
-        if (rarity) {
-          result[rarity] = (result[rarity] ?? 0) + 1;
-        }
-        return result;
-      },
-      {} as Record<string, number>
-    );
-    const data = labels.map((label) => count[label]);
-
-    setTypes({
-      labels,
-      datasets: [
-        {
-          data,
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-      ],
-    });
+    const data = getDropData(drops, shipTypeMaster, labels);
+    setTypes(getData(data, labels));
   }, [drops, shipTypeMaster]);
 
   const Graph = ({ data, title }: { data: Data; title: string }) => {
