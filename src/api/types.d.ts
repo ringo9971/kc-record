@@ -70,3 +70,37 @@ export interface EventAreas {
 export interface EventsAreasResponse {
   results: Map<string, string[]>;
 }
+
+export interface Resource {
+  id: string;
+  time: Date;
+  fuel: number;
+  ammo: number;
+  steel: number;
+  bauxite: number;
+  bucket?: number;
+  nail?: number;
+  screw?: number;
+}
+
+export interface ResourceRequest {
+  fuel: number;
+  ammo: number;
+  steel: number;
+  bauxite: number;
+  bucket?: number;
+  nail?: number;
+  screw?: number;
+}
+
+export interface FirestoreResource {
+  id: string;
+  time: Timestamp;
+  fuel: number;
+  ammo: number;
+  steel: number;
+  bauxite: number;
+  bucket?: number;
+  nail?: number;
+  screw?: number;
+}

@@ -6,6 +6,7 @@ import { createEventsAreas } from './createEventsAreas';
 import { createFriend } from './createFriend';
 import { createProfile } from './createProfile';
 import { createRareColor, createRareDrop } from './createRareSetting';
+import { createResource } from './createResource';
 import { deleteDrop } from './deleteDrop';
 import { deleteEventsAreas } from './deleteEventsAreas';
 import { deleteRareDrop } from './deleteRareSetting';
@@ -14,18 +15,24 @@ import { getEventsAreas } from './getEventsAreas';
 import { getFriends } from './getFriends';
 import { getProfile } from './getProfile';
 import { getRareSettings } from './getRareSettings';
+import { getResources } from './getResources';
 import {
   Drop,
   DropRequest,
   Profile,
   RareColorRequest,
   RareSettingsResponse,
+  Resource,
+  ResourceRequest,
 } from './types';
 import { updateDrop } from './updateDrop';
 import { updateRareColor } from './updateRareSetting';
 
 export class ApiClient {
-  constructor(private user: User | null, private firestore: Firestore) {}
+  constructor(
+    private user: User | null,
+    private firestore: Firestore
+  ) {}
 
   async createDrop(drop: DropRequest): Promise<Drop | null> {
     return createDrop(this.user, this.firestore, drop);
@@ -76,10 +83,20 @@ export class ApiClient {
   async getRareSettings(): Promise<RareSettingsResponse> {
     return getRareSettings(this.user, this.firestore);
   }
-  async updateRareColor(id: string, req: RareColorRequest): Promise<RareSettingsResponse> {
+  async updateRareColor(
+    id: string,
+    req: RareColorRequest
+  ): Promise<RareSettingsResponse> {
     return updateRareColor(this.user, this.firestore, id, req);
   }
   async deleteRareDrop(ship: string): Promise<RareSettingsResponse> {
     return deleteRareDrop(this.user, this.firestore, ship);
+  }
+
+  async createResource(req: ResourceRequest): Promise<Resource | null> {
+    return createResource(this.user, this.firestore, req);
+  }
+  async getResources(): Promise<Resource[]> {
+    return getResources(this.user, this.firestore);
   }
 }
