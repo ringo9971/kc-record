@@ -20,6 +20,7 @@ import { memo, useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 import { Drop, RareColor } from '../api/types';
+import { useMasterContext } from '../lib/MasterContext';
 import { useRareContext } from '../lib/RareContext';
 import { displayRate } from '../utils/helpers';
 
@@ -32,13 +33,19 @@ ChartJS.register(
   Legend
 );
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: false,
+const getOptions = (title: string) => {
+  return {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: true,
+        text: title,
+      },
     },
-  },
+  };
 };
 
 interface DropsAnalysisProps {
@@ -54,6 +61,7 @@ interface Data {
 }
 
 export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
+  const { shipCountryMaster, shipTypeMaster } = useMasterContext();
   const { rareDrops, rareColors } = useRareContext();
 
   const [width, setWidth] = useState(window.innerWidth);
@@ -65,6 +73,8 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
   const [rareRate, setRareRate] = useState<number | undefined>(undefined);
   const [data, setData] = useState<Data | undefined>(undefined);
   const [count, setCount] = useState<Data | undefined>(undefined);
+  const [country, setCountry] = useState<Data | undefined>(undefined);
+  const [types, setTypes] = useState<Data | undefined>(undefined);
 
   useEffect(() => {
     const total = drops.length;
@@ -152,6 +162,69 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
     });
   }, [drops, rareDrops, rareColors]);
 
+  useEffect(() => {
+    const labels = ['日', '米', '伊', '英', '独', '仏', 'ソ', '他'];
+
+    const count: Record<string, number> = drops.reduce(
+      (result, drop) => {
+        const rarity = shipCountryMaster.get(drop.ship);
+        if (rarity) {
+          result[rarity] = (result[rarity] ?? 0) + 1;
+        }
+        return result;
+      },
+      {} as Record<string, number>
+    );
+    const data = labels.map((label) => count[label]);
+
+    setCountry({
+      labels,
+      datasets: [
+        {
+          data,
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+      ],
+    });
+  }, [drops, shipCountryMaster]);
+
+  useEffect(() => {
+    const labels = [
+      '駆逐',
+      '軽巡',
+      '重巡',
+      '軽空',
+      '空母',
+      '戦艦',
+      '水母',
+      '海防',
+      '潜水',
+      'その他',
+    ];
+
+    const count: Record<string, number> = drops.reduce(
+      (result, drop) => {
+        const rarity = shipTypeMaster.get(drop.ship);
+        if (rarity) {
+          result[rarity] = (result[rarity] ?? 0) + 1;
+        }
+        return result;
+      },
+      {} as Record<string, number>
+    );
+    const data = labels.map((label) => count[label]);
+
+    setTypes({
+      labels,
+      datasets: [
+        {
+          data,
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+      ],
+    });
+  }, [drops, shipTypeMaster]);
+
   return (
     <>
       <TableContainer>
@@ -192,7 +265,7 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
           >
             <Bar
               data={data}
-              options={options}
+              options={getOptions('レアドロップ')}
               style={{
                 marginBottom: 2,
               }}
@@ -207,7 +280,46 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
           >
             <Bar
               data={count}
-              options={options}
+              options={getOptions('ドロップ別')}
+              style={{
+                marginBottom: 2,
+              }}
+            />
+          </Box>
+        )}
+      </Box>
+      <Box
+        display="flex"
+        flexDirection={width < 800 ? 'column' : 'row'}
+        sx={{
+          gap: 2,
+          mt: 2,
+        }}
+      >
+        {types && (
+          <Box
+            sx={{
+              width: width < 800 ? '100%' : '50%',
+            }}
+          >
+            <Bar
+              data={types}
+              options={getOptions('種別')}
+              style={{
+                marginBottom: 2,
+              }}
+            />
+          </Box>
+        )}
+        {country && (
+          <Box
+            sx={{
+              width: width < 800 ? '100%' : '50%',
+            }}
+          >
+            <Bar
+              data={country}
+              options={getOptions('国別')}
               style={{
                 marginBottom: 2,
               }}
