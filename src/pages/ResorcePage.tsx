@@ -2,10 +2,11 @@ import { Box, Button } from '@mui/material';
 import { memo, useState } from 'react';
 
 import NumberField from '../components/NumberField';
+import ResourcesChart from '../components/ResourcesChart';
 import { useResourcesContext } from '../lib/ResourceContext';
 
 export const ResourcePage = () => {
-  const { createResource } = useResourcesContext();
+  const { resources, createResource } = useResourcesContext();
 
   const [fuel, setFuel] = useState<number | null>(null);
   const [ammo, setAmmo] = useState<number | null>(null);
@@ -58,6 +59,9 @@ export const ResourcePage = () => {
             追加
           </Button>
         </Box>
+      </Box>
+      <Box pt={2}>
+        <ResourcesChart resources={resources} />
       </Box>
     </>
   );
