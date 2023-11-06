@@ -41,31 +41,31 @@ interface ResourceChartProps {
 
 export const ResourcesChart = ({ resources }: ResourceChartProps) => {
   const [data, setData] = useState<Data | null>(null);
+  const dataLabels = [
+    ['燃料', 'fuel'],
+    ['弾薬', 'ammo'],
+    ['鋼材', 'steel'],
+    ['ボーキ', 'bauxite'],
+    ['バケツ', 'bucket'],
+    ['釘', 'nail'],
+    ['ねじ', 'screw'],
+  ];
 
   useEffect(() => {
-    const labels = resources.map((resource) => formatTime(resource.time) ?? '');
-    const fuels = resources.map((resource) => resource.fuel);
-    const ammos = resources.map((resource) => resource.ammo);
-    const steels = resources.map((resource) => resource.steel);
-    const bauxites = resources.map((resource) => resource.bauxite ?? null);
-    const buckets = resources.map((resource) => resource.bucket ?? null);
-    const nails = resources.map((resource) => resource.nail ?? null);
-    const screws = resources.map((resource) => resource.screw ?? null);
-
+    const reversedResources = resources.slice().reverse();
     const data = {
-      labels,
-      datasets: [
-        { label: '燃料', data: fuels },
-        { label: '弾薬', data: ammos },
-        { label: '鋼材', data: steels },
-        { label: 'ボーキ', data: bauxites },
-        { label: 'バケツ', data: buckets },
-        { label: '釘', data: nails },
-        { label: 'ねじ', data: screws },
-      ],
+      labels: reversedResources.map(
+        (resource) => formatTime(resource.time) ?? ''
+      ),
+      datasets: dataLabels.map(([label, field]) => ({
+        label: label,
+        data: reversedResources.map(
+          (resource) => (resource[field as keyof Resource] as number) ?? null
+        ),
+      })),
     };
     setData(data);
-  }, [resources]);
+  }, [resources, dataLabels]);
 
   return <>{data && <Line data={data} options={options} />}</>;
 };
