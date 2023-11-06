@@ -1,18 +1,5 @@
 import { toRomaji } from 'wanakana';
 
-export const isPartialMatch = (mainString: string, searchString: string) => {
-  let mainIndex = 0;
-  for (let i = 0; i < searchString.length; i++) {
-    const char = searchString[i];
-    while (mainIndex < mainString.length && mainString[mainIndex] !== char) {
-      mainIndex++;
-    }
-    if (mainIndex === mainString.length) return false;
-    mainIndex++;
-  }
-  return true;
-};
-
 export const hiraganaToKatakana = (text: string) => {
   return text.replace(/[\u3041-\u3096]/g, (match) =>
     String.fromCharCode(match.charCodeAt(0) + 0x60)
@@ -28,6 +15,7 @@ export const katakanaToHiragana = (text: string) => {
 export const hiraganaToRomaji = (text: string) => {
   return toRomaji(text, {
     customRomajiMapping: {
+      し: 'si',
       じ: 'zi',
       ふ: 'hu',
       しゃ: 'sya',

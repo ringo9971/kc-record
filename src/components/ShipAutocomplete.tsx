@@ -5,7 +5,6 @@ import { ShipMaster, useMasterContext } from '../lib/MasterContext';
 import {
   hiraganaToKatakana,
   hiraganaToRomaji,
-  isPartialMatch,
   katakanaToHiragana,
 } from '../utils/helpers';
 
@@ -33,10 +32,10 @@ export const ShipAutocomplete = ({
       const katakana = hiraganaToKatakana(option.yomi);
       const romaji = hiraganaToRomaji(hiragana);
       return (
-        isPartialMatch(option.name, inputValue) ||
-        isPartialMatch(hiragana, inputValue) ||
-        isPartialMatch(katakana, inputValue) ||
-        isPartialMatch(romaji, inputValue)
+        option.name.startsWith(inputValue) ||
+        hiragana.startsWith(inputValue) ||
+        katakana.startsWith(inputValue) ||
+        romaji.startsWith(inputValue)
       );
     });
     return matches;
