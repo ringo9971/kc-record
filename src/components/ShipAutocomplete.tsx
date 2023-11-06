@@ -32,10 +32,10 @@ export const ShipAutocomplete = ({
       const katakana = hiraganaToKatakana(option.yomi);
       const romaji = hiraganaToRomaji(hiragana);
       return (
-        option.name.startsWith(inputValue) ||
+        option.name.toLowerCase().startsWith(inputValue.toLowerCase()) ||
         hiragana.startsWith(inputValue) ||
         katakana.startsWith(inputValue) ||
-        romaji.startsWith(inputValue)
+        romaji.toLowerCase().startsWith(inputValue.toLowerCase())
       );
     });
     return matches;
