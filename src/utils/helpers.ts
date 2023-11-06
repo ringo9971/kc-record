@@ -18,6 +18,8 @@ export const hiraganaToRomaji = (text: string) => {
       し: 'si',
       じ: 'zi',
       ふ: 'hu',
+      ち: 'ti',
+      つ: 'tu',
       しゃ: 'sya',
       しゅ: 'syu',
       しょ: 'syo',
