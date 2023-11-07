@@ -25,6 +25,17 @@ ChartJS.register(
 
 const options = {
   responsive: true,
+  animation: {
+    duration: 0,
+  },
+  scales: {
+    left: {
+      position: 'left' as const,
+    },
+    right: {
+      position: 'right' as const,
+    },
+  },
 };
 
 interface Data {
@@ -41,19 +52,19 @@ interface ResourceChartProps {
 
 export const ResourcesChart = ({ resources }: ResourceChartProps) => {
   const [data, setData] = useState<Data | null>(null);
-  const dataLabels = [
-    ['燃料', 'fuel'],
-    ['弾薬', 'ammo'],
-    ['鋼材', 'steel'],
-    ['ボーキ', 'bauxite'],
-    ['バケツ', 'bucket'],
-    ['釘', 'nail'],
-    ['ねじ', 'screw'],
-  ];
 
   useEffect(() => {
+    const dataLabels = [
+      ['燃料', 'fuel'],
+      ['弾薬', 'ammo'],
+      ['鋼材', 'steel'],
+      ['ボーキ', 'bauxite'],
+      ['バケツ', 'bucket'],
+      ['釘', 'nail'],
+      ['ねじ', 'screw'],
+    ];
     const reversedResources = resources.slice().reverse();
-    const data = {
+    const newData = {
       labels: reversedResources.map(
         (resource) => formatTime(resource.time) ?? ''
       ),
@@ -62,10 +73,17 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
         data: reversedResources.map(
           (resource) => (resource[field as keyof Resource] as number) ?? null
         ),
+        yAxisID:
+          label === '燃料' ||
+          label === '弾薬' ||
+          label === '鋼材' ||
+          label === 'ボーキ'
+            ? 'left'
+            : 'right',
       })),
     };
-    setData(data);
-  }, [resources, dataLabels]);
+    setData(newData);
+  }, [resources]);
 
   return <>{data && <Line data={data} options={options} />}</>;
 };
