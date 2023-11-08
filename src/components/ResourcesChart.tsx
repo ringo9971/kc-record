@@ -55,17 +55,17 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
 
   useEffect(() => {
     const dataLabels = [
-      ['燃料', 'fuel'],
-      ['弾薬', 'ammo'],
-      ['鋼材', 'steel'],
-      ['ボーキ', 'bauxite'],
-      ['バケツ', 'bucket'],
-      ['釘', 'nail'],
-      ['ねじ', 'screw'],
+      { label: '燃料', field: 'fuel', color: [65, 117, 5] },
+      { label: '弾薬', field: 'ammo', color: [139, 87, 42] },
+      { label: '鋼材', field: 'steel', color: [155, 155, 155] },
+      { label: 'ボーキ', field: 'bauxite', color: [245, 166, 35] },
+      { label: 'バケツ', field: 'bucket', color: [126, 211, 33] },
+      { label: '釘', field: 'nail', color: [50, 50, 100] },
+      { label: 'ねじ', field: 'screw', color: [100, 100, 100] },
     ];
     const newData = {
       labels: resources.map((resource) => formatTime(resource.time) ?? ''),
-      datasets: dataLabels.map(([label, field]) => ({
+      datasets: dataLabels.map(({ label, field, color }) => ({
         label: label,
         data: resources.map(
           (resource) => (resource[field as keyof Resource] as number) ?? null
@@ -77,6 +77,8 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
           label === 'ボーキ'
             ? 'left'
             : 'right',
+        borderColor: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+        backgroundColor: `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.5)`,
       })),
     };
     setData(newData);
