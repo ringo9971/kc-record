@@ -63,14 +63,11 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
       ['釘', 'nail'],
       ['ねじ', 'screw'],
     ];
-    const reversedResources = resources.slice().reverse();
     const newData = {
-      labels: reversedResources.map(
-        (resource) => formatTime(resource.time) ?? ''
-      ),
+      labels: resources.map((resource) => formatTime(resource.time) ?? ''),
       datasets: dataLabels.map(([label, field]) => ({
         label: label,
-        data: reversedResources.map(
+        data: resources.map(
           (resource) => (resource[field as keyof Resource] as number) ?? null
         ),
         yAxisID:
