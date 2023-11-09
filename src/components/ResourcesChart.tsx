@@ -95,6 +95,15 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
             : 'right',
         borderColor: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
         backgroundColor: `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.5)`,
+        borderDash:
+          label === '燃料' ||
+          label === '弾薬' ||
+          label === '鋼材' ||
+          label === 'ボーキ'
+            ? undefined
+            : label === 'ねじ'
+            ? [20, 4, 4, 4]
+            : [10, 5],
       })),
     };
     setData(newData);
