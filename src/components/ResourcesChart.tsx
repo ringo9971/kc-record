@@ -45,6 +45,9 @@ const options = {
     right: {
       position: 'right' as const,
     },
+    screw: {
+      position: 'right' as const,
+    },
   },
 };
 
@@ -87,6 +90,8 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
           label === '鋼材' ||
           label === 'ボーキ'
             ? 'left'
+            : label === 'ねじ'
+            ? 'screw'
             : 'right',
         borderColor: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
         backgroundColor: `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.5)`,
