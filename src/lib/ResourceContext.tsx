@@ -21,7 +21,7 @@ export const ResourcesProvider = ({ children }: { children: JSX.Element }) => {
   ): Promise<Resource | null> => {
     const newResource = await apiClient.createResource(req);
     if (!newResource) return null;
-    setResources((preResources) => [newResource, ...preResources]);
+    setResources((preResources) => [...preResources, newResource]);
     return newResource;
   };
   const getResources = async () => {
