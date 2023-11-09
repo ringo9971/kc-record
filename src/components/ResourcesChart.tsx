@@ -5,9 +5,11 @@ import {
   PointElement,
   LineElement,
   Title,
+  TimeScale,
   Tooltip,
   Legend,
 } from 'chart.js';
+import 'chartjs-adapter-moment';
 import { memo, useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
@@ -20,6 +22,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
+  TimeScale,
   Legend
 );
 
@@ -29,6 +32,13 @@ const options = {
     duration: 0,
   },
   scales: {
+    x: {
+      type: 'time' as const,
+      time: {
+        unit: 'day' as const,
+        parser: 'MM-DD' as const,
+      } as const,
+    },
     left: {
       position: 'left' as const,
     },
@@ -70,6 +80,7 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
         data: resources.map(
           (resource) => (resource[field as keyof Resource] as number) ?? null
         ),
+        xAxisID: 'x',
         yAxisID:
           label === '燃料' ||
           label === '弾薬' ||
