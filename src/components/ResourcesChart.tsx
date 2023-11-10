@@ -36,7 +36,7 @@ const options = {
       type: 'time' as const,
       time: {
         unit: 'day' as const,
-        parser: 'MM-DD' as const,
+        parser: 'MM/DD HH:mm' as const,
       } as const,
     },
     left: {
