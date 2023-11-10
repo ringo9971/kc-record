@@ -36,6 +36,7 @@ export const RecordPage = (): JSX.Element => {
     if (!newDrop) return;
     setShip('');
     setComment('');
+    setOutcome('S');
     setShipKey(uuidv4());
   };
 
