@@ -1,3 +1,4 @@
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import {
   Autocomplete,
   Button,
@@ -24,7 +25,7 @@ import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
 import { Drop } from '../api/types';
 import { useDropsContext } from '../lib/DropsContext';
-import { FriendData } from '../lib/FriendsContext';
+import { FriendData, useFriendsContext } from '../lib/FriendsContext';
 import { formatTime } from '../utils/helpers';
 
 interface DropsTableProps {
@@ -51,6 +52,7 @@ export const DropsTable = ({
   setDeleteDropShip,
 }: DropsTableProps): JSX.Element => {
   const { updateDrop } = useDropsContext();
+  const { getFriends } = useFriendsContext();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -81,6 +83,10 @@ export const DropsTable = ({
     setEditId(null);
   };
 
+  const handleReload = () => {
+    getFriends();
+  };
+
   return (
     <TableContainer>
       <Table>
@@ -104,7 +110,14 @@ export const DropsTable = ({
               {columnFilter.outcome && <TableCell></TableCell>}
               {columnFilter.ship && <TableCell>自分</TableCell>}
               {columnFilter.ship && (
-                <TableCell>{friendData?.profile.name}</TableCell>
+                <TableCell>
+                  {friendData?.profile.name}
+                  <Button
+                    onClick={handleReload}
+                    size="small"
+                    startIcon={<AutorenewIcon />}
+                  />
+                </TableCell>
               )}
               {columnFilter.comment && <TableCell></TableCell>}
               {columnFilter.time && <TableCell></TableCell>}
