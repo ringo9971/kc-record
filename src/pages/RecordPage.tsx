@@ -36,7 +36,6 @@ export const RecordPage = (): JSX.Element => {
     if (!newDrop) return;
     setShip('');
     setComment('');
-    setOutcome('S');
     setShipKey(uuidv4());
   };
 
@@ -47,7 +46,7 @@ export const RecordPage = (): JSX.Element => {
 
   return (
     <>
-      <Box display="flex" flexDirection="column">
+      <Box display="flex" flexDirection="column" key={shipKey}>
         <Box display="flex" flexDirection="row">
           <FreeAutocomplete
             inputValue={event}
@@ -62,7 +61,7 @@ export const RecordPage = (): JSX.Element => {
             label="海域"
           />
         </Box>
-        <Box display="flex" flexDirection="row" pt={1} key={shipKey}>
+        <Box display="flex" flexDirection="row" pt={1}>
           <ShipAutocomplete
             ship={ship}
             onShipChange={setShip}
