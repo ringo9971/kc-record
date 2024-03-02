@@ -562,6 +562,9 @@
       "country": "日"
     },
     { "name": "朝日", "yomi": "あさひ", "type": "駆逐", "country": "日" },
-    { "name": "白雲", "yomi": "しらくも", "type": "駆逐", "country": "日" }
+    { "name": "白雲", "yomi": "しらくも", "type": "駆逐", "country": "日" },
+    { "name": "Drum", "yomi": "ドラム", "type": "潜水", "country": "米" },
+    { "name": "平安丸", "yomi": "へいあんまる", "type": "その他", "country": "日" },
+    { "name": "伊36", "yomi": "い36", "type": "潜水", "country": "日" }
   ]
 }
