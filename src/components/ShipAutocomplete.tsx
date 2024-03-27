@@ -56,6 +56,7 @@ export const ShipAutocomplete = ({
       filterOptions={filterOptions}
       sx={{ width: 200 }}
       disabled={disabled}
+      autoHighlight
       renderInput={(params) => (
         <TextField {...params} label="ドロップ" placeholder="ドロップ" />
       )}
