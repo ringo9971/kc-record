@@ -221,7 +221,12 @@
       "country": "伊"
     },
     { "name": "Aquila", "yomi": "アクィラ", "type": "空母", "country": "伊" },
-    { "name": "秋津洲", "yomi": "あきつしま", "type": "その他", "country": "日" },
+    {
+      "name": "秋津洲",
+      "yomi": "あきつしま",
+      "type": "その他",
+      "country": "日"
+    },
     { "name": "Zara", "yomi": "ザラ", "type": "重巡", "country": "伊" },
     { "name": "Pola", "yomi": "ポーラ", "type": "重巡", "country": "伊" },
     { "name": "瑞穂", "yomi": "みずほ", "type": "水上機母艦", "country": "日" },
@@ -564,8 +569,33 @@
     { "name": "朝日", "yomi": "あさひ", "type": "駆逐", "country": "日" },
     { "name": "白雲", "yomi": "しらくも", "type": "駆逐", "country": "日" },
     { "name": "Drum", "yomi": "ドラム", "type": "潜水", "country": "米" },
-    { "name": "平安丸", "yomi": "へいあんまる", "type": "その他", "country": "日" },
+    {
+      "name": "平安丸",
+      "yomi": "へいあんまる",
+      "type": "その他",
+      "country": "日"
+    },
     { "name": "伊36", "yomi": "い36", "type": "潜水", "country": "日" },
-    { "name": "伊41", "yomi": "い41", "type": "潜水", "country": "日" }
+    { "name": "伊41", "yomi": "い41", "type": "潜水", "country": "日" },
+    {
+      "name": "Phoenix",
+      "yomi": "フェニックス",
+      "type": "軽巡",
+      "country": "米"
+    },
+    {
+      "name": "Lexington",
+      "yomi": "レキシントン",
+      "type": "空母",
+      "country": "米"
+    },
+    {
+      "name": "Valiant",
+      "yomi": "ヴァリアント",
+      "type": "戦艦",
+      "country": "英"
+    },
+    { "name": "Gloire", "yomi": "グロワール", "type": "軽巡", "country": "仏" },
+    { "name": "Mogador", "yomi": "モガドール", "type": "駆逐", "country": "仏" }
   ]
 }
