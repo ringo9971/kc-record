@@ -2,13 +2,13 @@ import { useRoutes } from 'react-router-dom';
 
 import useFirebase from './hooks/useFirebase';
 import { useUser } from './hooks/useUser';
-import { ApiClientProvider } from './lib/ApiClientContext';
-import { DropsProvider } from './lib/DropsContext';
-import { EventsAreasProvider } from './lib/EventsAreasContext';
-import { FriendsProvider } from './lib/FriendsContext';
-import { MasterProvider } from './lib/MasterContext';
-import { RareProvider } from './lib/RareContext';
-import { ResourcesProvider } from './lib/ResourceContext';
+import { ApiClientProvider } from './lib/ApiClientProvider';
+import { DropsProvider } from './lib/DropsProvider';
+import { EventsAreasProvider } from './lib/EventsAreasProvider';
+import { FriendsProvider } from './lib/FriendsProvider';
+import { MasterProvider } from './lib/MasterProvider';
+import { RareProvider } from './lib/RareProvider';
+import { ResourcesProvider } from './lib/ResourceProvider';
 import routes from './Routes';
 import TopBar from './TopBar';
 

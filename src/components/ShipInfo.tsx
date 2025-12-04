@@ -1,13 +1,13 @@
 import { Box } from '@mui/material';
 
-import { useRareContext } from '../lib/RareContext';
+import { useRare } from '../hooks/useRare';
 
 interface ShipInfoProps {
   ship?: string;
 }
 
 export const ShipInfo = ({ ship }: ShipInfoProps) => {
-  const { getColorByShip } = useRareContext();
+  const { getColorByShip } = useRare();
 
   const color = getColorByShip(ship);
 

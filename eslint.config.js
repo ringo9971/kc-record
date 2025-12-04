@@ -6,6 +6,7 @@ import importPlugin from "eslint-plugin-import";
 import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import globals from "globals";
 
 export default [
 
@@ -21,32 +22,24 @@ export default [
     languageOptions: {
       parser: tsParser,
 
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+        ecmaFeatures: { jsx: true },
+      },
+
       // ★ env の代わりに globals に統合
       globals: {
-        // browser
-        window: "readonly",
-        document: "readonly",
-        navigator: "readonly",
-
-        // ES2020
-        BigInt: "readonly",
-
-        // your custom globals
-        Atomics: "readonly",
-        SharedArrayBuffer: "readonly",
+        ...globals.browser,
+        ...globals.es2020,
         React: "writable",
       },
 
       ecmaVersion: 2020,
       sourceType: "module",
-
-      parserOptions: {
-        ecmaFeatures: { jsx: true },
-      },
     },
 
     settings: {
-      react: { version: "18.x" },
+      react: { version: "19.x" },
     },
 
     plugins: {

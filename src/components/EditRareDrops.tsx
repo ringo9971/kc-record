@@ -4,10 +4,10 @@ import { memo, useState } from 'react';
 import { SketchPicker, ColorResult } from 'react-color';
 
 import ColorsDropsBox from './ColorsDropsBox';
-import { useRareContext } from '../lib/RareContext';
+import { useRare } from '../hooks/useRare';
 
 export const EditRareDrops = () => {
-  const { colorsDrops, createRareColor, rareColors } = useRareContext();
+  const { colorsDrops, createRareColor, rareColors } = useRare();
 
   const [comment, setComment] = useState('');
   const [color, setColor] = useState('#000000');

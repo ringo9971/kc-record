@@ -16,12 +16,12 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 import { Drop, RareColor } from '../api/types';
-import { useMasterContext } from '../lib/MasterContext';
-import { useRareContext } from '../lib/RareContext';
+import { useMaster } from '../hooks/useMaster';
+import { useRare } from '../hooks/useRare';
 import { displayRate } from '../utils/helpers';
 
 ChartJS.register(
@@ -60,6 +60,42 @@ const getData = (data: number[], labels: string[]) => {
   };
 };
 
+const getDropData = (
+  drops: Drop[],
+  master: Map<string, string>,
+  labels: string[]
+) => {
+  const count: Record<string, number> = drops.reduce(
+    (result, drop) => {
+      const key = master.get(drop.ship);
+      if (key) {
+        result[key] = (result[key] ?? 0) + 1;
+      }
+      return result;
+    },
+    {} as Record<string, number>
+  );
+  return labels.map((label) => count[label]);
+};
+
+const Graph = ({ width, data, title }: { width: number; data: Data; title: string }) => {
+  return (
+    <Box
+      sx={{
+        width: width < 800 ? '100%' : '50%',
+      }}
+    >
+      <Bar
+        data={data}
+        options={getOptions(title)}
+        style={{
+          marginBottom: 2,
+        }}
+      />
+    </Box>
+  );
+};
+
 interface DropsAnalysisProps {
   drops: Drop[];
 }
@@ -73,117 +109,12 @@ interface Data {
 }
 
 export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
-  const { shipCountryMaster, shipTypeMaster } = useMasterContext();
-  const { rareDrops, rareColors } = useRareContext();
+  const { shipCountryMaster, shipTypeMaster } = useMaster();
+  const { rareDrops, rareColors } = useRare();
 
   const [width, setWidth] = useState(window.innerWidth);
 
-  const [total, setTotal] = useState<number>(drops.length);
-  const [reachRate, setReachRate] = useState<number | undefined>(undefined);
-  const [sRate, setSRate] = useState<number | undefined>(undefined);
-  const [dropRate, setDropRate] = useState<number | undefined>(undefined);
-  const [rareRate, setRareRate] = useState<number | undefined>(undefined);
-  const [data, setData] = useState<Data | undefined>(undefined);
-  const [count, setCount] = useState<Data | undefined>(undefined);
-  const [country, setCountry] = useState<Data | undefined>(undefined);
-  const [types, setTypes] = useState<Data | undefined>(undefined);
-
-  const getDropData = (
-    drops: Drop[],
-    master: Map<string, string>,
-    labels: string[]
-  ) => {
-    const count: Record<string, number> = drops.reduce(
-      (result, drop) => {
-        const key = master.get(drop.ship);
-        if (key) {
-          result[key] = (result[key] ?? 0) + 1;
-        }
-        return result;
-      },
-      {} as Record<string, number>
-    );
-    return labels.map((label) => count[label]);
-  };
-
-  const handleResize = () => {
-    setWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    const total = drops.length;
-    setTotal(drops.length);
-
-    const reachCount = drops.filter((drop) => drop.outcome !== '撤退').length;
-    const sCount = drops.filter((drop) => drop.outcome === 'S').length;
-    const dropCount = drops.filter(
-      (drop) => drop.ship && drop.ship !== 'ガシャン'
-    ).length;
-    const rareCount = drops.filter((drop) => rareDrops.get(drop.ship)).length;
-
-    setReachRate(reachCount / total);
-    setSRate(sCount / total);
-    setDropRate(dropCount / total);
-    setRareRate(rareCount / total);
-  }, [drops, rareDrops]);
-
-  useEffect(() => {
-    const count: Record<string, number> = drops.reduce(
-      (result, drop) => {
-        result[drop.ship] = (result[drop.ship] ?? 0) + 1;
-        return result;
-      },
-      {} as Record<string, number>
-    );
-
-    const sortedCount = Object.entries(count)
-      .filter(([drop]) => drop !== '' && drop !== '撤退' && drop !== 'ガシャン')
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 10);
-
-    const labels = sortedCount.map(([ship]) => ship);
-    const data = sortedCount.map(([, count]) => count);
-
-    setCount(getData(data, labels));
-  }, [drops]);
-
-  useEffect(() => {
-    if (drops.length === 0) return;
-
-    const ids = Array.from(rareColors.keys());
-    const colors = ids
-      .map((id) => rareColors.get(id))
-      .filter((color) => color !== undefined) as RareColor[];
-    const labels = colors.map((color) => color.comment);
-
-    const dropCount = drops.filter(
-      (drop) => drop.ship && drop.ship !== 'ガシャン'
-    ).length;
-    const data = getDropData(drops, rareDrops, ids).map(
-      (d) => (d / dropCount) * 100
-    );
-    setData(getData(data, labels));
-  }, [drops, rareDrops, rareColors]);
-
-  useEffect(() => {
-    const labels = ['日', '米', '伊', '英', '独', '仏', 'ソ', '他'];
-    const dropCount = drops.filter(
-      (drop) => drop.ship && drop.ship !== 'ガシャン'
-    ).length;
-    const data = getDropData(drops, shipCountryMaster, labels).map(
-      (d) => (d / dropCount) * 100
-    );
-    setCountry(getData(data, labels));
-  }, [drops, shipCountryMaster]);
-
-  useEffect(() => {
+  const types = useMemo(() => {
     const labels = [
       '駆逐',
       '軽巡',
@@ -202,26 +133,97 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
     const data = getDropData(drops, shipTypeMaster, labels).map(
       (d) => (d / dropCount) * 100
     );
-    setTypes(getData(data, labels));
+    return getData(data, labels);
   }, [drops, shipTypeMaster]);
 
-  const Graph = ({ data, title }: { data: Data; title: string }) => {
-    return (
-      <Box
-        sx={{
-          width: width < 800 ? '100%' : '50%',
-        }}
-      >
-        <Bar
-          data={data}
-          options={getOptions(title)}
-          style={{
-            marginBottom: 2,
-          }}
-        />
-      </Box>
+  const country = useMemo(() => {
+    const labels = ['日', '米', '伊', '英', '独', '仏', 'ソ', '他'];
+    const dropCount = drops.filter(
+      (drop) => drop.ship && drop.ship !== 'ガシャン'
+    ).length;
+    const data = getDropData(drops, shipCountryMaster, labels).map(
+      (d) => (d / dropCount) * 100
     );
+    return getData(data, labels);
+  }, [drops, shipCountryMaster]);
+
+  const data = useMemo(() => {
+    if (drops.length === 0) return undefined;
+
+    const ids = Array.from(rareColors.keys());
+    const colors = ids
+      .map((id) => rareColors.get(id))
+      .filter((color) => color !== undefined) as RareColor[];
+    const labels = colors.map((color) => color.comment);
+
+    const dropCount = drops.filter(
+      (drop) => drop.ship && drop.ship !== 'ガシャン'
+    ).length;
+    const data = getDropData(drops, rareDrops, ids).map(
+      (d) => (d / dropCount) * 100
+    );
+    return getData(data, labels);
+  }, [drops, rareDrops, rareColors]);
+
+  const count = useMemo(() => {
+    const count: Record<string, number> = drops.reduce(
+      (result, drop) => {
+        result[drop.ship] = (result[drop.ship] ?? 0) + 1;
+        return result;
+      },
+      {} as Record<string, number>
+    );
+
+    const sortedCount = Object.entries(count)
+      .filter(([drop]) => drop !== '' && drop !== '撤退' && drop !== 'ガシャン')
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10);
+
+    const labels = sortedCount.map(([ship]) => ship);
+    const data = sortedCount.map(([, count]) => count);
+
+    return getData(data, labels);
+  }, [drops]);
+
+  const total = useMemo(() => {
+    return drops.length;
+  }, [drops]);
+
+  const reachRate = useMemo(() => {
+    const reachCount = drops.filter((drop) => drop.outcome !== '撤退').length;
+    return reachCount / total;
+  }, [drops, total]);
+
+  const sRate = useMemo(() => {
+    const sCount = drops.filter((drop) => drop.outcome === 'S').length;
+    return sCount / total;
+  }, [drops, total]);
+
+  const dropRate = useMemo(() => {
+    const dropCount = drops.filter(
+      (drop) => drop.ship && drop.ship !== 'ガシャン'
+    ).length;
+    return dropCount / total;
+  }, [drops, total]);
+
+  const rareRate = useMemo(() => {
+    const rareCount = drops.filter((drop) => rareDrops.get(drop.ship)).length;
+    return rareCount / total;
+  }, [drops, total, rareDrops]);
+
+
+
+
+  const handleResize = () => {
+    setWidth(window.innerWidth);
   };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <>
@@ -255,8 +257,8 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
           mt: 2,
         }}
       >
-        {data && <Graph data={data} title="レアドロップ割合" />}
-        {count && <Graph data={count} title="ドロップ別" />}
+        {data && <Graph width={width} data={data} title="レアドロップ割合" />}
+        {count && <Graph width={width} data={count} title="ドロップ別" />}
       </Box>
       <Box
         display="flex"
@@ -266,8 +268,8 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
           mt: 2,
         }}
       >
-        {types && <Graph data={types} title="種別割合" />}
-        {country && <Graph data={country} title="国別割合" />}
+        {types && <Graph width={width} data={types} title="種別割合" />}
+        {country && <Graph width={width} data={country} title="国別割合" />}
       </Box>
     </>
   );

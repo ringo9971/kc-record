@@ -11,11 +11,11 @@ import {
 } from '@mui/material';
 import { memo, useState } from 'react';
 
+import { useFriends } from '../hooks/useFriends';
 import { useUser } from '../hooks/useUser';
-import { useFriendsContext } from '../lib/FriendsContext';
 
 const EditFriends = () => {
-  const { friendsData, createFriend } = useFriendsContext();
+  const { friendsData, createFriend } = useFriends();
   const { user } = useUser();
 
   const [friendId, setFriendId] = useState('');

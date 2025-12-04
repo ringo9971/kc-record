@@ -15,8 +15,8 @@ import DropFilter from './DropFilter';
 import DropsAnalysis from './DropsAnalysis';
 import DropsTable from './DropsTable';
 import { Drop } from '../api/types';
-import { useDropsContext } from '../lib/DropsContext';
-import { useFriendsContext } from '../lib/FriendsContext';
+import { useDrops } from '../hooks/useDrops';
+import { useFriends } from '../hooks/useFriends';
 
 const style = {
   position: 'absolute',
@@ -49,7 +49,7 @@ export const DropsDetail = ({
   outcomes,
   eventsAreas,
 }: DropsDetailProps)=> {
-  const { friendsData } = useFriendsContext();
+  const { friendsData } = useFriends();
   const [filteredFriendData, setFilteredFriendData] = useState<Drop[]>(
     friendsData?.[0]?.drops ?? []
   );
@@ -80,7 +80,7 @@ export const DropsDetail = ({
     時間: 'time',
   };
 
-  const { deleteDrop } = useDropsContext();
+  const { deleteDrop } = useDrops();
   const [isDropFilterOpen, setIsDropFilterOpen] = useState(false);
   const [filteredDrops, setFilteredDrops] = useState<Drop[]>(drops);
   const [event, setEvent] = useState('');
@@ -147,6 +147,7 @@ export const DropsDetail = ({
       area
     );
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFilteredDrops(newDrops);
     setFilteredFriendData(newFriendDrops);
   }, [event, area, drops, outcomesFilter, friendsData]);

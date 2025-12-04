@@ -1,24 +1,15 @@
-import { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
 
-import { useApiClient } from './ApiClientContext';
-import { useEventsAreasContext } from './EventsAreasContext';
+import { DropsContext } from './DropsContext';
 import { Drop, DropRequest } from '../api/types';
-
-interface DropsContextProps {
-  drops: Drop[];
-  createDrop: (drop: DropRequest) => Promise<Drop | null>;
-  getDrops: () => void;
-  updateDrop: (dropId: string, preDrop: Drop, newDrop: Drop) => void;
-  deleteDrop: (dropId: string) => void;
-}
-
-const DropsContext = createContext<DropsContextProps | null>(null);
+import { useApiClient } from '../hooks/useApiClient';
+import { useEventsAreas } from '../hooks/useEventsAreas';
 
 export const DropsProvider = ({ children }: { children: React.ReactNode }) => {
   const { apiClient } = useApiClient();
 
   const [drops, setDrops] = useState<Drop[]>([]);
-  const { createEventsAreas, deleteEventsAreas } = useEventsAreasContext();
+  const { createEventsAreas, deleteEventsAreas } = useEventsAreas();
 
   const createDrop = async (drop: DropRequest): Promise<Drop | null> => {
     const newDrop = await apiClient.createDrop(drop);
@@ -74,12 +65,4 @@ export const DropsProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </DropsContext.Provider>
   );
-};
-
-export const useDropsContext = (): DropsContextProps => {
-  const context = useContext(DropsContext);
-  if (!context) {
-    throw new Error('useDropsContext must be used within a DropsProvider');
-  }
-  return context;
 };

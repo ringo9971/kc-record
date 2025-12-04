@@ -1,29 +1,8 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
+import { useState } from 'react';
 
-import { useApiClient } from './ApiClientContext';
+import { RareContext } from './RareContext';
 import { RareColor, RareColorRequest } from '../api/types';
-
-interface RareContextProps {
-  rareDrops: Map<string, string>;
-  setRareDrops: Dispatch<SetStateAction<Map<string, string>>>;
-  getRareDrops: () => void;
-  createRareDrop: (ship: string, id: string) => void;
-  colorsDrops: Map<string, string[]>;
-  rareColors: Map<string, RareColor>;
-  createRareColor: (req: RareColorRequest) => void;
-  getColor: (id?: string) => RareColor;
-  getColorByShip: (ship?: string) => RareColor;
-  updateRareColor: (id: string, req: RareColorRequest) => void;
-  deleteRareDrop: (ship: string) => void;
-}
-
-const RareContext = createContext<RareContextProps | null>(null);
+import { useApiClient } from '../hooks/useApiClient';
 
 export const RareProvider = ({ children }: { children: React.ReactNode }) => {
   const { apiClient } = useApiClient();
@@ -111,12 +90,4 @@ export const RareProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </RareContext.Provider>
   );
-};
-
-export const useRareContext = (): RareContextProps => {
-  const context = useContext(RareContext);
-  if (!context) {
-    throw new Error('useRareContext must be used within a RareProvider');
-  }
-  return context;
 };

@@ -1,15 +1,9 @@
-import { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
 
-import { useApiClient } from './ApiClientContext';
+import { ResourcesContext } from './ResourceContext';
 import { Resource, ResourceRequest } from '../api/types';
+import { useApiClient } from '../hooks/useApiClient';
 
-interface ResourcesContextProps {
-  resources: Resource[];
-  createResource: (req: ResourceRequest) => Promise<Resource | null>;
-  getResources: () => void;
-}
-
-const ResourcesContext = createContext<ResourcesContextProps | null>(null);
 
 export const ResourcesProvider = ({ children }: { children: React.ReactNode }) => {
   const { apiClient } = useApiClient();
@@ -40,14 +34,4 @@ export const ResourcesProvider = ({ children }: { children: React.ReactNode }) =
       {children}
     </ResourcesContext.Provider>
   );
-};
-
-export const useResourcesContext = (): ResourcesContextProps => {
-  const context = useContext(ResourcesContext);
-  if (!context) {
-    throw new Error(
-      'useResourcesContext must be used within a ResourcesProvider'
-    );
-  }
-  return context;
 };

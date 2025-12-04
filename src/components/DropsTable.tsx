@@ -24,8 +24,9 @@ import { ShowFilter } from './DropsDetail';
 import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
 import { Drop } from '../api/types';
-import { useDropsContext } from '../lib/DropsContext';
-import { FriendData, useFriendsContext } from '../lib/FriendsContext';
+import { useDrops } from '../hooks/useDrops';
+import { useFriends } from '../hooks/useFriends';
+import { FriendData } from '../lib/FriendsContext';
 import { formatTime } from '../utils/helpers';
 
 interface DropsTableProps {
@@ -51,8 +52,8 @@ export const DropsTable = ({
   setFilteredDrops,
   setDeleteDropShip,
 }: DropsTableProps)=> {
-  const { updateDrop } = useDropsContext();
-  const { getFriends } = useFriendsContext();
+  const { updateDrop } = useDrops();
+  const { getFriends } = useFriends();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);

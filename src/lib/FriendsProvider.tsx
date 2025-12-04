@@ -1,28 +1,7 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
+import { useState } from 'react';
 
-import { useApiClient } from './ApiClientContext';
-import { Drop, Profile } from '../api/types';
-
-export interface FriendData {
-  friendId: string;
-  profile: Profile;
-  drops: Drop[];
-}
-
-interface FriendsContextProps {
-  friendsData: FriendData[];
-  setFriendsData: Dispatch<SetStateAction<FriendData[]>>;
-  getFriends: () => void;
-  createFriend: (friendId: string) => void;
-}
-
-const FriendsContext = createContext<FriendsContextProps | null>(null);
+import { FriendData, FriendsContext } from './FriendsContext.ts';
+import { useApiClient } from '../hooks/useApiClient.ts';
 
 export const FriendsProvider = ({ children }: { children: React.ReactNode}) => {
   const { apiClient } = useApiClient();
@@ -65,12 +44,4 @@ export const FriendsProvider = ({ children }: { children: React.ReactNode}) => {
       {children}
     </FriendsContext.Provider>
   );
-};
-
-export const useFriendsContext = (): FriendsContextProps => {
-  const context = useContext(FriendsContext);
-  if (!context) {
-    throw new Error('useFriendsContext must be used within a FriendsProvider');
-  }
-  return context;
 };

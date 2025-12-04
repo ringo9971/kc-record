@@ -10,7 +10,7 @@ import {
   Legend,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
-import { memo, useEffect, useState } from 'react';
+import { memo,  useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 
 import { Resource } from '../api/types';
@@ -51,32 +51,23 @@ const options = {
   },
 };
 
-interface Data {
-  labels: string[];
-  datasets: Array<{
-    label: string;
-    data: (number | null)[];
-  }>;
-}
+const dataLabels = [
+  { label: '燃料', field: 'fuel', color: [65, 117, 5] },
+  { label: '弾薬', field: 'ammo', color: [139, 87, 42] },
+  { label: '鋼材', field: 'steel', color: [155, 155, 155] },
+  { label: 'ボーキ', field: 'bauxite', color: [245, 166, 35] },
+  { label: 'バケツ', field: 'bucket', color: [126, 211, 33] },
+  { label: '釘', field: 'nail', color: [50, 50, 100] },
+  { label: 'ねじ', field: 'screw', color: [100, 100, 100] },
+];
 
 interface ResourceChartProps {
   resources: Resource[];
 }
 
 export const ResourcesChart = ({ resources }: ResourceChartProps) => {
-  const [data, setData] = useState<Data | null>(null);
-
-  useEffect(() => {
-    const dataLabels = [
-      { label: '燃料', field: 'fuel', color: [65, 117, 5] },
-      { label: '弾薬', field: 'ammo', color: [139, 87, 42] },
-      { label: '鋼材', field: 'steel', color: [155, 155, 155] },
-      { label: 'ボーキ', field: 'bauxite', color: [245, 166, 35] },
-      { label: 'バケツ', field: 'bucket', color: [126, 211, 33] },
-      { label: '釘', field: 'nail', color: [50, 50, 100] },
-      { label: 'ねじ', field: 'screw', color: [100, 100, 100] },
-    ];
-    const newData = {
+  const data = useMemo(() => {
+    return {
       labels: resources.map((resource) => formatTime(resource.time) ?? ''),
       datasets: dataLabels.map(({ label, field, color }) => ({
         label: label,
@@ -106,7 +97,6 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
             : [10, 5],
       })),
     };
-    setData(newData);
   }, [resources]);
 
   return <>{data && <Line data={data} options={options} />}</>;

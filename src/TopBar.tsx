@@ -15,23 +15,23 @@ import {
 import { memo, useState, MouseEvent, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { useDrops } from './hooks/useDrops';
+import { useEventsAreas } from './hooks/useEventsAreas';
+import { useFriends } from './hooks/useFriends';
 import { useLogout } from './hooks/useLogout';
+import { useRare } from './hooks/useRare';
+import { useResources } from './hooks/useResource';
 import { useUser } from './hooks/useUser';
-import { useDropsContext } from './lib/DropsContext';
-import { useEventsAreasContext } from './lib/EventsAreasContext';
-import { useFriendsContext } from './lib/FriendsContext';
-import { useRareContext } from './lib/RareContext';
-import { useResourcesContext } from './lib/ResourceContext';
 
 const TopBar = () => {
   const { user, loading } = useUser();
   const { logout } = useLogout();
 
-  const { getDrops } = useDropsContext();
-  const { getEventsAreas } = useEventsAreasContext();
-  const { getFriends } = useFriendsContext();
-  const { getRareDrops } = useRareContext();
-  const { getResources } = useResourcesContext();
+  const { getDrops } = useDrops();
+  const { getEventsAreas } = useEventsAreas();
+  const { getFriends } = useFriends();
+  const { getRareDrops } = useRare();
+  const { getResources } = useResources();
 
   const [first, setFirst] = useState(true);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -53,6 +53,7 @@ const TopBar = () => {
     getFriends();
     getRareDrops();
     getResources();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFirst(false);
   }, [
     first,
@@ -63,6 +64,7 @@ const TopBar = () => {
     getFriends,
     getRareDrops,
     getResources,
+    setFirst,
   ]);
 
   return (

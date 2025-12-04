@@ -1,7 +1,8 @@
 import { Autocomplete, FilterOptionsState, TextField } from '@mui/material';
 import { memo, useEffect } from 'react';
 
-import { ShipMaster, useMasterContext } from '../lib/MasterContext';
+import { useMaster } from '../hooks/useMaster';
+import { ShipMaster } from '../lib/MasterContext';
 import {
   hiraganaToKatakana,
   hiraganaToRomaji,
@@ -21,7 +22,7 @@ export const ShipAutocomplete = ({
   disabled,
   options,
 }: ShipAutocompleteProps) => {
-  const { shipsMaster } = useMasterContext();
+  const { shipsMaster } = useMaster();
 
   const filterOptions = (
     options: ShipMaster[],

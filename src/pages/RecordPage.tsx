@@ -7,12 +7,12 @@ import DropsDetail from '../components/DropsDetail';
 import FreeAutocomplete from '../components/FreeAutocomplete';
 import RadioButtonGroup from '../components/RadioButtonGroup';
 import ShipAutocomplete from '../components/ShipAutocomplete';
-import { useDropsContext } from '../lib/DropsContext';
-import { useEventsAreasContext } from '../lib/EventsAreasContext';
+import { useDrops } from '../hooks/useDrops';
+import { useEventsAreas } from '../hooks/useEventsAreas';
 
 export const RecordPage = () => {
-  const { drops, createDrop } = useDropsContext();
-  const { eventsAreas } = useEventsAreasContext();
+  const { drops, createDrop } = useDrops();
+  const { eventsAreas } = useEventsAreas();
 
   const [event, setEvent] = useState('');
   const [area, setArea] = useState('');
@@ -40,6 +40,7 @@ export const RecordPage = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEvent(drops[0]?.event ?? '');
     setArea(drops[0]?.area ?? '');
   }, [drops]);

@@ -8,14 +8,14 @@ import {
   Popover,
   Typography,
 } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { SketchPicker, ColorResult } from 'react-color';
 import { v4 as uuidv4 } from 'uuid';
 
 import ShipAutocomplete from './ShipAutocomplete';
 import { ShipInfo } from './ShipInfo';
-import { useMasterContext } from '../lib/MasterContext';
-import { useRareContext } from '../lib/RareContext';
+import { useMaster } from '../hooks/useMaster';
+import { useRare } from '../hooks/useRare';
 
 interface ColorsDropsBoxProps {
   id: string;
@@ -23,16 +23,18 @@ interface ColorsDropsBoxProps {
 }
 
 export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
-  const { shipsMaster } = useMasterContext();
+  const { shipsMaster } = useMaster();
   const {
     rareDrops,
     createRareDrop,
     deleteRareDrop,
     getColor,
     updateRareColor,
-  } = useRareContext();
+  } = useRare();
 
-  const [options, setOptions] = useState(shipsMaster);
+  const options = useMemo(() => {
+    return shipsMaster.filter((master) => !rareDrops.get(master.name));
+  }, [rareDrops, shipsMaster]);
 
   const [ship, setShip] = useState('');
   const [shipKey, setShipKey] = useState(uuidv4());
@@ -81,11 +83,6 @@ export const ColorsDropsBox = ({ id, ships }: ColorsDropsBoxProps) => {
   const handleDelete = (ship: string) => {
     deleteRareDrop(ship);
   };
-
-  useEffect(() => {
-    const options = shipsMaster.filter((master) => !rareDrops.get(master.name));
-    setOptions(options);
-  }, [rareDrops, shipsMaster]);
 
   return (
     <Box>

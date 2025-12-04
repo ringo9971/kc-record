@@ -1,22 +1,7 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
+import { useState } from 'react';
 
-import { useApiClient } from './ApiClientContext';
-
-interface EventsAreasContextProps {
-  eventsAreas: Map<string, string[]>;
-  setEventsAreas: Dispatch<SetStateAction<Map<string, string[]>>>;
-  createEventsAreas: (event: string, area: string) => void;
-  getEventsAreas: () => void;
-  deleteEventsAreas: (event: string, area: string) => void;
-}
-
-const EventsAreasContext = createContext<EventsAreasContextProps | null>(null);
+import { EventsAreasContext } from './EventsAreasContext'
+import { useApiClient } from '../hooks/useApiClient';
 
 export const EventsAreasProvider = ({
   children,
@@ -80,14 +65,4 @@ export const EventsAreasProvider = ({
       {children}
     </EventsAreasContext.Provider>
   );
-};
-
-export const useEventsAreasContext = (): EventsAreasContextProps => {
-  const context = useContext(EventsAreasContext);
-  if (!context) {
-    throw new Error(
-      'useEventsAreasContext must be used within a EventsAreasProvider'
-    );
-  }
-  return context;
 };

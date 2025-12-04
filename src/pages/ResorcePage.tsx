@@ -3,10 +3,10 @@ import { memo, useState } from 'react';
 
 import NumberField from '../components/NumberField';
 import ResourcesChart from '../components/ResourcesChart';
-import { useResourcesContext } from '../lib/ResourceContext';
+import { useResources } from '../hooks/useResource';
 
 export const ResourcePage = () => {
-  const { resources, createResource } = useResourcesContext();
+  const { resources, createResource } = useResources();
 
   const [fuel, setFuel] = useState<number | null>(null);
   const [ammo, setAmmo] = useState<number | null>(null);
