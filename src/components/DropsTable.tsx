@@ -50,7 +50,7 @@ export const DropsTable = ({
   isEdit,
   setFilteredDrops,
   setDeleteDropShip,
-}: DropsTableProps): JSX.Element => {
+}: DropsTableProps)=> {
   const { updateDrop } = useDropsContext();
   const { getFriends } = useFriendsContext();
 

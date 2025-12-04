@@ -17,7 +17,7 @@ export const ApiClientProvider = ({
 }: {
   user: User | null;
   firestore: Firestore;
-  children: JSX.Element;
+  children: React.ReactNode;
 }) => {
   const apiClient = new ApiClient(user, firestore);
 

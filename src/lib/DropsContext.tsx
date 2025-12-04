@@ -14,7 +14,7 @@ interface DropsContextProps {
 
 const DropsContext = createContext<DropsContextProps | null>(null);
 
-export const DropsProvider = ({ children }: { children: JSX.Element }) => {
+export const DropsProvider = ({ children }: { children: React.ReactNode }) => {
   const { apiClient } = useApiClient();
 
   const [drops, setDrops] = useState<Drop[]>([]);

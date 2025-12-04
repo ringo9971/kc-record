@@ -73,7 +73,7 @@ export const DropFilter = ({
       <FormGroup sx={{ direction: 'flex', flexDirection: 'row', pt: 2 }}>
         <Grid container style={{ width: '95%' }}>
           {outcomes.map((outcome) => (
-            <Grid item xs={2} key={outcome}>
+            <Grid size={2} key={outcome}>
               <FormControlLabel
                 key={outcome}
                 control={

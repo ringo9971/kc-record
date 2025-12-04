@@ -21,7 +21,7 @@ const EventsAreasContext = createContext<EventsAreasContextProps | null>(null);
 export const EventsAreasProvider = ({
   children,
 }: {
-  children: JSX.Element;
+  children: React.ReactNode;
 }) => {
   const { apiClient } = useApiClient();
 

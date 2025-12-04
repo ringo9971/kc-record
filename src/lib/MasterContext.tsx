@@ -16,7 +16,7 @@ interface MasterContextProps {
 
 const MasterContext = createContext<MasterContextProps | null>(null);
 
-export const MasterProvider = ({ children }: { children: JSX.Element }) => {
+export const MasterProvider = ({ children }: { children: React.ReactNode }) => {
   const ships: ShipMaster[] = shipsData.ships;
 
   const country = new Map<string, string>();

@@ -25,7 +25,7 @@ interface RareContextProps {
 
 const RareContext = createContext<RareContextProps | null>(null);
 
-export const RareProvider = ({ children }: { children: JSX.Element }) => {
+export const RareProvider = ({ children }: { children: React.ReactNode }) => {
   const { apiClient } = useApiClient();
 
   const [rareDrops, setRareDrops] = useState<Map<string, string>>(

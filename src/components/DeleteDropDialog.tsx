@@ -28,7 +28,7 @@ const TextGridItem = ({
   right?: boolean;
 }) => {
   return (
-    <Grid item xs={6} textAlign={right ? 'right' : 'left'}>
+    <Grid size={6} textAlign={right ? 'right' : 'left'}>
       <DialogContentText>{message}</DialogContentText>
     </Grid>
   );

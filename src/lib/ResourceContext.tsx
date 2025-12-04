@@ -11,7 +11,7 @@ interface ResourcesContextProps {
 
 const ResourcesContext = createContext<ResourcesContextProps | null>(null);
 
-export const ResourcesProvider = ({ children }: { children: JSX.Element }) => {
+export const ResourcesProvider = ({ children }: { children: React.ReactNode }) => {
   const { apiClient } = useApiClient();
 
   const [resources, setResources] = useState<Resource[]>([]);

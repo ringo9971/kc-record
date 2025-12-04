@@ -10,7 +10,7 @@ import ShipAutocomplete from '../components/ShipAutocomplete';
 import { useDropsContext } from '../lib/DropsContext';
 import { useEventsAreasContext } from '../lib/EventsAreasContext';
 
-export const RecordPage = (): JSX.Element => {
+export const RecordPage = () => {
   const { drops, createDrop } = useDropsContext();
   const { eventsAreas } = useEventsAreasContext();
 

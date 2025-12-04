@@ -24,7 +24,7 @@ interface FriendsContextProps {
 
 const FriendsContext = createContext<FriendsContextProps | null>(null);
 
-export const FriendsProvider = ({ children }: { children: JSX.Element }) => {
+export const FriendsProvider = ({ children }: { children: React.ReactNode}) => {
   const { apiClient } = useApiClient();
 
   const [friendsData, setFriendsData] = useState<FriendData[]>([]);

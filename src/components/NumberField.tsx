@@ -12,7 +12,7 @@ const NumberField = ({
   value,
   setValue,
   label,
-}: NumberFieldProps): JSX.Element => {
+}: NumberFieldProps)=> {
   return (
     <TextField
       placeholder={label}

@@ -21,7 +21,7 @@ export const RadioButtonGroup = ({
       <RadioGroup row defaultValue={options[0]} onChange={onChange}>
         <Grid container style={{ width: '95%' }}>
           {options.map((option) => (
-            <Grid item xs={2} key={option}>
+            <Grid size={2} key={option}>
               <FormControlLabel
                 value={option}
                 control={<Radio color="primary" />}

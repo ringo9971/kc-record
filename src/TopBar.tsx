@@ -23,7 +23,7 @@ import { useFriendsContext } from './lib/FriendsContext';
 import { useRareContext } from './lib/RareContext';
 import { useResourcesContext } from './lib/ResourceContext';
 
-const TopBar = (): JSX.Element => {
+const TopBar = () => {
   const { user, loading } = useUser();
   const { logout } = useLogout();
 

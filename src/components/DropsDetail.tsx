@@ -48,7 +48,7 @@ export const DropsDetail = ({
   drops,
   outcomes,
   eventsAreas,
-}: DropsDetailProps): JSX.Element => {
+}: DropsDetailProps)=> {
   const { friendsData } = useFriendsContext();
   const [filteredFriendData, setFilteredFriendData] = useState<Drop[]>(
     friendsData?.[0]?.drops ?? []
