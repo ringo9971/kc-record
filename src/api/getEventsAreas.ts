@@ -1,7 +1,6 @@
-import { User } from 'firebase/auth';
-import { doc, Firestore, getDoc } from 'firebase/firestore';
-
 import { EventAreas, EventsAreasResponse } from './types';
+import { User } from 'firebase/auth';
+import { Firestore, doc, getDoc } from 'firebase/firestore';
 
 export const getEventsAreas = async (
   user: User | null,

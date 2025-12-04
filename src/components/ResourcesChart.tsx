@@ -1,20 +1,21 @@
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  TimeScale,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import 'chartjs-adapter-moment';
-import { memo,  useMemo } from 'react';
-import { Line } from 'react-chartjs-2';
+import { memo, useMemo } from 'react';
 
 import { Resource } from '../api/types';
 import { formatTime } from '../utils/helpers';
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  TimeScale,
+  Title,
+  Tooltip,
+} from 'chart.js';
+import 'chartjs-adapter-moment';
+import { Line } from 'react-chartjs-2';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -82,8 +83,8 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
           label === 'ボーキ'
             ? 'left'
             : label === 'ねじ'
-            ? 'screw'
-            : 'right',
+              ? 'screw'
+              : 'right',
         borderColor: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
         backgroundColor: `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.5)`,
         borderDash:
@@ -93,8 +94,8 @@ export const ResourcesChart = ({ resources }: ResourceChartProps) => {
           label === 'ボーキ'
             ? undefined
             : label === 'ねじ'
-            ? [20, 4, 4, 4]
-            : [10, 5],
+              ? [20, 4, 4, 4]
+              : [10, 5],
       })),
     };
   }, [resources]);

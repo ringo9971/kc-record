@@ -1,3 +1,12 @@
+import { memo, useEffect, useState } from 'react';
+
+import { Drop } from '../api/types';
+import { useDrops } from '../hooks/useDrops';
+import { useFriends } from '../hooks/useFriends';
+import DeleteDropDialog from './DeleteDropDialog';
+import DropFilter from './DropFilter';
+import DropsAnalysis from './DropsAnalysis';
+import DropsTable from './DropsTable';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import {
   Box,
@@ -8,15 +17,6 @@ import {
   FormGroup,
   Modal,
 } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
-
-import DeleteDropDialog from './DeleteDropDialog';
-import DropFilter from './DropFilter';
-import DropsAnalysis from './DropsAnalysis';
-import DropsTable from './DropsTable';
-import { Drop } from '../api/types';
-import { useDrops } from '../hooks/useDrops';
-import { useFriends } from '../hooks/useFriends';
 
 const style = {
   position: 'absolute',
@@ -48,7 +48,7 @@ export const DropsDetail = ({
   drops,
   outcomes,
   eventsAreas,
-}: DropsDetailProps)=> {
+}: DropsDetailProps) => {
   const { friendsData } = useFriends();
   const [filteredFriendData, setFilteredFriendData] = useState<Drop[]>(
     friendsData?.[0]?.drops ?? []

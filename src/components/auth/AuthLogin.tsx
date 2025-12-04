@@ -1,3 +1,6 @@
+import { memo, useState } from 'react';
+
+import useFirebase from '../../hooks/useFirebase';
 import {
   Box,
   Button,
@@ -8,10 +11,7 @@ import {
 } from '@mui/material';
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { memo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import useFirebase from '../../hooks/useFirebase';
 
 const AuthLogin = () => {
   const { auth } = useFirebase();

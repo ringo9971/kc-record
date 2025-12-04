@@ -1,8 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-} from 'react';
+import { Dispatch, SetStateAction, createContext } from 'react';
 
 import { RareColor, RareColorRequest } from '../api/types';
 

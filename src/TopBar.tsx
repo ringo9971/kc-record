@@ -1,4 +1,13 @@
-import { Logout, PersonAdd, Person, Settings } from '@mui/icons-material';
+import { MouseEvent, memo, useEffect, useState } from 'react';
+
+import { useDrops } from './hooks/useDrops';
+import { useEventsAreas } from './hooks/useEventsAreas';
+import { useFriends } from './hooks/useFriends';
+import { useLogout } from './hooks/useLogout';
+import { useRare } from './hooks/useRare';
+import { useResources } from './hooks/useResource';
+import { useUser } from './hooks/useUser';
+import { Logout, Person, PersonAdd, Settings } from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
@@ -12,16 +21,7 @@ import {
   Toolbar,
   Tooltip,
 } from '@mui/material';
-import { memo, useState, MouseEvent, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-import { useDrops } from './hooks/useDrops';
-import { useEventsAreas } from './hooks/useEventsAreas';
-import { useFriends } from './hooks/useFriends';
-import { useLogout } from './hooks/useLogout';
-import { useRare } from './hooks/useRare';
-import { useResources } from './hooks/useResource';
-import { useUser } from './hooks/useUser';
 
 const TopBar = () => {
   const { user, loading } = useUser();

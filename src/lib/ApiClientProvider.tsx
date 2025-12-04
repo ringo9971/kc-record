@@ -1,14 +1,13 @@
+import { ApiClient } from '../api/ApiClient.ts';
+import { ApiClientContext } from './ApiClientContext.ts';
 import { User } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore';
 
-import { ApiClientContext } from './ApiClientContext.ts';
-import { ApiClient } from '../api/ApiClient.ts';
-
 export const ApiClientProvider = ({
-                                    user,
-                                    firestore,
-                                    children,
-                                  }: {
+  user,
+  firestore,
+  children,
+}: {
   user: User | null;
   firestore: Firestore;
   children: React.ReactNode;
@@ -21,4 +20,3 @@ export const ApiClientProvider = ({
     </ApiClientContext.Provider>
   );
 };
-

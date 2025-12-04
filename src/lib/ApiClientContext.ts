@@ -6,5 +6,6 @@ interface ApiClientContextProps {
   apiClient: ApiClient;
 }
 
-export const ApiClientContext = createContext<ApiClientContextProps | null>(null);
-
+export const ApiClientContext = createContext<ApiClientContextProps | null>(
+  null
+);

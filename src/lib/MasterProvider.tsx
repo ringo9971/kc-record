@@ -1,6 +1,6 @@
+import shipsData from '../assets/ships.json';
 import { MasterContext } from './MasterContext';
 import { ShipMaster } from './MasterContext.ts';
-import shipsData from '../assets/ships.json';
 
 export const MasterProvider = ({ children }: { children: React.ReactNode }) => {
   const ships: ShipMaster[] = shipsData.ships;

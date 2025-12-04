@@ -1,23 +1,22 @@
 // eslint.config.js
-import js from "@eslint/js";
-import tseslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-import importPlugin from "eslint-plugin-import";
-import reactPlugin from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import globals from "globals";
+import js from '@eslint/js';
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import importPlugin from 'eslint-plugin-import';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import globals from 'globals';
 
 export default [
-
   // --- ignore ---
   {
-    ignores: ["dist", ".eslintrc.cjs"],
+    ignores: ['dist', '.eslintrc.cjs'],
   },
 
   // --- main config ---
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
+    files: ['**/*.{js,jsx,ts,tsx}'],
 
     languageOptions: {
       parser: tsParser,
@@ -31,22 +30,22 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.es2020,
-        React: "writable",
+        React: 'writable',
       },
 
       ecmaVersion: 2020,
-      sourceType: "module",
+      sourceType: 'module',
     },
 
     settings: {
-      react: { version: "19.x" },
+      react: { version: '19.x' },
     },
 
     plugins: {
-      "@typescript-eslint": tseslint,
+      '@typescript-eslint': tseslint,
       react: reactPlugin,
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
       import: importPlugin,
     },
 
@@ -56,8 +55,8 @@ export default [
       ...reactHooks.configs.recommended.rules,
       ...reactPlugin.configs.recommended.rules,
 
-      "react-refresh/only-export-components": [
-        "warn",
+      'react-refresh/only-export-components': [
+        'warn',
         { allowConstantExport: true },
       ],
 

@@ -1,5 +1,5 @@
-import { useRoutes } from 'react-router-dom';
-
+import routes from './Routes';
+import TopBar from './TopBar';
 import useFirebase from './hooks/useFirebase';
 import { useUser } from './hooks/useUser';
 import { ApiClientProvider } from './lib/ApiClientProvider';
@@ -9,8 +9,7 @@ import { FriendsProvider } from './lib/FriendsProvider';
 import { MasterProvider } from './lib/MasterProvider';
 import { RareProvider } from './lib/RareProvider';
 import { ResourcesProvider } from './lib/ResourceProvider';
-import routes from './Routes';
-import TopBar from './TopBar';
+import { useRoutes } from 'react-router-dom';
 
 function App() {
   const routing = useRoutes(routes);

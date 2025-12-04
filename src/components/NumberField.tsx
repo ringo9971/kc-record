@@ -1,6 +1,7 @@
-import { TextField } from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
 import { memo } from 'react';
+
+import { TextField } from '@mui/material';
 
 interface NumberFieldProps {
   value: number | null;
@@ -8,11 +9,7 @@ interface NumberFieldProps {
   label: string;
 }
 
-const NumberField = ({
-  value,
-  setValue,
-  label,
-}: NumberFieldProps)=> {
+const NumberField = ({ value, setValue, label }: NumberFieldProps) => {
   return (
     <TextField
       placeholder={label}

@@ -1,9 +1,8 @@
+import { getResources } from './getResources';
+import { Resource, ResourceRequest } from './types';
 import { User } from 'firebase/auth';
 import { Firestore, doc, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-
-import { getResources } from './getResources';
-import { Resource, ResourceRequest } from './types';
 
 export const createResource = async (
   user: User | null,

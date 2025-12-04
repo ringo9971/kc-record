@@ -1,3 +1,9 @@
+import { memo, useEffect, useMemo, useState } from 'react';
+
+import { Drop, RareColor } from '../api/types';
+import { useMaster } from '../hooks/useMaster';
+import { useRare } from '../hooks/useRare';
+import { displayRate } from '../utils/helpers';
 import {
   Box,
   Table,
@@ -8,21 +14,15 @@ import {
   TableRow,
 } from '@mui/material';
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from 'chart.js';
-import { memo, useEffect, useMemo, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
-
-import { Drop, RareColor } from '../api/types';
-import { useMaster } from '../hooks/useMaster';
-import { useRare } from '../hooks/useRare';
-import { displayRate } from '../utils/helpers';
 
 ChartJS.register(
   CategoryScale,
@@ -78,7 +78,15 @@ const getDropData = (
   return labels.map((label) => count[label]);
 };
 
-const Graph = ({ width, data, title }: { width: number; data: Data; title: string }) => {
+const Graph = ({
+  width,
+  data,
+  title,
+}: {
+  width: number;
+  data: Data;
+  title: string;
+}) => {
   return (
     <Box
       sx={{
@@ -210,9 +218,6 @@ export const DropsAnalysis = ({ drops }: DropsAnalysisProps) => {
     const rareCount = drops.filter((drop) => rareDrops.get(drop.ship)).length;
     return rareCount / total;
   }, [drops, total, rareDrops]);
-
-
-
 
   const handleResize = () => {
     setWidth(window.innerWidth);

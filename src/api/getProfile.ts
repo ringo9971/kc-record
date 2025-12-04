@@ -1,7 +1,6 @@
-import { User } from 'firebase/auth';
-import { doc, getDoc, Firestore } from 'firebase/firestore';
-
 import { Profile } from './types';
+import { User } from 'firebase/auth';
+import { Firestore, doc, getDoc } from 'firebase/firestore';
 
 export const getProfiles = async (
   user: User | null,

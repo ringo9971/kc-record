@@ -1,7 +1,6 @@
+import { FirestoreResource, Resource } from './types';
 import { User } from 'firebase/auth';
 import { Firestore, doc, getDoc } from 'firebase/firestore';
-
-import { FirestoreResource, Resource } from './types';
 
 export const getResources = async (
   user: User | null,

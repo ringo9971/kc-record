@@ -1,8 +1,7 @@
-import { User } from 'firebase/auth';
-import { doc, setDoc, Firestore } from 'firebase/firestore';
-
 import { deleteEventsAreas } from './deleteEventsAreas';
 import { getAreaFirestoreDrops } from './getDrops';
+import { User } from 'firebase/auth';
+import { Firestore, doc, setDoc } from 'firebase/firestore';
 
 export const deleteDrop = async (
   user: User | null,

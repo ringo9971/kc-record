@@ -1,10 +1,9 @@
-import { User } from 'firebase/auth';
-import { doc, setDoc, Firestore } from 'firebase/firestore';
-
 import { createEventsAreas } from './createEventsAreas';
 import { deleteDrop } from './deleteDrop';
 import { getAreaFirestoreDrops } from './getDrops';
 import { Drop, FirestoreDrop } from './types';
+import { User } from 'firebase/auth';
+import { Firestore, doc, setDoc } from 'firebase/firestore';
 
 export const updateDrop = async (
   user: User | null,

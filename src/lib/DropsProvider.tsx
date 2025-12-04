@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { DropsContext } from './DropsContext';
 import { Drop, DropRequest } from '../api/types';
 import { useApiClient } from '../hooks/useApiClient';
 import { useEventsAreas } from '../hooks/useEventsAreas';
+import { DropsContext } from './DropsContext';
 
 export const DropsProvider = ({ children }: { children: React.ReactNode }) => {
   const { apiClient } = useApiClient();

@@ -1,8 +1,7 @@
-import { User } from 'firebase/auth';
-import { doc, Firestore, getDoc, Timestamp } from 'firebase/firestore';
-
 import { getEventsAreas } from './getEventsAreas';
 import { Drop, FirestoreDrop } from './types';
+import { User } from 'firebase/auth';
+import { Firestore, Timestamp, doc, getDoc } from 'firebase/firestore';
 
 interface FirestoreDropData {
   id: string;

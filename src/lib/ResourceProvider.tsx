@@ -1,11 +1,14 @@
 import { useState } from 'react';
 
-import { ResourcesContext } from './ResourceContext';
 import { Resource, ResourceRequest } from '../api/types';
 import { useApiClient } from '../hooks/useApiClient';
+import { ResourcesContext } from './ResourceContext';
 
-
-export const ResourcesProvider = ({ children }: { children: React.ReactNode }) => {
+export const ResourcesProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const { apiClient } = useApiClient();
 
   const [resources, setResources] = useState<Resource[]>([]);

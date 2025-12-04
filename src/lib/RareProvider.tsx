@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { RareContext } from './RareContext';
 import { RareColor, RareColorRequest } from '../api/types';
 import { useApiClient } from '../hooks/useApiClient';
+import { RareContext } from './RareContext';
 
 export const RareProvider = ({ children }: { children: React.ReactNode }) => {
   const { apiClient } = useApiClient();
@@ -63,7 +63,7 @@ export const RareProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const getColor = (id?: string): RareColor => {
-    return id ? rareColors.get(id) ?? getDefaultColor() : getDefaultColor();
+    return id ? (rareColors.get(id) ?? getDefaultColor()) : getDefaultColor();
   };
 
   const getColorByShip = (ship?: string): RareColor => {

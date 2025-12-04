@@ -1,6 +1,4 @@
-import { Box, Button, TextField } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 import { DropRequest } from '../api/types';
 import DropsDetail from '../components/DropsDetail';
@@ -9,6 +7,8 @@ import RadioButtonGroup from '../components/RadioButtonGroup';
 import ShipAutocomplete from '../components/ShipAutocomplete';
 import { useDrops } from '../hooks/useDrops';
 import { useEventsAreas } from '../hooks/useEventsAreas';
+import { Box, Button, TextField } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 
 export const RecordPage = () => {
   const { drops, createDrop } = useDrops();

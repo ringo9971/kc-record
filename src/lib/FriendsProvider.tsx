@@ -1,9 +1,13 @@
 import { useState } from 'react';
 
-import { FriendData, FriendsContext } from './FriendsContext.ts';
 import { useApiClient } from '../hooks/useApiClient.ts';
+import { FriendData, FriendsContext } from './FriendsContext.ts';
 
-export const FriendsProvider = ({ children }: { children: React.ReactNode}) => {
+export const FriendsProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const { apiClient } = useApiClient();
 
   const [friendsData, setFriendsData] = useState<FriendData[]>([]);

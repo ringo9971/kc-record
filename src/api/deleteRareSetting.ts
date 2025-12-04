@@ -1,8 +1,7 @@
-import { User } from 'firebase/auth';
-import { Firestore, doc, setDoc } from 'firebase/firestore';
-
 import { getRareSettings } from './getRareSettings';
 import { RareDrop, RareSettingsResponse } from './types';
+import { User } from 'firebase/auth';
+import { Firestore, doc, setDoc } from 'firebase/firestore';
 
 export const deleteRareDrop = async (
   user: User | null,

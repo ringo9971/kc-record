@@ -1,3 +1,5 @@
+import { ChangeEvent, memo } from 'react';
+
 import {
   FormControl,
   FormControlLabel,
@@ -5,7 +7,6 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
-import { ChangeEvent, memo } from 'react';
 
 interface RadioButtonGroupProps {
   options: string[];

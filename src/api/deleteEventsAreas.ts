@@ -1,8 +1,7 @@
-import { User } from 'firebase/auth';
-import { doc, setDoc, Firestore } from 'firebase/firestore';
-
 import { getEventsAreas } from './getEventsAreas';
 import { EventAreas } from './types';
+import { User } from 'firebase/auth';
+import { Firestore, doc, setDoc } from 'firebase/firestore';
 
 export const deleteEventsAreas = async (
   user: User | null,

@@ -1,3 +1,5 @@
+import { SyntheticEvent, memo } from 'react';
+
 import {
   Autocomplete,
   Box,
@@ -7,7 +9,6 @@ import {
   Grid,
   TextField,
 } from '@mui/material';
-import { SyntheticEvent, memo } from 'react';
 
 interface DropFilterProps {
   event: string;

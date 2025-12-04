@@ -1,14 +1,13 @@
+import { getRareSettings } from './getRareSettings';
+import {
+  FirestoreRareColor,
+  RareColorRequest,
+  RareDrop,
+  RareSettingsResponse,
+} from './types';
 import { User } from 'firebase/auth';
 import { Firestore, doc, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-
-import { getRareSettings } from './getRareSettings';
-import {
-  RareSettingsResponse,
-  RareDrop,
-  RareColorRequest,
-  FirestoreRareColor,
-} from './types';
 
 export const createRareColor = async (
   user: User | null,

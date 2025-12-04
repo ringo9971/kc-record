@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { EventsAreasContext } from './EventsAreasContext'
 import { useApiClient } from '../hooks/useApiClient';
+import { EventsAreasContext } from './EventsAreasContext';
 
 export const EventsAreasProvider = ({
   children,
@@ -34,7 +34,7 @@ export const EventsAreasProvider = ({
     const eventsAreas = await apiClient.getEventsAreas();
     setEventsAreas(eventsAreas.results);
   };
-  const deleteEventsAreas =  async(event: string, area: string) => {
+  const deleteEventsAreas = async (event: string, area: string) => {
     await apiClient.deleteEventsAreas(event, area);
     const eventAreas = eventsAreas.get(event);
     const updatedEventAreas =

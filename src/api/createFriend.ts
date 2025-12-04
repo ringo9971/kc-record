@@ -1,9 +1,8 @@
-import { User } from 'firebase/auth';
-import { Firestore, doc, setDoc } from 'firebase/firestore';
-
 import { getFriends } from './getFriends';
 import { getProfile } from './getProfile';
 import { Profile } from './types';
+import { User } from 'firebase/auth';
+import { Firestore, doc, setDoc } from 'firebase/firestore';
 
 export const createFriend = async (
   user: User | null,

@@ -1,10 +1,10 @@
+import { memo, useState } from 'react';
+
+import { useRare } from '../hooks/useRare';
+import ColorsDropsBox from './ColorsDropsBox';
 import { Circle, Rectangle } from '@mui/icons-material';
 import { Box, Button, Popover, TextField, Typography } from '@mui/material';
-import { memo, useState } from 'react';
-import { SketchPicker, ColorResult } from 'react-color';
-
-import ColorsDropsBox from './ColorsDropsBox';
-import { useRare } from '../hooks/useRare';
+import { ColorResult, SketchPicker } from 'react-color';
 
 export const EditRareDrops = () => {
   const { colorsDrops, createRareColor, rareColors } = useRare();

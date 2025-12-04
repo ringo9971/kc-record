@@ -1,8 +1,8 @@
-import { Box, Button, TextField } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 
 import { useApiClient } from '../hooks/useApiClient';
 import { useUser } from '../hooks/useUser';
+import { Box, Button, TextField } from '@mui/material';
 
 const EditProfile = () => {
   const { apiClient } = useApiClient();

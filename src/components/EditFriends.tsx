@@ -1,3 +1,7 @@
+import { memo, useState } from 'react';
+
+import { useFriends } from '../hooks/useFriends';
+import { useUser } from '../hooks/useUser';
 import {
   Box,
   Button,
@@ -9,10 +13,6 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
-import { memo, useState } from 'react';
-
-import { useFriends } from '../hooks/useFriends';
-import { useUser } from '../hooks/useUser';
 
 const EditFriends = () => {
   const { friendsData, createFriend } = useFriends();

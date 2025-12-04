@@ -1,10 +1,9 @@
-import { RouteObject } from 'react-router-dom';
-
 import FriendsPage from './pages/FriendsPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
+import { RouteObject } from 'react-router-dom';
 
 const routes: RouteObject[] = [
   {

@@ -1,6 +1,5 @@
-import { Box } from '@mui/material';
-
 import { useRare } from '../hooks/useRare';
+import { Box } from '@mui/material';
 
 interface ShipInfoProps {
   ship?: string;

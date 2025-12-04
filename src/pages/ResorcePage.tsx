@@ -1,9 +1,9 @@
-import { Box, Button } from '@mui/material';
 import { memo, useState } from 'react';
 
 import NumberField from '../components/NumberField';
 import ResourcesChart from '../components/ResourcesChart';
 import { useResources } from '../hooks/useResource';
+import { Box, Button } from '@mui/material';
 
 export const ResourcePage = () => {
   const { resources, createResource } = useResources();

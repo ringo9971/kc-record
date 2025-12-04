@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth';
-import { doc, setDoc, Firestore } from 'firebase/firestore';
+import { Firestore, doc, setDoc } from 'firebase/firestore';
 
 export const createProfile = async (
   user: User | null,

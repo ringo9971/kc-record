@@ -1,16 +1,16 @@
+import { memo } from 'react';
+
+import { Drop } from '../api/types';
+import { formatTime } from '../utils/helpers';
 import {
-  Dialog,
   Button,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Grid,
 } from '@mui/material';
-import { memo } from 'react';
-
-import { Drop } from '../api/types';
-import { formatTime } from '../utils/helpers';
 
 interface DeleteDropDialogProps {
   open: boolean;

@@ -1,3 +1,9 @@
+import { memo, useMemo, useState } from 'react';
+
+import { useMaster } from '../hooks/useMaster';
+import { useRare } from '../hooks/useRare';
+import ShipAutocomplete from './ShipAutocomplete';
+import { ShipInfo } from './ShipInfo';
 import { Circle, Rectangle } from '@mui/icons-material';
 import {
   Box,
@@ -8,14 +14,8 @@ import {
   Popover,
   Typography,
 } from '@mui/material';
-import { memo, useMemo, useState } from 'react';
-import { SketchPicker, ColorResult } from 'react-color';
+import { ColorResult, SketchPicker } from 'react-color';
 import { v4 as uuidv4 } from 'uuid';
-
-import ShipAutocomplete from './ShipAutocomplete';
-import { ShipInfo } from './ShipInfo';
-import { useMaster } from '../hooks/useMaster';
-import { useRare } from '../hooks/useRare';
 
 interface ColorsDropsBoxProps {
   id: string;

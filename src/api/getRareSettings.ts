@@ -1,12 +1,11 @@
-import { User } from 'firebase/auth';
-import { Firestore, doc, getDoc } from 'firebase/firestore';
-
 import {
   FirestoreRareColor,
   RareColor,
   RareDrop,
   RareSettingsResponse,
 } from './types';
+import { User } from 'firebase/auth';
+import { Firestore, doc, getDoc } from 'firebase/firestore';
 
 export const getRareSettings = async (
   user: User | null,

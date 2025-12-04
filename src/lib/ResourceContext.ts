@@ -8,4 +8,6 @@ export interface ResourcesContextProps {
   getResources: () => void;
 }
 
-export const ResourcesContext = createContext<ResourcesContextProps | null>(null);
+export const ResourcesContext = createContext<ResourcesContextProps | null>(
+  null
+);

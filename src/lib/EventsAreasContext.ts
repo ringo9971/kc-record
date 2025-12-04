@@ -1,8 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-} from 'react';
+import { Dispatch, SetStateAction, createContext } from 'react';
 
 export interface EventsAreasContextProps {
   eventsAreas: Map<string, string[]>;
@@ -12,4 +8,6 @@ export interface EventsAreasContextProps {
   deleteEventsAreas: (event: string, area: string) => void;
 }
 
-export const EventsAreasContext = createContext<EventsAreasContextProps | null>(null);
+export const EventsAreasContext = createContext<EventsAreasContextProps | null>(
+  null
+);

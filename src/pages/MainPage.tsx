@@ -1,8 +1,8 @@
-import { Box, Tab, Tabs } from '@mui/material';
 import { memo, useState } from 'react';
 
 import RecordPage from './RecordPage';
 import { ResourcePage } from './ResorcePage';
+import { Box, Tab, Tabs } from '@mui/material';
 
 export const MainPage = () => {
   const [tabpage, setTabpage] = useState(0);

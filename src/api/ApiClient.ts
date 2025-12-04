@@ -1,6 +1,3 @@
-import { User } from 'firebase/auth';
-import { Firestore } from 'firebase/firestore';
-
 import { createDrop } from './createDrop';
 import { createEventsAreas } from './createEventsAreas';
 import { createFriend } from './createFriend';
@@ -27,6 +24,8 @@ import {
 } from './types';
 import { updateDrop } from './updateDrop';
 import { updateRareColor } from './updateRareSetting';
+import { User } from 'firebase/auth';
+import { Firestore } from 'firebase/firestore';
 
 export class ApiClient {
   constructor(

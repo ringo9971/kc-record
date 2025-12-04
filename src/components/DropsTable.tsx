@@ -1,3 +1,19 @@
+import {
+  Dispatch,
+  SetStateAction,
+  SyntheticEvent,
+  memo,
+  useState,
+} from 'react';
+
+import { Drop } from '../api/types';
+import { useDrops } from '../hooks/useDrops';
+import { useFriends } from '../hooks/useFriends';
+import { FriendData } from '../lib/FriendsContext';
+import { formatTime } from '../utils/helpers';
+import { ShowFilter } from './DropsDetail';
+import ShipAutocomplete from './ShipAutocomplete';
+import { ShipInfo } from './ShipInfo';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import {
   Autocomplete,
@@ -12,22 +28,6 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
-import {
-  Dispatch,
-  SetStateAction,
-  SyntheticEvent,
-  memo,
-  useState,
-} from 'react';
-
-import { ShowFilter } from './DropsDetail';
-import ShipAutocomplete from './ShipAutocomplete';
-import { ShipInfo } from './ShipInfo';
-import { Drop } from '../api/types';
-import { useDrops } from '../hooks/useDrops';
-import { useFriends } from '../hooks/useFriends';
-import { FriendData } from '../lib/FriendsContext';
-import { formatTime } from '../utils/helpers';
 
 interface DropsTableProps {
   drops: Drop[];
@@ -51,7 +51,7 @@ export const DropsTable = ({
   isEdit,
   setFilteredDrops,
   setDeleteDropShip,
-}: DropsTableProps)=> {
+}: DropsTableProps) => {
   const { updateDrop } = useDrops();
   const { getFriends } = useFriends();
 

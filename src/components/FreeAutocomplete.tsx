@@ -1,5 +1,6 @@
-import { Autocomplete, TextField } from '@mui/material';
 import { SyntheticEvent, memo } from 'react';
+
+import { Autocomplete, TextField } from '@mui/material';
 
 interface FreeAutocompleteProps {
   inputValue: string;
